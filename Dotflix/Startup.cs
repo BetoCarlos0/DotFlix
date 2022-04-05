@@ -1,18 +1,16 @@
 using Dotflix.Data;
+using Dotflix.Data.Repository;
+using Dotflix.Data.Services;
+using Dotflix.Models.Contracts;
+using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Dotflix
 {
@@ -31,8 +29,12 @@ namespace Dotflix
 
             services.AddControllers();
 
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            //services.AddScoped<IMovieService, MovieService>();
+
             services.AddDbContext<DotflixDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
+                    x => x.MigrationsAssembly(typeof(DotflixDbContext).Assembly.FullName)));
 
             services.AddSwaggerGen(c =>
             {

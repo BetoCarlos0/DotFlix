@@ -5,14 +5,13 @@ namespace Dotflix.Models
 {
     public class Movie
     {
-        public int Id { get; set; }
+        public int MovieId { get; set; }
         public string Title { get; set; }
+        public string Sinopse { get; set; }
         public string Image { get; set; }
-        public string AgeGroup { get; set; }
-        public string Budget { get; set; }  // Orçamento
-        public string ReleaseData { get; set; }
-        public string Relevance { get; set; }
-        public string Revenue { get; set; } // Receita
+        public string AgeGroup { get; set; }     // faixa etária
+        public DateTime ReleaseData { get; set; }  // data lançamento
+        public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
         public ICollection<Language> Language { get; set; }
         //public IEnumerable<MovieLanguage> MovieLanguages { get; set; }
