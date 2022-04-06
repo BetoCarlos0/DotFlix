@@ -9,26 +9,24 @@ namespace Dotflix.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class LanguageController : ControllerBase
     {
-        private readonly IMovieService _movieService;
         private readonly ILanguageService _languageService;
 
-        public MovieController(IMovieService movieService, ILanguageService languageService)
+        public LanguageController(ILanguageService languageService)
         {
-            _movieService = movieService;
-            //_languageService = languageService;
+            _languageService = languageService;
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult<Movie>> GetAllMovies()
+        public async Task<ActionResult<Language>> GetAllLanguages()
         {
             try
             {
-                var AllMovie = await _movieService.GetAllAsync();
-                if (AllMovie == null) return NotFound();
+                var AllLanguage = await _languageService.GetAllAsync();
+                if (AllLanguage == null) return NotFound();
 
-                return Ok(AllMovie);
+                return Ok(AllLanguage);
             }
             catch (Exception)
             {
@@ -38,14 +36,14 @@ namespace Dotflix.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<Language>> GetLanguage(int id)
         {
             try
             {
-                var result = await _movieService.GetByIdAsync(id);
-                if (result == null) return NotFound();
-                
-                return Ok(result);
+                var getLanguage = await _languageService.GetByIdAsync(id);
+                if (getLanguage == null) return NotFound();
+
+                return Ok(getLanguage);
             }
             catch (Exception)
             {
@@ -55,16 +53,18 @@ namespace Dotflix.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Movie>> CreateMovie(Movie movie)
+        public async Task<ActionResult<Language>> CreateLanguage(Language language)
         {
             try
             {
-                if (movie == null) return BadRequest();
+                if (language == null) return BadRequest();
 
-                var result = await _movieService.AddAsync(movie);
+                //if (language.MovieId == -1) return BadRequest("id igual a null");
 
-                return CreatedAtAction(nameof(GetMovie),
-                    new { id = movie.MovieId}, result);
+                var result = await _languageService.AddAsync(language);
+
+                return CreatedAtAction(nameof(GetLanguage),
+                    new { id = language.LanguageId}, result);
             }
             catch (Exception)
             {
@@ -74,19 +74,19 @@ namespace Dotflix.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Movie>> UpdateMovie(int id, Movie movie)
+        public async Task<ActionResult<Language>> UpdateLanguage(int id, Language language)
         {
             try
             {
-                if (id != movie.MovieId)
-                    return BadRequest("Id e Filme incompatíveis");
+                if (id != language.LanguageId)
+                    return BadRequest("Id e Linguagem incompatíveis");
 
-                var result = _movieService.GetByIdAsync(id);
+                var result = _languageService.GetByIdAsync(id);
 
-                if(result == null)
-                    return NotFound($"Filme com Id {id} não encontrado");
+                if (result == null)
+                    return NotFound($"Linguagem com Id {id} não encontrado");
 
-                return await _movieService.UpdateAsync(movie);
+                return await _languageService.UpdateAsync(language);
             }
             catch (Exception)
             {
@@ -96,16 +96,16 @@ namespace Dotflix.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> Delete(int id)
+        public async Task<ActionResult<Language>> Delete(int id)
         {
             try
             {
-                var result = await _movieService.GetByIdAsync(id);
+                var result = await _languageService.GetByIdAsync(id);
 
                 if (result == null)
-                    return NotFound($"Filme com Id {id} não encontrado");
+                    return NotFound($"Linguagem com Id {id} não encontrado");
 
-                return await _movieService.DeleteId(id);
+                return await _languageService.DeleteId(id);
             }
             catch (Exception)
             {

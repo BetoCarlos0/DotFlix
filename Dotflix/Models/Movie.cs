@@ -14,10 +14,10 @@ namespace Dotflix.Models
         public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
         public ICollection<Language> Language { get; set; }
+    }
         //public IEnumerable<MovieLanguage> MovieLanguages { get; set; }
         //public IEnumerable<About> Abouts { get; set; }
         //public IEnumerable<MovieKeyword> MovieKeywords { get; set; }
-    }
     /*
     public class MovieGenre
     {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dotflix.Migrations
 {
     [DbContext(typeof(DotflixDbContext))]
-    [Migration("20220405024230_update-language")]
-    partial class updatelanguage
+    [Migration("20220406014801_Update-language")]
+    partial class Updatelanguage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

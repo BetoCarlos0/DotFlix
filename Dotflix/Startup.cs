@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Dotflix
@@ -30,7 +31,10 @@ namespace Dotflix
             services.AddControllers();
 
             services.AddScoped<IMovieRepository, MovieRepository>();
-            //services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieService, MovieService>();
+
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<ILanguageService, LanguageService>();
 
             services.AddDbContext<DotflixDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
@@ -38,7 +42,18 @@ namespace Dotflix
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dotflix", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "Dotflix",
+                    Version = "v1",
+                    Description = "Api simples de CRUD da Netflix",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Roberto Carlos",
+                        Email = "betocarlos00@hotmail.com",
+                        Url = new Uri("https://github.com/BetoCarlos0"),
+                    },
+                });
             });
         }
 

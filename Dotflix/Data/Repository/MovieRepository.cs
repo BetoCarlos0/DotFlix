@@ -1,9 +1,7 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Dotflix.Data.Repository
@@ -17,6 +15,15 @@ namespace Dotflix.Data.Repository
             _dbContext = dotflixDbContext;
         }
 
+        public async Task<IEnumerable<Movie>> GetAllAsync()
+        {
+            return await _dbContext.Movie.Include(x => x.Language).ToListAsync();
+        }
+
+        public async Task<Movie> GetByIdAsync(int id)
+        {
+            return await _dbContext.Movie.Include(x => x.Language).FirstOrDefaultAsync(x => x.MovieId == id);
+        }
         public async Task<Movie> AddAsync(Movie movie)
         {
             var result = await _dbContext.Movie.AddAsync(movie);
@@ -25,23 +32,41 @@ namespace Dotflix.Data.Repository
             return result.Entity;
         }
 
-        public async Task<IEnumerable<Movie>> GetAllAsync()
+        public async Task<Movie> UpdateAsync(Movie movie)
         {
-            return await _dbContext.Movie.ToListAsync();
-        }
+            var getMovie = await _dbContext.Movie
+                .FirstOrDefaultAsync(e => e.MovieId == movie.MovieId);
 
-        public async Task<Movie> GetByIdAsync(int id)
-        {
-            return await _dbContext.Movie.FirstOrDefaultAsync(x => x.MovieId == id);
-        }
+            if (getMovie != null)
+            {
+                getMovie.Image = movie.Image;
+                getMovie.Title = movie.Title;
+                getMovie.Sinopse = movie.Sinopse;
+                getMovie.Relevance = movie.Relevance;
+                getMovie.ReleaseData = movie.ReleaseData;
+                getMovie.RunTime = movie.RunTime;
+                getMovie.AgeGroup = movie.AgeGroup;
+                getMovie.Language = movie.Language;
 
-        public void Update(Movie entity)
-        {
-            throw new System.NotImplementedException();
+                await _dbContext.SaveChangesAsync();
+
+                return getMovie;
+            }
+
+            return null;
         }
-        public void DeleteId(int id)
+        public async Task<Movie> DeleteId(int id)
         {
-            throw new System.NotImplementedException();
+            var getMovie = await _dbContext.Movie
+                .FirstOrDefaultAsync(e => e.MovieId == id);
+
+            if (getMovie != null)
+            {
+                _dbContext.Movie.Remove(getMovie);
+                await _dbContext.SaveChangesAsync();
+                return getMovie;
+            }
+            return null;
         }
     }
 }

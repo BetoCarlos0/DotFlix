@@ -1,34 +1,69 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dotflix.Data.Repository
 {
     public class LanguageRepository : ILanguageRepository
     {
-        public void Create(Language entity)
+        private readonly DotflixDbContext _dbContext;
+
+        public LanguageRepository(DotflixDbContext dotflixDbContext)
         {
-            throw new System.NotImplementedException();
+            _dbContext = dotflixDbContext;
         }
 
-        public void DeleteId(int id)
+        public async Task<IEnumerable<Language>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Language.ToListAsync();
         }
 
-        public IEnumerable<Language> GetAll()
+        public async Task<Language> GetByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Language.FirstOrDefaultAsync(x => x.LanguageId == id);
         }
 
-        public IEnumerable<Language> GetById(int id)
+        public async Task<Language> AddAsync(Language language)
         {
-            throw new System.NotImplementedException();
+            var result = await _dbContext.Language.AddAsync(language);
+            await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
 
-        public void Update(Language entity)
+        public async Task<Language> UpdateAsync(Language language)
         {
-            throw new System.NotImplementedException();
+            var getLanguage = await _dbContext.Language.
+                FirstOrDefaultAsync(x => x.LanguageId == language.LanguageId);
+            
+            if (getLanguage != null)
+            {
+                getLanguage = language;
+                await _dbContext.SaveChangesAsync();
+
+                return getLanguage;
+            }
+
+            return null;
+        }
+
+        public async Task<Language> DeleteId(int id)
+        {
+            var getLanguage = await _dbContext.Language.
+                FirstOrDefaultAsync(x => x.LanguageId == id);
+
+            if (getLanguage != null)
+            {
+                _dbContext.Remove(getLanguage);
+                await _dbContext.SaveChangesAsync();
+
+                return getLanguage;
+            }
+
+            return null;
         }
     }
 }

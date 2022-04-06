@@ -8,39 +8,36 @@ namespace Dotflix.Data.Services
 {
     public class MovieService : IMovieService
     {
-        /*private readonly IMovieRepository _movieRepository;
+        private readonly IMovieRepository _movieRepository;
 
         public MovieService(IMovieRepository movieRepository)
         {
             _movieRepository = movieRepository;
-        }*/
-
-        public Task<Movie> AddAsync(Movie movie)
-        {
-            //return _movieRepository.AddAsync(movie);
-            throw new System.NotImplementedException();
         }
 
-        public void DeleteId(int id)
+        public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            return await _movieRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Movie>> GetAllAsync()
+        public async Task<Movie> GetByIdAsync(int id)
         {
-            //return _movieRepository.GetAllAsync();
-            throw new System.NotImplementedException();
+            return await _movieRepository.GetByIdAsync(id);
         }
 
-        public Task<Movie> GetByIdAsync(int id)
+        public async Task<Movie> AddAsync(Movie movie)
         {
-            //return _movieRepository.GetByIdAsync(id);
-            throw new System.NotImplementedException();
+            return await _movieRepository.AddAsync(movie);
         }
 
-        public void Update(Movie entity)
+        public async Task<Movie> UpdateAsync(Movie movie)
         {
-            throw new System.NotImplementedException();
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<Movie> DeleteId(int id)
+        {
+            return await _movieRepository.DeleteId(id);
         }
     }
 }
