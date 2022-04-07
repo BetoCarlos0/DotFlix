@@ -8,6 +8,19 @@ namespace Dotflix.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Language",
+                columns: table => new
+                {
+                    LanguageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "100, 1"),
+                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Language", x => x.LanguageId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Movie",
                 columns: table => new
                 {
@@ -27,33 +40,40 @@ namespace Dotflix.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Language",
+                name: "MovieLanguage",
                 columns: table => new
                 {
-                    LanguageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "100, 1"),
-                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
-                    MovieId = table.Column<int>(type: "int", nullable: true)
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Language", x => x.LanguageId);
+                    table.PrimaryKey("PK_MovieLanguage", x => new { x.MovieId, x.LanguageId });
                     table.ForeignKey(
-                        name: "FK_Language_Movie_MovieId",
+                        name: "FK_MovieLanguage_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "LanguageId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieLanguage_Movie_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movie",
                         principalColumn: "MovieId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Language_MovieId",
-                table: "Language",
-                column: "MovieId");
+                name: "IX_MovieLanguage_LanguageId",
+                table: "MovieLanguage",
+                column: "LanguageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MovieLanguage");
+
             migrationBuilder.DropTable(
                 name: "Language");
 

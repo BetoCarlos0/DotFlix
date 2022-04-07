@@ -10,6 +10,7 @@ namespace Dotflix.Data
 
         public DbSet<Movie> Movie { get; set; }
         public DbSet<Language> Language { get; set; }
+        public DbSet<MovieLanguage> MovieLanguage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

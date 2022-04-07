@@ -44,7 +44,7 @@ namespace Dotflix.Data.Repository
                 getLanguage.LanguageId = language.LanguageId;
                 getLanguage.Name = language.Name;
                 //getLanguage.MovieLanguage = language.MovieLanguage;
-                getLanguage.MovieId = language.MovieId;
+                //getLanguage.MovieId = language.MovieId;
 
                 await _dbContext.SaveChangesAsync();
 

@@ -2,6 +2,7 @@
 using Dotflix.Models.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Dotflix.Data.Repository
@@ -17,13 +18,22 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            return await _dbContext.Movie.Include(x => x.Language).ToListAsync();
+            //var result = await _dbContext.MovieLanguage.AsNoTracking().ToListAsync();
+
+            var getMovie = await  _dbContext.Language.Include(x => x.MovieLanguages).AsNoTracking().ToListAsync();
+
+            //var teste = 0;
+            return await _dbContext.Movie
+                .Include(x => x.MovieLanguages)
+                .AsNoTracking()
+                .ToListAsync();
+
             //return await _dbContext.Movie.ToListAsync();
         }
 
         public async Task<Movie> GetByIdAsync(int id)
         {
-            return await _dbContext.Movie.Include(x => x.Language).FirstOrDefaultAsync(x => x.MovieId == id);
+            return await _dbContext.Movie.Include(x => x.MovieLanguages).FirstOrDefaultAsync(x => x.MovieId == id);
             //return await _dbContext.Movie.FirstOrDefaultAsync(x => x.MovieId == id);
         }
         public async Task<Movie> AddAsync(Movie movie)
@@ -48,7 +58,7 @@ namespace Dotflix.Data.Repository
                 getMovie.ReleaseData = movie.ReleaseData;
                 getMovie.RunTime = movie.RunTime;
                 getMovie.AgeGroup = movie.AgeGroup;
-                getMovie.Language = movie.Language;
+                getMovie.MovieLanguages = movie.MovieLanguages;
 
                 await _dbContext.SaveChangesAsync();
 

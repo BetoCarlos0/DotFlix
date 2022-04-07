@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dotflix.Migrations
 {
     [DbContext(typeof(DotflixDbContext))]
-    [Migration("20220407023627_Initial")]
+    [Migration("20220407125708_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,17 +30,12 @@ namespace Dotflix.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 100)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.HasKey("LanguageId");
-
-                    b.HasIndex("MovieId");
 
                     b.ToTable("Language");
                 });
@@ -92,18 +87,44 @@ namespace Dotflix.Migrations
                     b.ToTable("Movie");
                 });
 
+            modelBuilder.Entity("Dotflix.Models.MovieLanguage", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("MovieLanguage");
+                });
+
+            modelBuilder.Entity("Dotflix.Models.MovieLanguage", b =>
+                {
+                    b.HasOne("Dotflix.Models.Language", null)
+                        .WithMany("MovieLanguages")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Dotflix.Models.Movie", null)
+                        .WithMany("MovieLanguages")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Dotflix.Models.Language", b =>
                 {
-                    b.HasOne("Dotflix.Models.Movie", "Movie")
-                        .WithMany("Language")
-                        .HasForeignKey("MovieId");
-
-                    b.Navigation("Movie");
+                    b.Navigation("MovieLanguages");
                 });
 
             modelBuilder.Entity("Dotflix.Models.Movie", b =>
                 {
-                    b.Navigation("Language");
+                    b.Navigation("MovieLanguages");
                 });
 #pragma warning restore 612, 618
         }

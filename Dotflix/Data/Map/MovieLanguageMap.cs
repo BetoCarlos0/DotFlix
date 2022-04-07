@@ -4,15 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dotflix.Data.Map
 {
-    public class MovieLanguageMap //: IEntityTypeConfiguration<MovieLanguage>
+    public class MovieLanguageMap : IEntityTypeConfiguration<MovieLanguage>
     {
 
-        /*public void Configure(EntityTypeBuilder<MovieLanguage> builder)
+        public void Configure(EntityTypeBuilder<MovieLanguage> builder)
         {
-            builder.HasKey(x => x.MovieLanguageId);
-
-            builder.Property(x => x.MovieLanguageId)
-                .UseIdentityColumn(100, 1);
-        }*/
+            builder.HasKey(x => new { x.MovieId, x.LanguageId});
+        }
     }
 }

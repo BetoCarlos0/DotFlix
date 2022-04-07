@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Dotflix.Models
 {
@@ -6,8 +7,6 @@ namespace Dotflix.Models
     {
         public int LanguageId { get; set; }
         public string Name { get; set; }
-
-        public int? MovieId { get; set; }
-        public Movie Movie { get; set; }
+        public ICollection<MovieLanguage> MovieLanguages { get; set; }
     }
 }

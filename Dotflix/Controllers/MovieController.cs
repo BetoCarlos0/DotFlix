@@ -19,7 +19,7 @@ namespace Dotflix.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<Movie>> GetAllMovies()
+        public async Task<ActionResult<MovieOutput>> GetAllMovies()
         {
             try
             {
@@ -59,10 +59,10 @@ namespace Dotflix.Controllers
             {
                 if (movie == null) return BadRequest();
 
-                var result = await _movieService.AddAsync(movie);
+                await _movieService.AddAsync(movie);
 
                 return CreatedAtAction(nameof(GetMovie),
-                    new { id = movie.MovieId}, result);
+                    new { id = movie.MovieId}, movie);
             }
             catch (Exception)
             {
