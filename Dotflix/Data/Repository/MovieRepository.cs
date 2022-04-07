@@ -18,11 +18,13 @@ namespace Dotflix.Data.Repository
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
             return await _dbContext.Movie.Include(x => x.Language).ToListAsync();
+            //return await _dbContext.Movie.ToListAsync();
         }
 
         public async Task<Movie> GetByIdAsync(int id)
         {
             return await _dbContext.Movie.Include(x => x.Language).FirstOrDefaultAsync(x => x.MovieId == id);
+            //return await _dbContext.Movie.FirstOrDefaultAsync(x => x.MovieId == id);
         }
         public async Task<Movie> AddAsync(Movie movie)
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Dotflix.Migrations
 {
-    public partial class Updatelanguage : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Dotflix.Migrations
                 columns: table => new
                 {
                     MovieId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "100, 1"),
                     Title = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Sinopse = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
                     Image = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
@@ -31,7 +31,7 @@ namespace Dotflix.Migrations
                 columns: table => new
                 {
                     LanguageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "100, 1"),
                     Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
                     MovieId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -43,7 +43,7 @@ namespace Dotflix.Migrations
                         column: x => x.MovieId,
                         principalTable: "Movie",
                         principalColumn: "MovieId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

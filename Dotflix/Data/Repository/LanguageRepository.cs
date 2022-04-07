@@ -18,7 +18,7 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Language>> GetAllAsync()
         {
-            return await _dbContext.Language.ToListAsync();
+            return await _dbContext.Language.AsNoTracking().ToListAsync();
         }
 
         public async Task<Language> GetByIdAsync(int id)
@@ -41,7 +41,11 @@ namespace Dotflix.Data.Repository
             
             if (getLanguage != null)
             {
-                getLanguage = language;
+                getLanguage.LanguageId = language.LanguageId;
+                getLanguage.Name = language.Name;
+                //getLanguage.MovieLanguage = language.MovieLanguage;
+                getLanguage.MovieId = language.MovieId;
+
                 await _dbContext.SaveChangesAsync();
 
                 return getLanguage;

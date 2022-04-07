@@ -12,12 +12,10 @@ namespace Dotflix.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-        private readonly ILanguageService _languageService;
 
-        public MovieController(IMovieService movieService, ILanguageService languageService)
+        public MovieController(IMovieService movieService)
         {
             _movieService = movieService;
-            //_languageService = languageService;
         }
         
         [HttpGet]

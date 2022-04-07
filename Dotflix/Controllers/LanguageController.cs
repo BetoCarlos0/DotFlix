@@ -59,8 +59,6 @@ namespace Dotflix.Controllers
             {
                 if (language == null) return BadRequest();
 
-                //if (language.MovieId == -1) return BadRequest("id igual a null");
-
                 var result = await _languageService.AddAsync(language);
 
                 return CreatedAtAction(nameof(GetLanguage),
