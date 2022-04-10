@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dotflix.Migrations
 {
     [DbContext(typeof(DotflixDbContext))]
-    [Migration("20220407125708_Initial")]
+    [Migration("20220410003648_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,17 +104,21 @@ namespace Dotflix.Migrations
 
             modelBuilder.Entity("Dotflix.Models.MovieLanguage", b =>
                 {
-                    b.HasOne("Dotflix.Models.Language", null)
+                    b.HasOne("Dotflix.Models.Language", "Language")
                         .WithMany("MovieLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dotflix.Models.Movie", null)
+                    b.HasOne("Dotflix.Models.Movie", "Movie")
                         .WithMany("MovieLanguages")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("Dotflix.Models.Language", b =>

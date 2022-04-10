@@ -102,17 +102,21 @@ namespace Dotflix.Migrations
 
             modelBuilder.Entity("Dotflix.Models.MovieLanguage", b =>
                 {
-                    b.HasOne("Dotflix.Models.Language", null)
+                    b.HasOne("Dotflix.Models.Language", "Language")
                         .WithMany("MovieLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dotflix.Models.Movie", null)
+                    b.HasOne("Dotflix.Models.Movie", "Movie")
                         .WithMany("MovieLanguages")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("Dotflix.Models.Language", b =>

@@ -79,7 +79,7 @@ namespace Dotflix.Controllers
                 if (id != language.LanguageId)
                     return BadRequest("Id e Linguagem incompatíveis");
 
-                var result = _languageService.GetByIdAsync(id);
+                var result = await _languageService.GetByIdAsync(id);
 
                 if (result == null)
                     return NotFound($"Linguagem com Id {id} não encontrado");
