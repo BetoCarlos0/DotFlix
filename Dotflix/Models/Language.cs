@@ -7,6 +7,8 @@ namespace Dotflix.Models
     {
         public int LanguageId { get; set; }
         public string Name { get; set; }
+
+        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ICollection<MovieLanguage> MovieLanguages { get; set; }
     }
 }

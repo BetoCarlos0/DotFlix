@@ -29,8 +29,12 @@ namespace Dotflix
         {
 
             //services.AddControllers();
-            services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services.AddControllers().AddJsonOptions(x => {
+                //x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                //x.JsonSerializerOptions.WriteIndented = false;
+                //x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                //x.JsonSerializerOptions.
+            });
 
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();

@@ -19,7 +19,7 @@ namespace Dotflix.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Language>> GetAllLanguages()
+        public async Task<ActionResult<LanguageViewOutput>> GetAllLanguages()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Dotflix.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Language>> CreateLanguage(Language language)
+        public async Task<ActionResult<LanguageViewOutput>> CreateLanguage(Language language)
         {
             try
             {

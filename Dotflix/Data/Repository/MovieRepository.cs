@@ -18,14 +18,25 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            //var result = await _dbContext.MovieLanguage.AsNoTracking().ToListAsync();
 
-            //var getMovie = await  _dbContext.Movie.Include(x => x.MovieLanguages).AsNoTracking().ToListAsync();
+            //var getLanguage = await _dbContext.Language
+            //    .Include(x => x.MovieLanguages)
+            //    .ThenInclude(x => x.Language)
+            //    .AsNoTracking()
+            //    .ToListAsync();
 
-            return await _dbContext.Movie
-                .Include(x => x.MovieLanguages)
-                .AsNoTracking()
+            var getMovie = new MovieData();
+
+            getMovie.MovieLanguage = await _dbContext.MovieLanguage
+                .Include(x => x.Movie)
+                .Include(x => x.Language)
                 .ToListAsync();
+
+            return (IEnumerable<Movie>)getMovie;
+
+            //return await _dbContext.Movie
+            //    .AsNoTracking()
+            //    .ToListAsync();
         }
 
         public async Task<Movie> GetByIdAsync(int id)

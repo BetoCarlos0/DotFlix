@@ -2,7 +2,9 @@
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Dotflix.Controllers
@@ -19,46 +21,27 @@ namespace Dotflix.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<Movie>> GetAllMovies()
+        public async Task<ActionResult<IEnumerable<Movie>>> GetAllMovies()
         {
-            try
-            {
-                var AllMovie = await _movieService.GetAllAsync();
-                if (AllMovie == null) return NotFound();
-
-                return Ok(AllMovie);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            return Ok(await _movieService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            try
-            {
-                var result = await _movieService.GetByIdAsync(id);
-                if (result == null) return NotFound();
+            var result = await _movieService.GetByIdAsync(id);
+
+            if (result == null) return NotFound();
                 
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<Movie>> CreateMovie(Movie movie)
         {
+            if (movie == null) return BadRequest();
             try
             {
-                if (movie == null) return BadRequest();
-
                 await _movieService.AddAsync(movie);
 
                 return CreatedAtAction(nameof(GetMovie),
@@ -73,22 +56,21 @@ namespace Dotflix.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Movie>> UpdateMovie(int id, Movie movie)
         {
+            if (id != movie.MovieId)
+                return BadRequest("Id e Filme incompatíveis");
+
+            var result = await _movieService.GetByIdAsync(id);
+
+            if(result == null)
+                return NotFound($"Filme com Id {id} não encontrado");
+
             try
             {
-                if (id != movie.MovieId)
-                    return BadRequest("Id e Filme incompatíveis");
-
-                var result = await _movieService.GetByIdAsync(id);
-
-                if(result == null)
-                    return NotFound($"Filme com Id {id} não encontrado");
-
                 return await _movieService.UpdateAsync(movie);
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -106,8 +88,7 @@ namespace Dotflix.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
