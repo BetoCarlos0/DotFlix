@@ -16,8 +16,8 @@ namespace Dotflix.Models
         public DateTime RunTime { get; set; }
 
         //[JsonPropertyName("Languages")]
-        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public ICollection<MovieLanguage> MovieLanguages { get; set; }
+        //[JsonIgnore]
+        public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
     }
 }
 //public IEnumerable<MovieLanguage> MovieLanguages { get; set; }

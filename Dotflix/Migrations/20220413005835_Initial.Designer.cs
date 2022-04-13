@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dotflix.Migrations
 {
     [DbContext(typeof(DotflixDbContext))]
-    [Migration("20220410003648_Initial")]
+    [Migration("20220413005835_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

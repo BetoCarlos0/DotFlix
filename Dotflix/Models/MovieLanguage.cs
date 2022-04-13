@@ -4,13 +4,16 @@ namespace Dotflix.Models
 {
     public class MovieLanguage
     {
+        //[JsonIgnore]
         public int LanguageId { get; set; }
+        //[JsonIgnore]
         public int MovieId { get; set; }
 
         //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Movie Movie { get; set; }
+        [JsonIgnore]
+        public virtual Movie Movie { get; set; }
 
         //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Language Language { get; set; } 
+        public virtual Language Language { get; set; } 
     }
 }

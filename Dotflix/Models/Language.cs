@@ -9,6 +9,7 @@ namespace Dotflix.Models
         public string Name { get; set; }
 
         //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public ICollection<MovieLanguage> MovieLanguages { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
     }
 }

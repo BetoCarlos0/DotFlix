@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Dotflix.Models
 {
-    public class MovieOutput
+    public class MovieViewModelOutput
     {
         public int MovieId { get; set; }
         public string Title { get; set; }
@@ -14,7 +14,7 @@ namespace Dotflix.Models
         public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
 
-        public ICollection<LanguageOutput> Languages { get; set; }
+        public IList<LanguageOutput> Languages { get; set; }
     }
     public class LanguageOutput
     {
