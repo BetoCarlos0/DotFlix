@@ -15,12 +15,12 @@ namespace Dotflix.Data.Services
             _movieRepository = movieRepository;
         }
 
-        public async Task<IEnumerable<Movie>> GetAllAsync()
+        public async Task<IEnumerable<MovieOutput>> GetAllAsync()
         {
             return await _movieRepository.GetAllAsync();
         }
 
-        public async Task<Movie> GetByIdAsync(int id)
+        public async Task<MovieOutput> GetByIdAsync(int id)
         {
             return await _movieRepository.GetByIdAsync(id);
         }

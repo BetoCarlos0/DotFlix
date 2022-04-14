@@ -21,13 +21,13 @@ namespace Dotflix.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetAllMovies()
+        public async Task<ActionResult<IEnumerable<MovieOutput>>> GetAllMovies()
         {
             return Ok(await _movieService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<MovieOutput>> GetMovie(int id)
         {
             var result = await _movieService.GetByIdAsync(id);
 
@@ -84,7 +84,7 @@ namespace Dotflix.Controllers
                 if (result == null)
                     return NotFound($"Filme com Id {id} não encontrado");
 
-                return await _movieService.DeleteId(id);
+                return Ok(await _movieService.DeleteId(id));
             }
             catch (Exception)
             {

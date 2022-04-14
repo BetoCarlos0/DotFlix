@@ -5,9 +5,9 @@ namespace Dotflix.Models.Contracts.Services
 {
     public interface IMovieService
     {
-        Task<IEnumerable<Movie>> GetAllAsync();
+        Task<IEnumerable<MovieOutput>> GetAllAsync();
+        Task<MovieOutput> GetByIdAsync(int id);
         Task<Movie> AddAsync(Movie movie);
-        Task<Movie> GetByIdAsync(int id);
         Task<Movie> UpdateAsync(Movie movie);
         Task<Movie> DeleteId(int id);
     }

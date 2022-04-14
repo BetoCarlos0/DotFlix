@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Dotflix.Models
 {
@@ -15,8 +14,6 @@ namespace Dotflix.Models
         public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
 
-        //[JsonPropertyName("Languages")]
-        //[JsonIgnore]
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
     }
 }
