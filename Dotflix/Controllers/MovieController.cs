@@ -1,4 +1,5 @@
-﻿using Dotflix.Models;
+﻿using Dotflix.Data;
+using Dotflix.Models;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,13 @@ namespace Dotflix.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieOutput>>> GetAllMovies()
+        public async Task<ActionResult<IEnumerable<Movie>>> GetAllMovies()
         {
             return Ok(await _movieService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovieOutput>> GetMovie(int id)
+        public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             var result = await _movieService.GetByIdAsync(id);
 

@@ -16,68 +16,61 @@ namespace Dotflix.Data.Repository
             _dbContext = dotflixDbContext;
         }
 
-        public async Task<IEnumerable<MovieOutput>> GetAllAsync()
+        public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            var viewMovie = new List<MovieOutput>();
+            #region resultado alternativo
+            //var viewMovie = new List<MovieOutput>();
 
-            var movies = await _dbContext.Movie
+            //var movies = await _dbContext.Movie
+            //    .Include(x => x.MovieLanguages)
+            //        .ThenInclude(x => x.Language)
+            //    .AsNoTracking()
+            //    .ToListAsync();
+
+            //foreach (var movie in movies)
+            //{
+            //    var ViewLanguage = new List<LanguageOutput>();
+
+            //    foreach (var lang in movie.MovieLanguages)
+            //    {
+            //        ViewLanguage.Add(new LanguageOutput
+            //        {
+            //            LanguageId = lang.Language.LanguageId,
+            //            Name = lang.Language.Name
+            //        });
+
+            //    }
+
+            //    viewMovie.Add(new MovieOutput
+            //    {
+            //        MovieId = movie.MovieId,
+            //        Title = movie.Title,
+            //        Image = movie.Image,
+            //        Sinopse = movie.Sinopse,
+            //        ReleaseData = movie.ReleaseData,
+            //        Relevance = movie.Relevance,
+            //        RunTime = movie.RunTime,
+            //        AgeGroup = movie.AgeGroup,
+            //        Languages = ViewLanguage
+            //    }); ;
+            //}
+
+            //return viewMovie;
+            #endregion
+
+            return await _dbContext.Movie
                 .Include(x => x.MovieLanguages)
                     .ThenInclude(x => x.Language)
                 .AsNoTracking()
                 .ToListAsync();
-
-            foreach (var movie in movies)
-            {
-                var ViewLanguage = new List<LanguageOutput>();
-
-                foreach (var lang in movie.MovieLanguages)
-                {
-                    ViewLanguage.Add(new LanguageOutput
-                    {
-                        LanguageId = lang.Language.LanguageId,
-                        Name = lang.Language.Name
-                    });
-
-                }
-
-                viewMovie.Add(new MovieOutput
-                {
-                    MovieId = movie.MovieId,
-                    Title = movie.Title,
-                    Image = movie.Image,
-                    Sinopse = movie.Sinopse,
-                    ReleaseData = movie.ReleaseData,
-                    Relevance = movie.Relevance,
-                    RunTime = movie.RunTime,
-                    AgeGroup = movie.AgeGroup,
-                    Languages = ViewLanguage
-                });
-            }
-
-            return viewMovie;
         }
 
-        public async Task<MovieOutput> GetByIdAsync(int id)
+        public async Task<Movie> GetByIdAsync(int id)
         {
-            var movie = await _dbContext.Movie
-                .Include(x => x.MovieLanguages.Select(x => new { x.Language.LanguageId, x.Language.Name }))
-                    //.ThenInclude(x => x.Language)
+            return await _dbContext.Movie
+                .Include(x => x.MovieLanguages)
+                    .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(x => x.MovieId == id);
-
-            var viewMovie = new MovieOutput
-            {
-                MovieId = movie.MovieId,
-                Title = movie.Title,
-                Image = movie.Image,
-                Sinopse = movie.Sinopse,
-                ReleaseData = movie.ReleaseData,
-                Relevance = movie.Relevance,
-                RunTime = movie.RunTime,
-                AgeGroup = movie.AgeGroup,
-                Languages = _dbContext.Language.Select(x => x.LanguageId)
-            };
-
-            return viewMovie;
         }
         public async Task<Movie> AddAsync(Movie movie)
         {

@@ -7,8 +7,8 @@ namespace Dotflix.Models
         public int LanguageId { get; set; }
         public int MovieId { get; set; }
 
-        [JsonIgnore]
-        public virtual Movie Movie { get; set; }
-        public virtual Language Language { get; set; } 
+        //[JsonIgnore]
+        public Movie Movie { get; set; }
+        public Language Language { get; set; } 
     }
 }

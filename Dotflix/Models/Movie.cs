@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Dotflix.Models
 {
@@ -14,10 +17,20 @@ namespace Dotflix.Models
         public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Language> Languages
+        {
+            get => MovieLanguages.Select(x => x.Language);
+            set => MovieLanguages = value.Select(y => new MovieLanguage()
+            {
+                LanguageId = y.LanguageId,
+            }).ToList();
+        }
     }
 }
-//public IEnumerable<MovieLanguage> MovieLanguages { get; set; }
 //public IEnumerable<About> Abouts { get; set; }
 //public IEnumerable<MovieKeyword> MovieKeywords { get; set; }
 /*
