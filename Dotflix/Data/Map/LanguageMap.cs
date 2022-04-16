@@ -15,8 +15,6 @@ namespace Dotflix.Data.Map
                 .HasColumnType("varchar")
                 .HasMaxLength(30)
                 .IsRequired();
-
-            //builder.Property(x => x.MovieId).HasDefaultValueSql(null);
         }
     }
 }

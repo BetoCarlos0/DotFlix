@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,10 +18,11 @@ namespace Dotflix.Models
         public int Relevance { get; set; }    // relevância
         public DateTime RunTime { get; set; }
 
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
 
         [NotMapped]
+        //[JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public IEnumerable<Language> Languages
         {
             get => MovieLanguages.Select(x => x.Language);

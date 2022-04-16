@@ -44,8 +44,6 @@ namespace Dotflix.Data.Map
             builder.Property(x => x.RunTime)
                 .HasColumnType("datetime")
                 .IsRequired();
-
-            //builder.Entity<Movie>();
         }
     }
 }
