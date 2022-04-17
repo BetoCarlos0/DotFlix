@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.Json.Serialization;
 
 namespace Dotflix.Models
 {
@@ -22,7 +21,7 @@ namespace Dotflix.Models
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
 
         [NotMapped]
-        //[JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public IEnumerable<Language> Languages
         {
             get => MovieLanguages.Select(x => x.Language);

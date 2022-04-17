@@ -29,11 +29,6 @@ namespace Dotflix
         {
 
             services.AddControllers();
-            //services.AddControllers().AddJsonOptions(x => {
-            //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            //    x.JsonSerializerOptions.WriteIndented = false;
-            //    x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            //});
 
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
@@ -49,7 +44,7 @@ namespace Dotflix
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
                 { 
-                    Title = "Dotflix",
+                    Title = "Api Dotflix",
                     Version = "v1",
                     Description = "Api simples de CRUD da Netflix",
                     Contact = new OpenApiContact

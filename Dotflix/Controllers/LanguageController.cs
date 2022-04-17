@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dotflix.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class LanguageController : ControllerBase
     {
