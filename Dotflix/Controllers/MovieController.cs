@@ -30,9 +30,12 @@ namespace Dotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
+            if (id <= 0) return BadRequest();
+
             var result = await _movieService.GetByIdAsync(id);
 
             if (result == null) return NotFound();

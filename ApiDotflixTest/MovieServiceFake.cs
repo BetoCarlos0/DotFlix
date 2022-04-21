@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApiDotflixTest
 {
-    public class MovieServiceFake : IMovieService
+    public class MovieServiceFake
     {
-        private readonly List<Movie> _movie;
+        /*private readonly List<Movie> _movie;
 
         public MovieServiceFake()
         {
@@ -87,6 +87,6 @@ namespace ApiDotflixTest
                 _movie.Remove(getMovie);
             }
             return null;
-        }
-    }
+        }*/
+    }    
 }

@@ -12,9 +12,9 @@ namespace Dotflix.Models
         public string Title { get; set; }
         public string Sinopse { get; set; }
         public string Image { get; set; }
-        public string AgeGroup { get; set; }     // faixa etária
-        public DateTime ReleaseData { get; set; }  // data lançamento
-        public int Relevance { get; set; }    // relevância
+        public string AgeGroup { get; set; }      // faixa etária
+        public DateTime ReleaseData { get; set; } // data lançamento
+        public int Relevance { get; set; }        // relevância
         public DateTime RunTime { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
