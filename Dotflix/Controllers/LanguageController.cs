@@ -18,6 +18,7 @@ namespace Dotflix.Controllers
             _languageService = languageService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<Language>> GetAllLanguages()
         {
@@ -35,6 +36,8 @@ namespace Dotflix.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Language>> GetLanguage(int id)
         {
@@ -52,6 +55,8 @@ namespace Dotflix.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<ActionResult<Language>> CreateLanguage(Language language)
         {
@@ -71,6 +76,9 @@ namespace Dotflix.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id}")]
         public async Task<ActionResult<Language>> UpdateLanguage(int id, Language language)
         {
@@ -93,6 +101,8 @@ namespace Dotflix.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Language>> Delete(int id)
         {
