@@ -14,7 +14,7 @@ namespace ApiDotflixTest.ControllerTests
     {
         protected readonly List<Movie> _movies;
         protected readonly Mock<IMovieService> _mockService;
-        protected readonly MovieController _movieController; 
+        protected MovieController _movieController; 
 
         public BaseMovieControllerTest(List<Movie> movies)
         {

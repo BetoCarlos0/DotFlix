@@ -14,7 +14,7 @@ namespace ApiDotflixTest.ControllerTests
 {
     public class MovieControllerTest : BaseMovieControllerTest
     {
-        private static readonly List<Movie> movies = new List<Movie>
+        private static List<Movie> movies = new List<Movie>
         {
             new Movie
             {
@@ -59,83 +59,64 @@ namespace ApiDotflixTest.ControllerTests
         }
 
         [Fact]
-        public async Task GetMovie_Whencalled_ReturnOk()
-        {   //arrange
+        public async Task GetAllMovies_Whencalled_ReturnOk()
+        {
+            //arrange act
             var movies = await _movieController.GetAllMovies();
 
-            //act
-            var result = movies.Result as OkObjectResult;
-
-            //acert
+            //assert
+            var result = movies.Result;
             Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
         public async Task GetMovieById_WhenCalled_ReturnOk()
         {
-            _mockService.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(movies[0]);
+            //arrange
+            int id = 1;
+            var getMovie = _movies.FirstOrDefault(x => x.MovieId == id);
 
-            var movie = await _movieController.GetMovie(1);
+            _mockService.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(getMovie);
 
-            var result = movie.Result as OkObjectResult;
+            //act
+            var movie = await _movieController.GetMovie(id);
 
+            //assert
+            var result = movie.Result;
             Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
         public async Task GetMoviById_WhenCalled_ReturnBadRequest()
         {
-            _mockService.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(movies[0]);
+            //arrange
+            int id = -1;
+            var getMovie = _movies.FirstOrDefault(x => x.MovieId == id);
 
-            var movie = await _movieController.GetMovie(1);
+            _mockService.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(getMovie);
 
-            var result = movie.Result as OkObjectResult;
+            //act
+            var movie = await _movieController.GetMovie(id);
 
-            Assert.IsType<OkObjectResult>(result);
+            //assert
+            var result = movie.Result;
+            Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]
         public async Task GetMoviById_WhenCalled_ReturnNotFound()
         {
-            _mockService.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(movies[0]);
+            //arrange
+            int id = 3;
+            var getMovie = _movies.FirstOrDefault(x => x.MovieId == id);
+            _mockService.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(getMovie);
 
-            var movie = await _movieController.GetMovie(1);
+            //act
+            var movie = await _movieController.GetMovie(id);
 
-            var result = movie.Result as OkObjectResult;
-
-            Assert.IsType<OkObjectResult>(result);
+            //assert
+            var result = movie.Result;
+            Assert.IsType<NotFoundResult>(result);
         }
-
-        //private Task<ActionResult> GetMovies()
-        //{
-        //    List<Movie> movies = new List<Movie>
-        //    {
-        //        new Movie
-        //        {
-        //            MovieId = 1, AgeGroup = "0", Image = "img2", ReleaseData = new DateTime(2021, 5, 10),
-        //                    RunTime = new DateTime(2021, 5, 10, 15, 20, 20), Sinopse = "uma sinopse", Title = "um filme", Relevance = 45,
-        //                    Languages = new List<Language>(){
-        //                        new Language(){
-        //                            LanguageId = 1, Name = "portugues"
-        //                        }
-        //                    }
-        //        },
-        //        new Movie
-        //        {
-        //            MovieId = 2, AgeGroup = "10", Image = "img1", ReleaseData = new DateTime(2021, 5, 10),
-        //                    RunTime = new DateTime(2021, 5, 10, 15, 20, 20), Sinopse = "outra sinopse", Title = "outro filme", Relevance = 15,
-        //                    Languages = new List<Language>(){
-        //                        new Language(){
-        //                            LanguageId = 1, Name = "portugues"
-        //                        },
-        //                        new Language(){
-        //                            LanguageId = 2, Name = "ingles"
-        //                        }
-        //                    }
-        //        }
-        //    };
-           
-        //    return movies;
-        //}
     }
 }
