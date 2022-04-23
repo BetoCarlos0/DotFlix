@@ -26,12 +26,17 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "uma sinopse",
                 Title = "um filme",
                 Relevance = 45,
-                Languages = new List<Language>(){
-                    new Language(){
-                        LanguageId = 1, Name = "portugues"
+                MovieLanguages = new List<MovieLanguage>()
+                {
+                    new MovieLanguage()
+                    {
+                        LanguageId = 1,
+                        MovieId = 1,
+                        Language = new Language(){
+                            LanguageId = 1, Name = "portugues"
+                        }
                     }
                 }
-
             },
             new Movie
             {
@@ -43,12 +48,23 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "outra sinopse",
                 Title = "outro filme",
                 Relevance = 15,
-                Languages = new List<Language>(){
-                    new Language(){
-                        LanguageId = 1, Name = "portugues"
+                MovieLanguages = new List<MovieLanguage>()
+                {
+                    new MovieLanguage()
+                    {
+                        LanguageId = 1,
+                        MovieId = 2,
+                        Language = new Language(){
+                            LanguageId = 1, Name = "portugues"
+                        }
                     },
-                    new Language(){
-                        LanguageId = 2, Name = "ingles"
+                    new MovieLanguage()
+                    {
+                        LanguageId = 2,
+                        MovieId = 2,
+                        Language = new Language(){
+                            LanguageId = 2, Name = "Ingles"
+                        }
                     }
                 }
             }
@@ -59,6 +75,7 @@ namespace ApiDotflixTest.ControllerTests
         }
 
         [Fact]
+        [Trait("Movie", "GetMovie")]
         public async Task GetAllMovies_Whencalled_ReturnOk()
         {
             //arrange act
@@ -70,12 +87,12 @@ namespace ApiDotflixTest.ControllerTests
         }
 
         [Fact]
+        [Trait("Movie", "GetMovie")]
         public async Task GetMovieById_WhenCalled_ReturnOk()
         {
             //arrange
-            int id = 1;
+            int id = 2;
             var getMovie = _movies.FirstOrDefault(x => x.MovieId == id);
-
             _mockService.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(getMovie);
 
             //act
@@ -83,16 +100,18 @@ namespace ApiDotflixTest.ControllerTests
 
             //assert
             var result = movie.Result;
+            var actionValue = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(id, ((Movie)actionValue.Value).MovieId);
             Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
+        [Trait("Movie", "GetMovie")]
         public async Task GetMoviById_WhenCalled_ReturnBadRequest()
         {
             //arrange
             int id = -1;
             var getMovie = _movies.FirstOrDefault(x => x.MovieId == id);
-
             _mockService.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(getMovie);
 
             //act
@@ -104,6 +123,7 @@ namespace ApiDotflixTest.ControllerTests
         }
 
         [Fact]
+        [Trait("Movie", "GetMovie")]
         public async Task GetMoviById_WhenCalled_ReturnNotFound()
         {
             //arrange
@@ -117,6 +137,86 @@ namespace ApiDotflixTest.ControllerTests
             //assert
             var result = movie.Result;
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        [Trait("Movie", "PostMovie")]
+        public async Task CreateMovie_WhenCalled_ReturnCreated()
+        {
+            //arrange
+            var newMovie = new Movie
+            {
+                MovieId = 3,
+                Title = "novo filme",
+                Sinopse = "um filme de teste",
+                Image = "imgTeste",
+                AgeGroup = "14",
+                ReleaseData = new DateTime(2010, 2, 20),
+                Relevance = 10,
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                MovieLanguages = new List<MovieLanguage>()
+                {
+                    new MovieLanguage()
+                    {
+                        LanguageId = 1,
+                        MovieId = 3,
+                        Language = new Language(){
+                            LanguageId = 1,
+                            Name = "portugues"
+                        }
+                    }
+                }
+            };
+
+            //_mockService.Setup(x => x.AddAsync(It.IsAny<Movie>())).ReturnsAsync(newMovie);
+            _mockService.Verify(x => x.AddAsync(It.Is<Movie>(x => x.MovieLanguages.Equals(null))), Times.Once);
+
+            //act
+            var result = await _movieController.CreateMovie(newMovie);
+
+            //assert
+            var actionResult = result.Result;
+            Assert.Equal(3, newMovie.MovieId);
+            Assert.Equal(new DateTime(2021, 5, 10, 15, 20, 20), newMovie.RunTime);
+            Assert.Equal(new DateTime(2010, 2, 20), newMovie.ReleaseData);
+            Assert.IsType<CreatedAtActionResult>(actionResult);
+        }
+
+        [Fact]
+        [Trait("Movie", "PostMovie")]
+        public async Task CreateMovie_WhenCalled_ReturnBadRequest()
+        {
+            //arrange
+            var newMovie = new Movie
+            {
+                MovieId = 3,
+                Title = "novo filme",
+                Sinopse = "um filme de teste",
+                Image = "imgTeste",
+                AgeGroup = "14",
+                ReleaseData = new DateTime(2010, 2, 20),
+                Relevance = 10,
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                Languages = new List<Language>()
+                {
+                    new Language()
+                    {
+                        LanguageId = 1
+                    }
+                }
+            };
+
+            //_mockService.Setup(x => x.AddAsync(It.IsAny<Movie>())).ReturnsAsync(newMovie);
+            _mockService.Verify(x => x.AddAsync(It.Is<Movie>(x => x.MovieLanguages.Equals(null))), Times.Once);
+
+            //act
+            var result = await _movieController.CreateMovie(newMovie);
+
+            //assert
+            var actionResult = result.Result;
+            var actionValue = Assert.IsType<BadRequestResult>(actionResult);
+            Assert.Null(newMovie.Languages);
+            Assert.IsType<BadRequestResult>(actionResult);
         }
     }
 }

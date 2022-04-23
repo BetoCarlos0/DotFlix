@@ -1,5 +1,6 @@
 ﻿using Dotflix.Controllers;
 using Dotflix.Models;
+using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Moq;
 using System;
@@ -14,7 +15,7 @@ namespace ApiDotflixTest.ControllerTests
     {
         protected readonly List<Movie> _movies;
         protected readonly Mock<IMovieService> _mockService;
-        protected MovieController _movieController; 
+        protected MovieController _movieController;
 
         public BaseMovieControllerTest(List<Movie> movies)
         {
