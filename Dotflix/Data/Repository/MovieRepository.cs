@@ -18,46 +18,6 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            #region resultado alternativo
-            //var viewMovie = new List<MovieOutput>();
-
-            //var movies = await _dbContext.Movie
-            //    .Include(x => x.MovieLanguages)
-            //        .ThenInclude(x => x.Language)
-            //    .AsNoTracking()
-            //    .ToListAsync();
-
-            //foreach (var movie in movies)
-            //{
-            //    var ViewLanguage = new List<LanguageOutput>();
-
-            //    foreach (var lang in movie.MovieLanguages)
-            //    {
-            //        ViewLanguage.Add(new LanguageOutput
-            //        {
-            //            LanguageId = lang.Language.LanguageId,
-            //            Name = lang.Language.Name
-            //        });
-
-            //    }
-
-            //    viewMovie.Add(new MovieOutput
-            //    {
-            //        MovieId = movie.MovieId,
-            //        Title = movie.Title,
-            //        Image = movie.Image,
-            //        Sinopse = movie.Sinopse,
-            //        ReleaseData = movie.ReleaseData,
-            //        Relevance = movie.Relevance,
-            //        RunTime = movie.RunTime,
-            //        AgeGroup = movie.AgeGroup,
-            //        Languages = ViewLanguage
-            //    }); ;
-            //}
-
-            //return viewMovie;
-            #endregion
-
             return await _dbContext.Movie
                 .Include(x => x.MovieLanguages)
                     .ThenInclude(x => x.Language)
@@ -94,16 +54,16 @@ namespace Dotflix.Data.Repository
                 getMovie.ReleaseData = movie.ReleaseData;
                 getMovie.RunTime = movie.RunTime;
                 getMovie.AgeGroup = movie.AgeGroup;
+                getMovie.Languages = movie.Languages;
                 getMovie.MovieLanguages = movie.MovieLanguages;
 
                 await _dbContext.SaveChangesAsync();
 
                 return getMovie;
             }
-
             return null;
         }
-        public async Task<Movie> DeleteId(int id)
+        public async Task DeleteId(int id)
         {
             var getMovie = await _dbContext.Movie
                 .FirstOrDefaultAsync(e => e.MovieId == id);
@@ -112,9 +72,7 @@ namespace Dotflix.Data.Repository
             {
                 _dbContext.Movie.Remove(getMovie);
                 await _dbContext.SaveChangesAsync();
-                return getMovie;
             }
-            return null;
         }
     }
 }

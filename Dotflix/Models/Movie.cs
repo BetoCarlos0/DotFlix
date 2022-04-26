@@ -9,15 +9,31 @@ namespace Dotflix.Models
 {
     public class Movie
     {
+        [Required]
         public int MovieId { get; set; }
+
+        [Required]
         public string Title { get; set; }
+
+        [Required]
         public string Sinopse { get; set; }
+
+        [Required]
         public string Image { get; set; }
+
+        [Required]
         public string AgeGroup { get; set; }      // faixa etária
+
+        [Required]
         public DateTime ReleaseData { get; set; } // data lançamento
+
+        [Required]
         public int Relevance { get; set; }        // relevância
+
+        [Required]
         public DateTime RunTime { get; set; }
 
+        [Required]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
 
@@ -25,7 +41,13 @@ namespace Dotflix.Models
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public IEnumerable<Language> Languages
         {
-            get => MovieLanguages.Select(x => x.Language);
+            get
+            {
+                if (MovieLanguages != null)
+                    return MovieLanguages.Select(x => x.Language);
+                return Enumerable.Empty<Language>();
+            }
+
             set => MovieLanguages = value.Select(y => new MovieLanguage()
             {
                 LanguageId = y.LanguageId,

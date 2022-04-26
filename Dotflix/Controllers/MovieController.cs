@@ -4,8 +4,10 @@ using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Dotflix.Controllers
@@ -15,6 +17,7 @@ namespace Dotflix.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
+        //private readonly ILogger<MovieController> _logger;
 
         public MovieController(IMovieService movieService)
         {
@@ -38,7 +41,7 @@ namespace Dotflix.Controllers
 
             var result = await _movieService.GetByIdAsync(id);
 
-            if (result == null) return NotFound();
+            if (result == null) return NotFound($"400 - Filme com Id {id} não encontrado");
                 
             return Ok(result);
         }
@@ -48,13 +51,20 @@ namespace Dotflix.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> CreateMovie(Movie movie)
         {
-            if (movie == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
             try
             {
-                await _movieService.AddAsync(movie);
+                var created = await _movieService.AddAsync(movie);
+
+                var pase = 1;
 
                 return CreatedAtAction(nameof(GetMovie),
-                    new { id = movie.MovieId}, movie);
+                    new { id = created.MovieId}, created);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
             catch (Exception)
             {
@@ -89,21 +99,16 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                var result = await _movieService.GetByIdAsync(id);
+            var result = await _movieService.GetByIdAsync(id);
 
-                if (result == null)
-                    return NotFound($"Filme com Id {id} não encontrado");
+            if (result == null)
+                return NotFound($"Filme com Id {id} não encontrado");
 
-                return Ok(await _movieService.DeleteId(id));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            await _movieService.DeleteId(id);
+
+            return NoContent();
         }
     }
 }

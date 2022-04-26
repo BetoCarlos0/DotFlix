@@ -1,6 +1,7 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,9 +36,9 @@ namespace Dotflix.Data.Services
             return await _movieRepository.UpdateAsync(movie);
         }
 
-        public async Task<Movie> DeleteId(int id)
+        public async Task DeleteId(int id)
         {
-            return await _movieRepository.DeleteId(id);
+            await _movieRepository.DeleteId(id);
         }
     }
 }

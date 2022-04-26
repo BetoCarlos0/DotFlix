@@ -9,6 +9,6 @@ namespace Dotflix.Models.Contracts.Services
         Task<Movie> GetByIdAsync(int id);
         Task<Movie> AddAsync(Movie movie);
         Task<Movie> UpdateAsync(Movie movie);
-        Task<Movie> DeleteId(int id);
+        Task DeleteId(int id);
     }
 }
