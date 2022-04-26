@@ -1,5 +1,6 @@
 ﻿using Dotflix.Data;
 using Dotflix.Models;
+using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,6 @@ namespace Dotflix.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-        //private readonly ILogger<MovieController> _logger;
 
         public MovieController(IMovieService movieService)
         {
@@ -55,16 +55,17 @@ namespace Dotflix.Controllers
 
             try
             {
-                var created = await _movieService.AddAsync(movie);
+                await _movieService.AddAsync(movie).ConfigureAwait(false);
+                //var  newUser = await _movieService.GetByIdAsync(movie.MovieId).ConfigureAwait(false);
 
-                var pase = 1;
+                //if (newUser == null) NoContent();
 
                 return CreatedAtAction(nameof(GetMovie),
-                    new { id = created.MovieId}, created);
+                        new { id = movie.MovieId }, movie);
             }
             catch (DbUpdateException)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest(new ValidationProblemDetails(ModelState));
             }
             catch (Exception)
             {
@@ -89,6 +90,10 @@ namespace Dotflix.Controllers
             try
             {
                 return await _movieService.UpdateAsync(movie);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
             catch (Exception)
             {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Dotflix.Models
 {
@@ -12,28 +13,30 @@ namespace Dotflix.Models
         [Required]
         public int MovieId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Título obrigatório")]
+        [Display(Name = "Título")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Sinopse obrigatória")]
         public string Sinopse { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Imagem obrigatória")]
+        [JsonPropertyName("Imagem")]
         public string Image { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Faixa etária obrigatória")]
         public string AgeGroup { get; set; }      // faixa etária
 
-        [Required]
+        [Required(ErrorMessage = "Data de lançamento obrigaório")]
         public DateTime ReleaseData { get; set; } // data lançamento
 
-        [Required]
+        [Required(ErrorMessage = "Relevância do filme obrigatório")]
         public int Relevance { get; set; }        // relevância
 
-        [Required]
+        [Required(ErrorMessage = "Tempo do Filme obrigatório")]
         public DateTime RunTime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Id do Idioma obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
 

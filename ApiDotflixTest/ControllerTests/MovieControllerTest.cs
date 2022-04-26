@@ -190,14 +190,14 @@ namespace ApiDotflixTest.ControllerTests
                 AgeGroup = "14",
                 ReleaseData = new DateTime(2010, 2, 20),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20)
-                //MovieLanguages = new List<MovieLanguage>()
-                //{
-                //    new MovieLanguage()
-                //    {
-                //        LanguageId = 1
-                //    }
-                //}
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                MovieLanguages = new List<MovieLanguage>()
+                {
+                    new MovieLanguage()
+                    {
+                        LanguageId = 1
+                    }
+                }
             };
 
             _mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
