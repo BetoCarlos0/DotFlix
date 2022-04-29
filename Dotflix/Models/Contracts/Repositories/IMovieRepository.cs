@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Dotflix.Models.Contracts
@@ -7,8 +8,8 @@ namespace Dotflix.Models.Contracts
     {
         Task<IEnumerable<Movie>> GetAllAsync();
         Task<Movie> GetByIdAsync(int id);
-        Task<Movie> AddAsync(Movie movie);
-        Task<Movie> UpdateAsync(Movie movie);
+        Task AddAsync(Movie movie);
+        Task UpdateAsync(Movie movie);
         Task DeleteId(int id);
     }
 }

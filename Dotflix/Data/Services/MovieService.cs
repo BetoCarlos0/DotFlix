@@ -26,14 +26,14 @@ namespace Dotflix.Data.Services
             return await _movieRepository.GetByIdAsync(id);
         }
 
-        public async Task<Movie> AddAsync(Movie movie)
+        public async Task AddAsync(Movie movie)
         {
-            return await _movieRepository.AddAsync(movie);
+            await _movieRepository.AddAsync(movie);
         }
 
-        public async Task<Movie> UpdateAsync(Movie movie)
+        public async Task UpdateAsync(Movie movie)
         {
-            return await _movieRepository.UpdateAsync(movie);
+            await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task DeleteId(int id)

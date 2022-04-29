@@ -1,5 +1,6 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,15 +33,13 @@ namespace Dotflix.Data.Repository
                     .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(x => x.MovieId == id);
         }
-        public async Task<Movie> AddAsync(Movie movie)
+        public async Task AddAsync(Movie movie)
         {
-            var result = await _dbContext.Movie.AddAsync(movie);
+            await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
-
-            return result.Entity;
         }
 
-        public async Task<Movie> UpdateAsync(Movie movie)
+        public async Task UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
                 .FirstOrDefaultAsync(e => e.MovieId == movie.MovieId);
@@ -59,9 +58,9 @@ namespace Dotflix.Data.Repository
 
                 await _dbContext.SaveChangesAsync();
 
-                return getMovie;
+                //return getMovie;
             }
-            return null;
+            //return null;
         }
         public async Task DeleteId(int id)
         {

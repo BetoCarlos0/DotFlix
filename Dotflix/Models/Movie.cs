@@ -14,20 +14,19 @@ namespace Dotflix.Models
         public int MovieId { get; set; }
 
         [Required(ErrorMessage = "Título obrigatório")]
-        [Display(Name = "Título")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Sinopse obrigatória")]
         public string Sinopse { get; set; }
 
         [Required(ErrorMessage = "Imagem obrigatória")]
-        [JsonPropertyName("Imagem")]
         public string Image { get; set; }
 
         [Required(ErrorMessage = "Faixa etária obrigatória")]
         public string AgeGroup { get; set; }      // faixa etária
 
         [Required(ErrorMessage = "Data de lançamento obrigaório")]
+        [JsonPropertyName("Data lançamento")]
         public DateTime ReleaseData { get; set; } // data lançamento
 
         [Required(ErrorMessage = "Relevância do filme obrigatório")]

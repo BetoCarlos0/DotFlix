@@ -163,17 +163,17 @@ namespace ApiDotflixTest.ControllerTests
                 }
             };
 
-            _mockService.Setup(x => x.AddAsync(It.IsAny<Movie>())).ReturnsAsync(newMovie);
+            //_mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
 
             //act
             var result = await _movieController.CreateMovie(newMovie);
 
             //assert
-            var actionResult = result.Result;
+            var actionResult = result.GetType();
             Assert.Equal(3, newMovie.MovieId);
             Assert.Equal(new DateTime(2021, 5, 10, 15, 20, 20), newMovie.RunTime);
             Assert.Equal(new DateTime(2010, 2, 20), newMovie.ReleaseData);
-            Assert.IsType<CreatedAtActionResult>(actionResult);
+            Assert.IsType<CreatedAtActionResult>(result);
         }
 
         [Fact]
@@ -186,7 +186,6 @@ namespace ApiDotflixTest.ControllerTests
                 MovieId = 0,
                 Title = "novo filme",
                 Sinopse = "um filme de teste",
-                Image = null,
                 AgeGroup = "14",
                 ReleaseData = new DateTime(2010, 2, 20),
                 Relevance = 10,
@@ -200,20 +199,13 @@ namespace ApiDotflixTest.ControllerTests
                 }
             };
 
-            _mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
+            //_mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
 
             //act
             var result = await _movieController.CreateMovie(newMovie);
 
             //assert
-            var actionResult = result.Result;
-            //var actionValue = Assert.IsType<BadRequestResult>(actionResult);
-            //Assert.Null(newMovie.Languages);
-
-            //ArgumentNullException exception = Assert.Throws<ArgumentNullException>(result);
-            //Assert.Throws<ArgumentNullException>(result);
-            //Assert.Equal("erro", exception.Message);
-            Assert.IsType<ArgumentNullException>(actionResult);
+            Assert.IsType<BadRequestResult>(result);
         }
     }
 }

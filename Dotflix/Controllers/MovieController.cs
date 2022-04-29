@@ -49,16 +49,13 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<ActionResult<Movie>> CreateMovie(Movie movie)
+        public async Task<ActionResult> CreateMovie(Movie movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
                 await _movieService.AddAsync(movie).ConfigureAwait(false);
-                //var  newUser = await _movieService.GetByIdAsync(movie.MovieId).ConfigureAwait(false);
-
-                //if (newUser == null) NoContent();
 
                 return CreatedAtAction(nameof(GetMovie),
                         new { id = movie.MovieId }, movie);
@@ -77,7 +74,7 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Movie>> UpdateMovie(int id, Movie movie)
+        public async Task<ActionResult> UpdateMovie(int id, Movie movie)
         {
             if (id != movie.MovieId)
                 return BadRequest("Id e Filme incompatíveis");
@@ -89,7 +86,8 @@ namespace Dotflix.Controllers
 
             try
             {
-                return await _movieService.UpdateAsync(movie);
+                await _movieService.UpdateAsync(movie);
+                return NoContent();
             }
             catch (DbUpdateException)
             {
