@@ -34,7 +34,7 @@ namespace Dotflix.Data.Services
         {
             return await _languageRepository.UpdateAsync(language);
         }
-        public async Task<Language> DeleteId(int id)
+        public async Task<bool> DeleteId(int id)
         {
             return await _languageRepository.DeleteId(id);
         }

@@ -33,36 +33,47 @@ namespace Dotflix.Data.Repository
                     .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(x => x.MovieId == id);
         }
-        public async Task AddAsync(Movie movie)
+        public async Task<Movie> AddAsync(Movie movie)
         {
-            await _dbContext.Movie.AddAsync(movie);
+            var getMovie = await _dbContext.Movie.FirstOrDefaultAsync(x => x.Title == movie.Title);
+
+            if (getMovie == null)
+            {
+                return null;
+            }
+            else
+            {
+                return getMovie;
+            }
+            var result = await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
 
-        public async Task UpdateAsync(Movie movie)
+        public async Task<Movie> UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
-                .FirstOrDefaultAsync(e => e.MovieId == movie.MovieId);
+                .Include(x => x.MovieLanguages)
+                    .ThenInclude(x => x.Language)
+                .FirstOrDefaultAsync(x => x.MovieId == movie.MovieId);
 
-            if (getMovie != null)
-            {
-                getMovie.Image = movie.Image;
-                getMovie.Title = movie.Title;
-                getMovie.Sinopse = movie.Sinopse;
-                getMovie.Relevance = movie.Relevance;
-                getMovie.ReleaseData = movie.ReleaseData;
-                getMovie.RunTime = movie.RunTime;
-                getMovie.AgeGroup = movie.AgeGroup;
-                getMovie.Languages = movie.Languages;
-                getMovie.MovieLanguages = movie.MovieLanguages;
+            if (getMovie == null) return null;
 
-                await _dbContext.SaveChangesAsync();
+            getMovie.Image = movie.Image;
+            getMovie.Title = movie.Title;
+            getMovie.Sinopse = movie.Sinopse;
+            getMovie.Relevance = movie.Relevance;
+            getMovie.ReleaseData = movie.ReleaseData;
+            getMovie.RunTime = movie.RunTime;
+            getMovie.AgeGroup = movie.AgeGroup;
+            getMovie.MovieLanguages = movie.MovieLanguages;
 
-                //return getMovie;
-            }
-            //return null;
+            await _dbContext.SaveChangesAsync();
+
+            return getMovie;
         }
-        public async Task DeleteId(int id)
+        public async Task<bool> DeleteId(int id)
         {
             var getMovie = await _dbContext.Movie
                 .FirstOrDefaultAsync(e => e.MovieId == id);
@@ -71,7 +82,10 @@ namespace Dotflix.Data.Repository
             {
                 _dbContext.Movie.Remove(getMovie);
                 await _dbContext.SaveChangesAsync();
+
+                return true;
             }
+            return false;
         }
     }
 }

@@ -33,15 +33,12 @@ namespace Dotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            if (id <= 0) return BadRequest();
-
             var result = await _movieService.GetByIdAsync(id);
 
-            if (result == null) return NotFound($"400 - Filme com Id {id} não encontrado");
+            if (result == null) return NotFound($"404 - Filme com Id {id} não encontrado");
                 
             return Ok(result);
         }
@@ -55,7 +52,10 @@ namespace Dotflix.Controllers
 
             try
             {
-                await _movieService.AddAsync(movie).ConfigureAwait(false);
+                var result = await _movieService.AddAsync(movie).ConfigureAwait(false);
+
+                if (result.Title == movie.Title && result.MovieId != movie.MovieId)
+                    return BadRequest($"400 - Filme com Id {result.MovieId} tem o mesmo Título");
 
                 return CreatedAtAction(nameof(GetMovie),
                         new { id = movie.MovieId }, movie);
@@ -71,27 +71,22 @@ namespace Dotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMovie(int id, Movie movie)
+        public async Task<ActionResult<Movie>> UpdateMovie(int id, Movie movie)
         {
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
             if (id != movie.MovieId)
-                return BadRequest("Id e Filme incompatíveis");
-
-            var result = await _movieService.GetByIdAsync(id);
-
-            if(result == null)
-                return NotFound($"Filme com Id {id} não encontrado");
+                return BadRequest("400 - Id e Filme incompatíveis");
 
             try
             {
-                await _movieService.UpdateAsync(movie);
-                return NoContent();
+                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
             }
             catch (DbUpdateException)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest(new ValidationProblemDetails(ModelState));
             }
             catch (Exception)
             {
@@ -100,18 +95,22 @@ namespace Dotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _movieService.GetByIdAsync(id);
+            try
+            {
+                var resultType = await _movieService.DeleteId(id).ConfigureAwait(false);
 
-            if (result == null)
-                return NotFound($"Filme com Id {id} não encontrado");
+                if (resultType == false) return BadRequest();
 
-            await _movieService.DeleteId(id);
-
-            return NoContent();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

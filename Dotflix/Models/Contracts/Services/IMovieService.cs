@@ -8,8 +8,8 @@ namespace Dotflix.Models.Contracts.Services
     {
         Task<IEnumerable<Movie>> GetAllAsync();
         Task<Movie> GetByIdAsync(int id);
-        Task AddAsync(Movie movie);
-        Task UpdateAsync(Movie movie);
-        Task DeleteId(int id);
+        Task<Movie> AddAsync(Movie movie);
+        Task<Movie> UpdateAsync(Movie movie);
+        Task<bool> DeleteId(int id);
     }
 }

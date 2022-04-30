@@ -18,16 +18,29 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Language>> GetAllAsync()
         {
-            return await _dbContext.Language.AsNoTracking().ToListAsync();
+            return await _dbContext.Language
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<Language> GetByIdAsync(int id)
         {
-            return await _dbContext.Language.FirstOrDefaultAsync(x => x.LanguageId == id);
+            return await _dbContext.Language
+                .FirstOrDefaultAsync(x => x.LanguageId == id);
         }
 
         public async Task<Language> AddAsync(Language language)
         {
+            var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.Name == language.Name);
+
+            if (getLanguage == null)
+            {
+                return null;
+            }
+            else
+            {
+                return getLanguage;
+            }
             var result = await _dbContext.Language.AddAsync(language);
             await _dbContext.SaveChangesAsync();
 
@@ -39,20 +52,17 @@ namespace Dotflix.Data.Repository
             var getLanguage = await _dbContext.Language.
                 FirstOrDefaultAsync(x => x.LanguageId == language.LanguageId);
             
-            if (getLanguage != null)
-            {
-                getLanguage.LanguageId = language.LanguageId;
-                getLanguage.Name = language.Name;
+            if (getLanguage == null) return null;
 
-                await _dbContext.SaveChangesAsync();
+            getLanguage.LanguageId = language.LanguageId;
+            getLanguage.Name = language.Name;
 
-                return getLanguage;
-            }
+            await _dbContext.SaveChangesAsync();
 
-            return null;
+            return getLanguage;
         }
 
-        public async Task<Language> DeleteId(int id)
+        public async Task<bool> DeleteId(int id)
         {
             var getLanguage = await _dbContext.Language.
                 FirstOrDefaultAsync(x => x.LanguageId == id);
@@ -62,10 +72,9 @@ namespace Dotflix.Data.Repository
                 _dbContext.Remove(getLanguage);
                 await _dbContext.SaveChangesAsync();
 
-                return getLanguage;
+                return true;
             }
-
-            return null;
+            return false;
         }
     }
 }

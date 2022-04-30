@@ -2,6 +2,7 @@
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -22,18 +23,7 @@ namespace Dotflix.Controllers
         [HttpGet]
         public async Task<ActionResult<Language>> GetAllLanguages()
         {
-            try
-            {
-                var AllLanguage = await _languageService.GetAllAsync();
-                if (AllLanguage == null) return NotFound();
-
-                return Ok(AllLanguage);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            return Ok(await _languageService.GetAllAsync());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,18 +31,11 @@ namespace Dotflix.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Language>> GetLanguage(int id)
         {
-            try
-            {
-                var getLanguage = await _languageService.GetByIdAsync(id);
-                if (getLanguage == null) return NotFound();
+            var getLanguage = await _languageService.GetByIdAsync(id);
 
-                return Ok(getLanguage);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            if (getLanguage == null) return NotFound($"404 - Idioma com Id {id} não encontrado");
+
+            return Ok(getLanguage);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -60,14 +43,21 @@ namespace Dotflix.Controllers
         [HttpPost]
         public async Task<ActionResult<Language>> CreateLanguage(Language language)
         {
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
             try
             {
-                if (language == null) return BadRequest();
+                var result = await _languageService.AddAsync(language).ConfigureAwait(false);
 
-                var result = await _languageService.AddAsync(language);
+                if (result.Name == language.Name && result.LanguageId != language.LanguageId)
+                    return BadRequest($"400 - Filme com Id {result.LanguageId} tem o mesmo Título");
 
                 return CreatedAtAction(nameof(GetLanguage),
-                    new { id = language.LanguageId}, result);
+                    new { id = language.LanguageId}, language);
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest(new ValidationProblemDetails(ModelState));
             }
             catch (Exception)
             {
@@ -82,17 +72,14 @@ namespace Dotflix.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Language>> UpdateLanguage(int id, Language language)
         {
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
+            if (id != language.LanguageId)
+                return BadRequest("400 - Id e Idioma incompatíveis");
+
             try
             {
-                if (id != language.LanguageId)
-                    return BadRequest("Id e Linguagem incompatíveis");
-
-                var result = await _languageService.GetByIdAsync(id);
-
-                if (result == null)
-                    return NotFound($"Linguagem com Id {id} não encontrado");
-
-                return await _languageService.UpdateAsync(language);
+                return Ok(await _languageService.UpdateAsync(language));
             }
             catch (Exception)
             {
@@ -102,18 +89,17 @@ namespace Dotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Language>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                var result = await _languageService.GetByIdAsync(id);
+                var result = await _languageService.DeleteId(id);
 
-                if (result == null)
-                    return NotFound($"Linguagem com Id {id} não encontrado");
+                if (result == false) return BadRequest();
 
-                return await _languageService.DeleteId(id);
+                return Ok();
             }
             catch (Exception)
             {

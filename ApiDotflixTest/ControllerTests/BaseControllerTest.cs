@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace ApiDotflixTest.ControllerTests
 {
-    public abstract class BaseMovieControllerTest
+    public abstract class BaseControllerTest
     {
         protected readonly List<Movie> _movies;
         protected readonly Mock<IMovieService> _mockService;
         protected MovieController _movieController;
 
-        public BaseMovieControllerTest(List<Movie> movies)
+        public BaseControllerTest(List<Movie> movies)
         {
             _movies = movies;
             _mockService = new Mock<IMovieService>();
