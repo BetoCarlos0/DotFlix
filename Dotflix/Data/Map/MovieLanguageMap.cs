@@ -9,6 +9,10 @@ namespace Dotflix.Data.Map
         public void Configure(EntityTypeBuilder<MovieLanguage> builder)
         {
             builder.HasKey(x => new { x.MovieId, x.LanguageId});
+
+            builder.Property(x => x.MovieId).HasColumnName("Movie_Id");
+
+            builder.Property(x => x.LanguageId).HasColumnName("Language_Id");
         }
     }
 }

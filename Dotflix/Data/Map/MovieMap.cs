@@ -9,7 +9,7 @@ namespace Dotflix.Data.Map
         public void Configure(EntityTypeBuilder<Movie> builder)
         {
             builder.HasKey(x => x.MovieId);
-            builder.Property(x => x.MovieId).UseIdentityColumn(100, 1);
+            builder.Property(x => x.MovieId);
 
             builder.Property(x => x.Image)
                 .HasColumnType("varchar")

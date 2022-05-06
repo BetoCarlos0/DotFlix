@@ -29,7 +29,7 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Language>> GetLanguage(int id)
+        public async Task<ActionResult<Language>> GetLanguage(Guid id)
         {
             var getLanguage = await _languageService.GetByIdAsync(id);
 
@@ -50,7 +50,7 @@ namespace Dotflix.Controllers
                 var result = await _languageService.AddAsync(language).ConfigureAwait(false);
 
                 if (result.Name == language.Name && result.LanguageId != language.LanguageId)
-                    return BadRequest($"400 - Filme com Id {result.LanguageId} tem o mesmo Título");
+                    return BadRequest($"400 - Idioma com Id {result.LanguageId} Já existente");
 
                 return CreatedAtAction(nameof(GetLanguage),
                     new { id = language.LanguageId}, language);
@@ -70,7 +70,7 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Language>> UpdateLanguage(int id, Language language)
+        public async Task<ActionResult<Language>> UpdateLanguage(Guid id, Language language)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -91,7 +91,7 @@ namespace Dotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {

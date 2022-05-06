@@ -9,7 +9,8 @@ namespace Dotflix.Data.Map
         public void Configure(EntityTypeBuilder<Language> builder)
         {
             builder.HasKey(x => x.LanguageId);
-            builder.Property(x => x.LanguageId).UseIdentityColumn(100,1);
+            builder.Property(x => x.LanguageId)
+                .HasColumnName("Language_Id");
 
             builder.Property(x => x.Name)
                 .HasColumnType("varchar")

@@ -11,28 +11,34 @@ namespace Dotflix.Models
     public class Movie
     {
         [Required]
-        public int MovieId { get; set; }
+        public Guid MovieId { get; set; }
 
         [Required(ErrorMessage = "Título obrigatório")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Título menor que 5 caracteres")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Sinopse obrigatória")]
+        [StringLength(250, MinimumLength = 5, ErrorMessage = "Sinopse menor que 5 caracteres")]
         public string Sinopse { get; set; }
 
         [Required(ErrorMessage = "Imagem obrigatória")]
         public string Image { get; set; }
 
         [Required(ErrorMessage = "Faixa etária obrigatória")]
+        [StringLength(2, MinimumLength = 1, ErrorMessage = "Faixa etária inválida")]
         public string AgeGroup { get; set; }      // faixa etária
 
         [Required(ErrorMessage = "Data de lançamento obrigaório")]
         [JsonPropertyName("Data lançamento")]
+        [DataType(DataType.Date)]
         public DateTime ReleaseData { get; set; } // data lançamento
 
         [Required(ErrorMessage = "Relevância do filme obrigatório")]
+        [Range(0, 100, ErrorMessage = "Porcentagem inválida")]
         public int Relevance { get; set; }        // relevância
 
         [Required(ErrorMessage = "Tempo do Filme obrigatório")]
+        [DataType(DataType.Time)]
         public DateTime RunTime { get; set; }
 
         [Required(ErrorMessage = "Id do Idioma obrigatório")]

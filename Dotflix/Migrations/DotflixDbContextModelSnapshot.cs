@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Dotflix.Migrations
+namespace ApiDotflix.Migrations
 {
     [DbContext(typeof(DotflixDbContext))]
     partial class DotflixDbContextModelSnapshot : ModelSnapshot
@@ -21,12 +21,10 @@ namespace Dotflix.Migrations
 
             modelBuilder.Entity("Dotflix.Models.Language", b =>
                 {
-                    b.Property<int>("LanguageId")
+                    b.Property<Guid>("LanguageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 100)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Language_Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -40,12 +38,9 @@ namespace Dotflix.Migrations
 
             modelBuilder.Entity("Dotflix.Models.Movie", b =>
                 {
-                    b.Property<int>("MovieId")
+                    b.Property<Guid>("MovieId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 100)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AgeGroup")
                         .IsRequired()
@@ -87,11 +82,13 @@ namespace Dotflix.Migrations
 
             modelBuilder.Entity("Dotflix.Models.MovieLanguage", b =>
                 {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Movie_Id");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Language_Id");
 
                     b.HasKey("MovieId", "LanguageId");
 

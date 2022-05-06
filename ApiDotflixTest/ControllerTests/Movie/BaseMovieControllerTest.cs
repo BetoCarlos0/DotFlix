@@ -1,23 +1,18 @@
 ﻿using Dotflix.Controllers;
 using Dotflix.Models;
-using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiDotflixTest.ControllerTests
 {
-    public abstract class BaseControllerTest
+    public abstract class BaseMovieControllerTest
     {
         protected readonly List<Movie> _movies;
         protected readonly Mock<IMovieService> _mockService;
         protected MovieController _movieController;
 
-        public BaseControllerTest(List<Movie> movies)
+        public BaseMovieControllerTest(List<Movie> movies)
         {
             _movies = movies;
             _mockService = new Mock<IMovieService>();

@@ -1,6 +1,7 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Dotflix.Data.Services
             return await _languageRepository.GetAllAsync();
         }
 
-        public async Task<Language> GetByIdAsync(int id)
+        public async Task<Language> GetByIdAsync(Guid id)
         {
             return await _languageRepository.GetByIdAsync(id);
         }
@@ -34,7 +35,7 @@ namespace Dotflix.Data.Services
         {
             return await _languageRepository.UpdateAsync(language);
         }
-        public async Task<bool> DeleteId(int id)
+        public async Task<bool> DeleteId(Guid id)
         {
             return await _languageRepository.DeleteId(id);
         }

@@ -1,6 +1,7 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Dotflix.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<Language> GetByIdAsync(int id)
+        public async Task<Language> GetByIdAsync(Guid id)
         {
             return await _dbContext.Language
                 .FirstOrDefaultAsync(x => x.LanguageId == id);
@@ -62,7 +63,7 @@ namespace Dotflix.Data.Repository
             return getLanguage;
         }
 
-        public async Task<bool> DeleteId(int id)
+        public async Task<bool> DeleteId(Guid id)
         {
             var getLanguage = await _dbContext.Language.
                 FirstOrDefaultAsync(x => x.LanguageId == id);

@@ -2,6 +2,7 @@
 using Dotflix.Models.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace Dotflix.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<Movie> GetByIdAsync(int id)
+        public async Task<Movie> GetByIdAsync(Guid id)
         {
             return await _dbContext.Movie
                 .Include(x => x.MovieLanguages)
@@ -73,7 +74,7 @@ namespace Dotflix.Data.Repository
 
             return getMovie;
         }
-        public async Task<bool> DeleteId(int id)
+        public async Task<bool> DeleteId(Guid id)
         {
             var getMovie = await _dbContext.Movie
                 .FirstOrDefaultAsync(e => e.MovieId == id);

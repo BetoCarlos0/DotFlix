@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Dotflix.Migrations
+namespace ApiDotflix.Migrations
 {
     public partial class Initial : Migration
     {
@@ -11,21 +11,19 @@ namespace Dotflix.Migrations
                 name: "Language",
                 columns: table => new
                 {
-                    LanguageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "100, 1"),
+                    Language_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Language", x => x.LanguageId);
+                    table.PrimaryKey("PK_Language", x => x.Language_Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Movie",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "100, 1"),
+                    MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Sinopse = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
                     Image = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
@@ -43,30 +41,30 @@ namespace Dotflix.Migrations
                 name: "MovieLanguage",
                 columns: table => new
                 {
-                    LanguageId = table.Column<int>(type: "int", nullable: false),
-                    MovieId = table.Column<int>(type: "int", nullable: false)
+                    Language_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Movie_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieLanguage", x => new { x.MovieId, x.LanguageId });
+                    table.PrimaryKey("PK_MovieLanguage", x => new { x.Movie_Id, x.Language_Id });
                     table.ForeignKey(
-                        name: "FK_MovieLanguage_Language_LanguageId",
-                        column: x => x.LanguageId,
+                        name: "FK_MovieLanguage_Language_Language_Id",
+                        column: x => x.Language_Id,
                         principalTable: "Language",
-                        principalColumn: "LanguageId",
+                        principalColumn: "Language_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MovieLanguage_Movie_MovieId",
-                        column: x => x.MovieId,
+                        name: "FK_MovieLanguage_Movie_Movie_Id",
+                        column: x => x.Movie_Id,
                         principalTable: "Movie",
                         principalColumn: "MovieId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MovieLanguage_LanguageId",
+                name: "IX_MovieLanguage_Language_Id",
                 table: "MovieLanguage",
-                column: "LanguageId");
+                column: "Language_Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
