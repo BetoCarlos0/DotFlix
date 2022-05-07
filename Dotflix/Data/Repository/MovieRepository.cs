@@ -32,11 +32,11 @@ namespace Dotflix.Data.Repository
             return await _dbContext.Movie
                 .Include(x => x.MovieLanguages)
                     .ThenInclude(x => x.Language)
-                .FirstOrDefaultAsync(x => x.MovieId == id);
+                .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
         }
         public async Task<Movie> AddAsync(Movie movie)
         {
-            var getMovie = await _dbContext.Movie.FirstOrDefaultAsync(x => x.Title == movie.Title);
+            var getMovie = await _dbContext.Movie.FirstOrDefaultAsync(x => x.Title.Equals(movie.Title));
 
             if (getMovie == null)
             {
@@ -57,7 +57,7 @@ namespace Dotflix.Data.Repository
             var getMovie = await _dbContext.Movie
                 .Include(x => x.MovieLanguages)
                     .ThenInclude(x => x.Language)
-                .FirstOrDefaultAsync(x => x.MovieId == movie.MovieId);
+                .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             if (getMovie == null) return null;
 

@@ -10,7 +10,6 @@ namespace Dotflix.Models
 {
     public class Movie
     {
-        [Required]
         public Guid MovieId { get; set; }
 
         [Required(ErrorMessage = "Título obrigatório")]
@@ -29,7 +28,6 @@ namespace Dotflix.Models
         public string AgeGroup { get; set; }      // faixa etária
 
         [Required(ErrorMessage = "Data de lançamento obrigaório")]
-        [JsonPropertyName("Data lançamento")]
         [DataType(DataType.Date)]
         public DateTime ReleaseData { get; set; } // data lançamento
 
@@ -40,6 +38,9 @@ namespace Dotflix.Models
         [Required(ErrorMessage = "Tempo do Filme obrigatório")]
         [DataType(DataType.Time)]
         public DateTime RunTime { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime Cadastro { get; set; }
 
         [Required(ErrorMessage = "Id do Idioma obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
@@ -60,6 +61,11 @@ namespace Dotflix.Models
             {
                 LanguageId = y.LanguageId,
             }).ToList();
+        }
+
+        public void DataCadastro()
+        {
+            Cadastro = DateTime.Now;
         }
     }
 }

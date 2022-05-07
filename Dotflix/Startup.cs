@@ -36,9 +36,12 @@ namespace Dotflix
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<ILanguageService, LanguageService>();
 
+            //services.AddDbContext<DotflixDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
+            //        x => x.MigrationsAssembly(typeof(DotflixDbContext).Assembly.FullName)));
+
             services.AddDbContext<DotflixDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
-                    x => x.MigrationsAssembly(typeof(DotflixDbContext).Assembly.FullName)));
+                options.UseInMemoryDatabase("ImMemory"));
 
             services.AddSwaggerGen(c =>
             {

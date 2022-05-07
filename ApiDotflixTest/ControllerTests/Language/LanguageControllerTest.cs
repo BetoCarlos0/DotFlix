@@ -1,7 +1,6 @@
 ﻿using ApiDotflixTest.ControllerTests;
 using Dotflix.Models;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace ApiDotflixTest.ControllerTests
 {
     public class LanguageControllerTest : BaseLanguageControllerTest
     {
-        private static new readonly List<Language> _lang = new List<Language>()
+        private static readonly List<Language> _lang = new List<Language>()
         {
             new Language
             {
@@ -27,15 +26,11 @@ namespace ApiDotflixTest.ControllerTests
             }
         };
 
-        public LanguageControllerTest() : base(new List<Language>(_lang))
-        {
-        }
-
         [Fact, Trait("Language", "GetLanguage")]
         public async Task GetAllLanguage_Whencalled_ReturnOk()
         {
             //arrange act
-            var lang = await _languageController.GetAllLanguages();
+            //var lang = await _languageController.GetAllLanguages();
 
             //assert
             var result = lang.Result;

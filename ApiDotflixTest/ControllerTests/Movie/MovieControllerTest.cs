@@ -4,7 +4,6 @@ using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
