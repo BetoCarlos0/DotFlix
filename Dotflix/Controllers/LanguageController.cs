@@ -50,7 +50,7 @@ namespace Dotflix.Controllers
                 var result = await _languageService.AddAsync(language).ConfigureAwait(false);
 
                 if (result.Name == language.Name && result.LanguageId != language.LanguageId)
-                    return BadRequest($"400 - Idioma com Id {result.LanguageId} Já existente");
+                    return BadRequest($"400 - Idioma {result.Name} Já existente");
 
                 return CreatedAtAction(nameof(GetLanguage),
                     new { id = language.LanguageId}, language);

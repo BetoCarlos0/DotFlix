@@ -27,21 +27,16 @@ namespace Dotflix.Data.Repository
         public async Task<Language> GetByIdAsync(Guid id)
         {
             return await _dbContext.Language
-                .FirstOrDefaultAsync(x => x.LanguageId == id);
+                .FirstOrDefaultAsync(x => x.LanguageId.Equals(id));
         }
 
         public async Task<Language> AddAsync(Language language)
         {
-            var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.Name == language.Name);
+            var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.Name.Equals(language.Name));
 
-            if (getLanguage == null)
-            {
-                return null;
-            }
-            else
-            {
+            if (getLanguage != null)
                 return getLanguage;
-            }
+
             var result = await _dbContext.Language.AddAsync(language);
             await _dbContext.SaveChangesAsync();
 
@@ -51,11 +46,10 @@ namespace Dotflix.Data.Repository
         public async Task<Language> UpdateAsync(Language language)
         {
             var getLanguage = await _dbContext.Language.
-                FirstOrDefaultAsync(x => x.LanguageId == language.LanguageId);
+                FirstOrDefaultAsync(x => x.LanguageId.Equals(language.LanguageId));
             
             if (getLanguage == null) return null;
 
-            getLanguage.LanguageId = language.LanguageId;
             getLanguage.Name = language.Name;
 
             await _dbContext.SaveChangesAsync();

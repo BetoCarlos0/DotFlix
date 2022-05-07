@@ -23,7 +23,7 @@ namespace Dotflix.Controllers
         {
             _movieService = movieService;
         }
-        
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Movie>>> GetAllMovies()
@@ -55,7 +55,7 @@ namespace Dotflix.Controllers
                 var result = await _movieService.AddAsync(movie).ConfigureAwait(false);
 
                 if (result.Title == movie.Title && result.MovieId != movie.MovieId)
-                    return BadRequest($"400 - Filme com Id {result.MovieId} tem o mesmo Título");
+                    return BadRequest($"400 - Título {result.Title} já existente");
 
                 return CreatedAtAction(nameof(GetMovie),
                         new { id = movie.MovieId }, movie);
@@ -82,7 +82,12 @@ namespace Dotflix.Controllers
 
             try
             {
-                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
+                var result = await _movieService.UpdateAsync(movie).ConfigureAwait(false);
+
+                if (result.Title == movie.Title && result.MovieId != movie.MovieId)
+                    return BadRequest($"400 - Título {result.Title} já existente");
+
+                return Ok(result);
             }
             catch (DbUpdateException)
             {
