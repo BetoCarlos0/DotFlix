@@ -4,6 +4,7 @@ using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ApiDotflixTest.ControllerTests
 {
     public class MovieControllerTest : BaseMovieControllerTest
     {
-        private static new readonly List<Movie> _movies = new List<Movie>()
+        /*private static new readonly List<Movie> _movies = new List<Movie>()
         {
             new Movie
             {
@@ -76,8 +77,8 @@ namespace ApiDotflixTest.ControllerTests
 
         public MovieControllerTest() : base(new List<Movie>(_movies))
         {
-        }
-
+        }*/
+        /*
         [Fact]
         [Trait("Movie", "GetMovie")]
         public async Task GetAllMovies_Whencalled_ReturnOk()
@@ -360,6 +361,6 @@ namespace ApiDotflixTest.ControllerTests
 
             //assert
             Assert.IsType<OkResult>(movie);
-        }
+        }*/
     }
 }

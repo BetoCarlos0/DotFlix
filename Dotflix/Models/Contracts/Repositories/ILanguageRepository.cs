@@ -8,7 +8,8 @@ namespace Dotflix.Models.Contracts
     {
         Task<IEnumerable<Language>> GetAllAsync();
         Task<Language> GetByIdAsync(Guid id);
-        Task<Language> AddAsync(Language movie);
+        Task<Language> GetByNameAsync(string name);
+        Task<bool> AddAsync(Language movie);
         Task<Language> UpdateAsync(Language movie);
         Task<bool> DeleteId(Guid id);
     }

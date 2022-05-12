@@ -1,23 +1,22 @@
-﻿using ApiDotflixTest.ControllerTests;
+﻿using Dotflix.Controllers;
 using Dotflix.Models;
+using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiDotflixTest.ControllerTests
 {
-    public class LanguageControllerTest : BaseLanguageControllerTest
+    public class LanguageControllerTest
     {
-        private static readonly List<Language> _lang = new List<Language>()
+        /*private static readonly List<Language> _lang = new List<Language>()
         {
             new Language
             {
                 LanguageId = new Guid("a6e7fc8b-b836-4c14-b804-38f60152542f"),
-                Name = "Portugês"
+                Name = "Português"
             },
             new Language
             {
@@ -26,11 +25,20 @@ namespace ApiDotflixTest.ControllerTests
             }
         };
 
+        public LanguageControllerTest() : base(new List<Language>(_lang))
+        {
+        }*/
+
         [Fact, Trait("Language", "GetLanguage")]
         public async Task GetAllLanguage_Whencalled_ReturnOk()
         {
-            //arrange act
-            //var lang = await _languageController.GetAllLanguages();
+            //arrange
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.GetAllAsync());
+            var languageController = new LanguageController(mockService.Object);
+
+            //act
+            var lang = await languageController.GetAllLanguages();
 
             //assert
             var result = lang.Result;
@@ -41,12 +49,18 @@ namespace ApiDotflixTest.ControllerTests
         public async Task GetLanguageById_WhenCalled_ReturnOk()
         {
             //arrange
-            Guid id = new Guid("a6e7fc8b-b836-4c14-b804-38f60152542f");
-            var getLang = _lang.FirstOrDefault(x => x.LanguageId == id);
-            _mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(getLang);
+            Guid id = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5");
+            var getLang = new Language
+            {
+                LanguageId = id,
+                Name = "Português"
+            };
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(getLang);
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var lang = await _languageController.GetLanguage(id);
+            var lang = await languageController.GetLanguage(id);
 
             //assert
             var result = lang.Result;
@@ -56,21 +70,29 @@ namespace ApiDotflixTest.ControllerTests
         }
         
         [Fact, Trait("Language", "GetLanguage")]
-        public async Task GetLanguageById_WhenCalled_ReturnNotFound()
+        public async Task GetLanguageById_WhenCalled_NoContent()
         {
             //arrange
-            Guid id = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664");
-            var getLang = _lang.FirstOrDefault(x => x.LanguageId == id);
-            _mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(getLang);
+            Guid id = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4");
+            var getLang = new Language
+            {
+                LanguageId = id,
+                Name = "Português"
+            };
+            var mockService = new Mock<ILanguageService>();
+            //mockService.Setup(x => x.GetByIdAsync(new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4"))).Returns(null);
+            mockService.SetupGet(x => x.GetByIdAsync(id)).ReturnsAsync(getLang);
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var lang = await _languageController.GetLanguage(id);
+            var lang = await languageController.GetLanguage(id);
 
             //assert
             var result = lang.Result;
-            Assert.IsType<NotFoundObjectResult>(result);
+            //var actionValue = Assert.IsType<OkObjectResult>(result);
+            Assert.Null(result);
         }
-        
+        /*
         [Fact, Trait("Language", "PostLanguage")]
         public async Task CreateLanguage_DuplicateName_ReturnBadRequest()
         {
@@ -78,18 +100,18 @@ namespace ApiDotflixTest.ControllerTests
             var newLang = new Language
             {
                 LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5"),
-                Name = "Portugês"
+                Name = "Português"
             };
-            _mockService.Setup(x => x.AddAsync(newLang)).ReturnsAsync(newLang);
+            _mockService.Setup(x => x.AddAsync(It.IsAny<Language>())).ThrowsAsync(new DbUpdateException($"{newLang.Name} já existente"));
 
             //act
             var movie = await _languageController.CreateLanguage(newLang);
 
             //assert
-            var result = movie.Result;
-            Assert.IsType<BadRequestObjectResult>(result);
+            var exception = await Assert.ThrowsAnyAsync<DbUpdateException>(() => _languageController.CreateLanguage(newLang));
+            Assert.Equal($"{newLang.Name} já existente", exception.Message);
         }
-        /*
+        
         [Fact]
         [Trait("Movie", "PostMovie")]
         public async Task CreateMovie_WhenCalled_ReturnCreated()

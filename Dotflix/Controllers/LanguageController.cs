@@ -31,33 +31,31 @@ namespace Dotflix.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Language>> GetLanguage(Guid id)
         {
-            var getLanguage = await _languageService.GetByIdAsync(id);
+            //var getLanguage = await _languageService.GetByIdAsync(id);
 
-            if (getLanguage == null) return NotFound($"404 - Idioma com Id {id} não encontrado");
+            //if (getLanguage == null) return NotFound($"404 - Idioma com Id {id} não encontrado");
 
-            return Ok(getLanguage);
+            return Ok(await _languageService.GetByIdAsync(id));
+            //return Ok(getLanguage);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<ActionResult<Language>> CreateLanguage(Language language)
+        public async Task<IActionResult> CreateLanguage(Language language)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                var result = await _languageService.AddAsync(language).ConfigureAwait(false);
-
-                if (result.Name == language.Name && result.LanguageId != language.LanguageId)
-                    return BadRequest($"400 - Idioma {result.Name} Já existente");
+                await _languageService.AddAsync(language).ConfigureAwait(false);
 
                 return CreatedAtAction(nameof(GetLanguage),
                     new { id = language.LanguageId}, language);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(new ValidationProblemDetails(ModelState));
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {

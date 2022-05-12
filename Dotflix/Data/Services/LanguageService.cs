@@ -1,6 +1,7 @@
 ﻿using Dotflix.Models;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,9 +27,16 @@ namespace Dotflix.Data.Services
             return await _languageRepository.GetByIdAsync(id);
         }
 
-        public async Task<Language> AddAsync(Language language)
+        public async Task<bool> AddAsync(Language language)
         {
-            return await _languageRepository.AddAsync(language);
+            var getLanguage = await _languageRepository.GetByNameAsync(language.Name);
+
+            if (getLanguage != null)
+                throw new DbUpdateException($"{getLanguage.Name} já existente");
+
+            await _languageRepository.AddAsync(language);
+
+            return true;
         }
 
         public async Task<Language> UpdateAsync(Language language)

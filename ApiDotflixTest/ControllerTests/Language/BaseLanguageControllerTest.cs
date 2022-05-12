@@ -1,6 +1,7 @@
 ﻿using Dotflix.Controllers;
 using Dotflix.Models;
 using Dotflix.Models.Contracts.Services;
+using Moq;
 using System.Collections.Generic;
 
 namespace ApiDotflixTest.ControllerTests

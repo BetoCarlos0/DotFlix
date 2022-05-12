@@ -27,20 +27,26 @@ namespace Dotflix.Data.Repository
         public async Task<Language> GetByIdAsync(Guid id)
         {
             return await _dbContext.Language
-                .FirstOrDefaultAsync(x => x.LanguageId.Equals(id));
+                .FindAsync(id);
         }
 
-        public async Task<Language> AddAsync(Language language)
+        public async Task<Language> GetByNameAsync(string name)
+        {
+            return await _dbContext.Language.FirstOrDefaultAsync(x => x.Name.Equals(name));
+        }
+
+        public async Task<bool> AddAsync(Language language)
         {
             var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.Name.Equals(language.Name));
 
             if (getLanguage != null)
-                return getLanguage;
+                throw new DbUpdateException($"{getLanguage.Name} já existente");
+                //return getLanguage;
 
-            var result = await _dbContext.Language.AddAsync(language);
+            await _dbContext.Language.AddAsync(language);
             await _dbContext.SaveChangesAsync();
 
-            return result.Entity;
+            return true;
         }
 
         public async Task<Language> UpdateAsync(Language language)
@@ -71,5 +77,6 @@ namespace Dotflix.Data.Repository
             }
             return false;
         }
+
     }
 }
