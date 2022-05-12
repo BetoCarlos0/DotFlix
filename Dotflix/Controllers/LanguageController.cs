@@ -31,12 +31,11 @@ namespace Dotflix.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Language>> GetLanguage(Guid id)
         {
-            //var getLanguage = await _languageService.GetByIdAsync(id);
+            var getLanguage = await _languageService.GetByIdAsync(id);
 
-            //if (getLanguage == null) return NotFound($"404 - Idioma com Id {id} não encontrado");
+            if (getLanguage == null) return NotFound("Idioma não encontrado");
 
-            return Ok(await _languageService.GetByIdAsync(id));
-            //return Ok(getLanguage);
+            return Ok(getLanguage);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -48,14 +47,12 @@ namespace Dotflix.Controllers
 
             try
             {
-                await _languageService.AddAsync(language).ConfigureAwait(false);
+                var result = await _languageService.AddAsync(language).ConfigureAwait(false);
+
+                if (result != true) return BadRequest();
 
                 return CreatedAtAction(nameof(GetLanguage),
                     new { id = language.LanguageId}, language);
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception)
             {

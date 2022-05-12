@@ -1,4 +1,5 @@
 ﻿using Dotflix.Controllers;
+using Dotflix.Data.Services;
 using Dotflix.Models;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +71,7 @@ namespace ApiDotflixTest.ControllerTests
         }
         
         [Fact, Trait("Language", "GetLanguage")]
-        public async Task GetLanguageById_WhenCalled_NoContent()
+        public async Task GetLanguageById_WhenCalled_NotFound()
         {
             //arrange
             Guid id = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4");
@@ -80,8 +81,7 @@ namespace ApiDotflixTest.ControllerTests
                 Name = "Português"
             };
             var mockService = new Mock<ILanguageService>();
-            //mockService.Setup(x => x.GetByIdAsync(new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4"))).Returns(null);
-            mockService.SetupGet(x => x.GetByIdAsync(id)).ReturnsAsync(getLang);
+            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
             var languageController = new LanguageController(mockService.Object);
 
             //act
@@ -89,29 +89,29 @@ namespace ApiDotflixTest.ControllerTests
 
             //assert
             var result = lang.Result;
-            //var actionValue = Assert.IsType<OkObjectResult>(result);
-            Assert.Null(result);
+            Assert.IsType<NotFoundObjectResult>(result);
         }
-        /*
+        
         [Fact, Trait("Language", "PostLanguage")]
         public async Task CreateLanguage_DuplicateName_ReturnBadRequest()
         {
             //arrange
             var newLang = new Language
             {
-                LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5"),
+                LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4"),
                 Name = "Português"
             };
-            _mockService.Setup(x => x.AddAsync(It.IsAny<Language>())).ThrowsAsync(new DbUpdateException($"{newLang.Name} já existente"));
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.AddAsync(It.IsAny<Language>()));
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var movie = await _languageController.CreateLanguage(newLang);
+            var result = await languageController.CreateLanguage(newLang);
 
             //assert
-            var exception = await Assert.ThrowsAnyAsync<DbUpdateException>(() => _languageController.CreateLanguage(newLang));
-            Assert.Equal($"{newLang.Name} já existente", exception.Message);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
-        
+        /*
         [Fact]
         [Trait("Movie", "PostMovie")]
         public async Task CreateMovie_WhenCalled_ReturnCreated()

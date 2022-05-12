@@ -4,13 +4,18 @@ using Dotflix.Data.Services;
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Text.Json.Serialization;
 
 namespace Dotflix
@@ -61,8 +66,10 @@ namespace Dotflix
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
         {
+            app.UseErrorHandler(logger);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,6 +87,41 @@ namespace Dotflix
             {
                 endpoints.MapControllers();
             });
+        }
+        public static class ErrorHandlerExtensions
+        {
+            public static IApplicationBuilder UseErrorHandler(
+                                              this IApplicationBuilder appBuilder,
+                                              ILoggerFactory loggerFactory)
+            {
+                return appBuilder.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
+                        var exceptionHandlerFeature = context
+                                                        .Features
+                                                        .Get<IExceptionHandlerFeature>();
+
+                        if (exceptionHandlerFeature != null)
+                        {
+
+                            var logger = loggerFactory.CreateLogger("ErrorHandler");
+                            logger.LogError($"Error: {exceptionHandlerFeature.Error}");
+
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.ContentType = "application/json";
+
+                            var json = new
+                            {
+                                context.Response.StatusCode,
+                                Message = "Internal Server Error",
+                            };
+
+                            await context.Response.WriteAsync(JsonConvert.SerializeObject(json));
+                        }
+                    });
+                });
+            }
         }
     }
 }

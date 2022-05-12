@@ -37,12 +37,6 @@ namespace Dotflix.Data.Repository
 
         public async Task<bool> AddAsync(Language language)
         {
-            var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.Name.Equals(language.Name));
-
-            if (getLanguage != null)
-                throw new DbUpdateException($"{getLanguage.Name} já existente");
-                //return getLanguage;
-
             await _dbContext.Language.AddAsync(language);
             await _dbContext.SaveChangesAsync();
 
