@@ -1,8 +1,8 @@
 ﻿using Dotflix.Controllers;
-using Dotflix.Data.Services;
 using Dotflix.Models;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -12,24 +12,6 @@ namespace ApiDotflixTest.ControllerTests
 {
     public class LanguageControllerTest
     {
-        /*private static readonly List<Language> _lang = new List<Language>()
-        {
-            new Language
-            {
-                LanguageId = new Guid("a6e7fc8b-b836-4c14-b804-38f60152542f"),
-                Name = "Português"
-            },
-            new Language
-            {
-                LanguageId = new Guid("d78610d4-5041-4b8a-bb70-6f605b7a141d"),
-                Name = "Inglês"
-            }
-        };
-
-        public LanguageControllerTest() : base(new List<Language>(_lang))
-        {
-        }*/
-
         [Fact, Trait("Language", "GetLanguage")]
         public async Task GetAllLanguage_Whencalled_ReturnOk()
         {
@@ -81,7 +63,7 @@ namespace ApiDotflixTest.ControllerTests
                 Name = "Português"
             };
             var mockService = new Mock<ILanguageService>();
-            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
+            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new DbUpdateException());
             var languageController = new LanguageController(mockService.Object);
 
             //act
@@ -98,8 +80,26 @@ namespace ApiDotflixTest.ControllerTests
             //arrange
             var newLang = new Language
             {
-                LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f4"),
                 Name = "Português"
+            };
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.AddAsync(It.IsAny<Language>())).ThrowsAsync(new DbUpdateException());
+            var languageController = new LanguageController(mockService.Object);
+
+            //act
+            var result = await languageController.CreateLanguage(newLang);
+
+            //assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+        
+        [Fact, Trait("Language", "PostLanguage")]
+        public async Task CreateLanguage_WhenCalled_ReturnCreated()
+        {
+            //arrange
+            var newLang = new Language
+            {
+                Name = "teste"
             };
             var mockService = new Mock<ILanguageService>();
             mockService.Setup(x => x.AddAsync(It.IsAny<Language>()));
@@ -109,210 +109,151 @@ namespace ApiDotflixTest.ControllerTests
             var result = await languageController.CreateLanguage(newLang);
 
             //assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-        /*
-        [Fact]
-        [Trait("Movie", "PostMovie")]
-        public async Task CreateMovie_WhenCalled_ReturnCreated()
-        {
-            //arrange
-            var newMovie = new Movie
-            {
-                MovieId = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664"),
-                Title = "novo filme",
-                Sinopse = "um filme de teste",
-                Image = "imgTeste",
-                AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
-                Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
-                MovieLanguages = new List<MovieLanguage>()
-                {
-                    new MovieLanguage()
-                    {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
-                    }
-                }
-            };
-            Guid guidResult;
-            _mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
-
-            //act
-            var result = await _movieController.CreateMovie(newMovie);
-
-            //assert
-            //Assert.Equal("dd376a06-e466-4596-9769-ddcc5fe14664", newMovie.MovieId);
-            Assert.True(Guid.TryParse("dd376a06-e466-4596-9769-ddcc5fe14664", out guidResult));
-            Assert.Equal(new DateTime(2021, 5, 10, 15, 20, 20), newMovie.RunTime);
-            Assert.Equal(new DateTime(2010, 2, 20), newMovie.ReleaseData);
             Assert.IsType<CreatedAtActionResult>(result);
         }
-
-        [Fact]
-        [Trait("Movie", "PostMovie")]
-        public async Task CreateMovie_FieldNull_ReturnBadRequest()
+        
+        [Fact, Trait("language", "PostLanguage")]
+        public async Task CreateLanguage_FieldNull_ReturnBadRequest()
         {
             //arrange
-            var newMovie = new Movie
+            var newLang = new Language
             {
-                MovieId = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664"),
-                Title = null,
-                Sinopse = "um filme de teste",
-                AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
-                Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
-                MovieLanguages = new List<MovieLanguage>()
-                {
-                    new MovieLanguage()
-                    {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
-                    }
-                }
+                Name = null
             };
-            _mockService.Setup(x => x.AddAsync(newMovie));
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.AddAsync(It.IsAny<Language>()));
 
-            _movieController.ModelState.AddModelError("Title", "Required");
+            var languageController = new LanguageController(mockService.Object);
+            languageController.ModelState.AddModelError("name", "Required");
 
             //act
-            var result = await _movieController.CreateMovie(newMovie);
+            var result = await languageController.CreateLanguage(newLang);
 
             //assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
-
-        [Fact]
-        [Trait("Movie", "PostMovie")]
-        public async Task CreateMovie_CompareType_ResponseHasCreatedMovie()
+        
+        [Fact, Trait("Language", "PutLanguage")]
+        public async Task UpdateLanguage_WhenCalled_ReturnOk()
         {
             //arrange
-            var newMovie = new Movie
+            var id = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146");
+            var newLang = new Language
             {
-                MovieId = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664"),
-                Title = "titulo",
-                Sinopse = "um filme de teste",
-                AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
-                Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
-                MovieLanguages = new List<MovieLanguage>()
-                {
-                    new MovieLanguage()
-                    {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
-                    }
-                }
+                LanguageId = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146"),
+                Name = "teste"
             };
-            _mockService.Setup(x => x.AddAsync(newMovie)).ReturnsAsync(newMovie);
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<Language>()));
+
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var result = await _movieController.CreateMovie(newMovie) as CreatedAtActionResult;
-            var movie = result.Value as Movie;
+            var result = await languageController.UpdateLanguage(id, newLang);
 
             //assert
-            Assert.IsType<CreatedAtActionResult>(result);
-            Assert.IsType<Movie>(movie);
-        }
-
-        [Fact]
-        [Trait("Movie", "PutMovie")]
-        public async Task UpdateMovie_WhenCalled_ReturnOk()
-        {
-            //arrange
-            Guid id = new Guid();
-            var updateMovie = new Movie
-            {
-                MovieId = id,
-                AgeGroup = "0",
-                Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
-                Sinopse = "uma sinopse",
-                Title = "um filme",
-                Relevance = 45,
-                Languages = new List<Language>()
-                {
-                    new Language()
-                    {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
-                    }
-                }
-            };
-            var getMovie = await _movieController.GetMovie(id);
-            _mockService.Setup(x => x.UpdateAsync(updateMovie)).ReturnsAsync(updateMovie);
-
-            //act
-            var movie = await _movieController.UpdateMovie(id, updateMovie);
-
-            //assert
-            var result = movie.Result;
             Assert.IsType<OkObjectResult>(result);
         }
-
-        [Fact]
-        [Trait("Movie", "PutMovie")]
-        public async Task UpdateMovie_CompareId_ReturnBadRequest()
+        
+        [Fact, Trait("Language", "PutLanguage")]
+        public async Task UpdateLanguage_CompareId_ReturnBadRequest()
         {
             //arrange
-            Guid id = new Guid();
-            var updateMovie = new Movie
+            var id = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146");
+            var newLang = new Language
             {
-                MovieId = new Guid(),
-                AgeGroup = "0",
-                Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
-                Sinopse = "uma sinopse",
-                Title = "um filme",
-                Relevance = 45,
-                Languages = new List<Language>()
-                {
-                    new Language()
-                    {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
-                    }
-                }
+                LanguageId = new Guid("866e8eab-296e-4d82-b877-8ff96a5209c6"),
+                Name = "teste"
             };
-            var getMovie = await _movieController.GetMovie(id);
-            _mockService.Setup(x => x.UpdateAsync(updateMovie)).ReturnsAsync(updateMovie);
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<Language>()));
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var movie = await _movieController.UpdateMovie(id, updateMovie);
+            var result = await languageController.UpdateLanguage(id, newLang);
 
             //assert
-            var result = movie.Result;
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
-        [Fact]
-        [Trait("Movie", "DeleteMovie")]
-        public async Task DeleteMovie_WhenCalled_ReturnNotFound()
+        [Fact, Trait("Language", "PutLanguage")]
+        public async Task UpdateLanguage_DuplicateName_ReturnBadRequest()
         {
             //arrange
-            Guid id = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664");
-            _mockService.Setup(x => x.DeleteId(It.IsAny<Guid>())).ReturnsAsync(false);
+            var id = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5");
+            var newLang = new Language
+            {
+                LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5"),
+                Name = "Inglês"
+            };
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<Language>())).ThrowsAsync(new DbUpdateException());
+
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var movie = await _movieController.Delete(id);
+            var result = await languageController.UpdateLanguage(id, newLang);
 
             //assert
-            Assert.IsType<BadRequestResult>(movie);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
 
-        [Fact]
-        [Trait("Movie", "DeleteMovie")]
-        public async Task DeleteMovie_WhenCalled_ReturnOk()
+        [Fact, Trait("Language", "PutLanguage")]
+        public async Task UpdateLanguage_InvalidId_ReturnBadRequest()
         {
             //arrange
-            Guid id = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664");
-            _mockService.Setup(x => x.DeleteId(It.IsAny<Guid>())).ReturnsAsync(true);
+            Guid id = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146");
+            var newLang = new Language
+            {
+                LanguageId = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146"),
+                Name = "Inglês"
+            };
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<Language>())).ThrowsAsync(new DbUpdateException());
+
+            var languageController = new LanguageController(mockService.Object);
 
             //act
-            var movie = await _movieController.Delete(id);
+            var result = await languageController.UpdateLanguage(id, newLang);
 
             //assert
-            Assert.IsType<OkResult>(movie);
-        }*/
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact, Trait("Language", "DeleteLanguage")]
+        public async Task DeleteLanguage_InvalidId_ReturnBadRequest()
+        {
+            //arrange
+            var id = new Guid("ed4ddfd9-24d7-44e6-807f-6aceaf071146");
+
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.DeleteId(It.IsAny<Guid>())).ThrowsAsync(new DbUpdateException());
+
+            var languageController = new LanguageController(mockService.Object);
+
+            //act
+            var result = await languageController.Delete(id);
+
+            //assert
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact, Trait("Language", "DeleteLanguage")]
+        public async Task DeleteLanguage_WhenCalled_ReturnOk()
+        {
+            //arrange
+            var id = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5");
+
+            var mockService = new Mock<ILanguageService>();
+            mockService.Setup(x => x.DeleteId(It.IsAny<Guid>())).ReturnsAsync(true);
+
+            var languageController = new LanguageController(mockService.Object);
+
+            //act
+            var result = await languageController.Delete(id);
+
+            //assert
+            Assert.IsType<OkObjectResult>(result);
+        }
     }
 }

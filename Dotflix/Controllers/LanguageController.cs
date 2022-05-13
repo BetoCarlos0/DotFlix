@@ -31,11 +31,19 @@ namespace Dotflix.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Language>> GetLanguage(Guid id)
         {
-            var getLanguage = await _languageService.GetByIdAsync(id);
-
-            if (getLanguage == null) return NotFound("Idioma não encontrado");
-
-            return Ok(getLanguage);
+            try
+            {
+                return Ok(await _languageService.GetByIdAsync(id));
+            }
+            catch (DbUpdateException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -47,12 +55,14 @@ namespace Dotflix.Controllers
 
             try
             {
-                var result = await _languageService.AddAsync(language).ConfigureAwait(false);
-
-                if (result != true) return BadRequest();
+                await _languageService.AddAsync(language).ConfigureAwait(false);
 
                 return CreatedAtAction(nameof(GetLanguage),
                     new { id = language.LanguageId}, language);
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -63,19 +73,22 @@ namespace Dotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Language>> UpdateLanguage(Guid id, Language language)
+        public async Task<IActionResult> UpdateLanguage(Guid id, Language language)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             if (id != language.LanguageId)
-                return BadRequest("400 - Id e Idioma incompatíveis");
+                return BadRequest("Id e Idioma incompatíveis");
 
             try
             {
                 return Ok(await _languageService.UpdateAsync(language));
             }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
@@ -84,17 +97,17 @@ namespace Dotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                var result = await _languageService.DeleteId(id);
-
-                if (result == false) return BadRequest();
-
-                return Ok();
+                return Ok(await _languageService.DeleteId(id));
+            }
+            catch (DbUpdateException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {

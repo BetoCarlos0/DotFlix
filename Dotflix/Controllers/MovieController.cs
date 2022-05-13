@@ -26,7 +26,7 @@ namespace Dotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetAllMovies()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetAllMovies()
         {
             return Ok(await _movieService.GetAllAsync());
         }
@@ -36,62 +36,63 @@ namespace Dotflix.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(Guid id)
         {
-            var result = await _movieService.GetByIdAsync(id);
-
-            if (result == null) return NotFound($"404 - Filme com Id {id} não encontrado");
-                
-            return Ok(result);
+            try
+            {
+                return Ok(await _movieService.GetByIdAsync(id));
+            }
+            catch (DbUpdateException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<ActionResult> CreateMovie(Movie movie)
+        public async Task<IActionResult> CreateMovie(Movie movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                var result = await _movieService.AddAsync(movie).ConfigureAwait(false);
-
-                if (result.Title == movie.Title && result.MovieId != movie.MovieId)
-                    return BadRequest($"400 - Título {result.Title} já existente");
+                await _movieService.AddAsync(movie).ConfigureAwait(false);
 
                 return CreatedAtAction(nameof(GetMovie),
                         new { id = movie.MovieId }, movie);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(new ValidationProblemDetails(ModelState));
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
             }
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Movie>> UpdateMovie(Guid id, Movie movie)
+        public async Task<IActionResult> UpdateMovie(Guid id, Movie movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             if (id != movie.MovieId)
-                return BadRequest("400 - Id e Filme incompatíveis");
+                return BadRequest("Id e Filme incompatíveis");
 
             try
             {
-                var result = await _movieService.UpdateAsync(movie).ConfigureAwait(false);
-
-                if (result.Title == movie.Title && result.MovieId != movie.MovieId)
-                    return BadRequest($"400 - Título {result.Title} já existente");
-
-                return Ok(result);
+                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(new ValidationProblemDetails(ModelState));
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -100,21 +101,22 @@ namespace Dotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var resultType = await _movieService.DeleteId(id).ConfigureAwait(false);
-
-                if (resultType == false) return BadRequest();
-
-                return Ok();
+                return Ok(await _movieService.DeleteId(id));
+            }
+            catch (DbUpdateException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
             }
         }
     }

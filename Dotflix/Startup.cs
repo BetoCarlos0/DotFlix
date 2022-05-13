@@ -68,7 +68,7 @@ namespace Dotflix
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
         {
-            app.UseErrorHandler(logger);
+            //app.UseErrorHandler(logger);
 
             if (env.IsDevelopment())
             {
@@ -88,7 +88,7 @@ namespace Dotflix
                 endpoints.MapControllers();
             });
         }
-        public static class ErrorHandlerExtensions
+        /*public static class ErrorHandlerExtensions
         {
             public static IApplicationBuilder UseErrorHandler(
                                               this IApplicationBuilder appBuilder,
@@ -122,6 +122,6 @@ namespace Dotflix
                     });
                 });
             }
-        }
+        }*/
     }
 }

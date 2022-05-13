@@ -31,17 +31,23 @@ namespace Dotflix.Data.Services
         {
             var getLanguage = await _languageRepository.GetByNameAsync(language.Name);
 
-            if (getLanguage != null)
+            if (getLanguage == null)
+                return await _languageRepository.AddAsync(language);
+            else
                 throw new DbUpdateException($"{getLanguage.Name} já existente");
-
-            await _languageRepository.AddAsync(language);
-
-            return true;
         }
 
-        public async Task<Language> UpdateAsync(Language language)
+        public async Task<bool> UpdateAsync(Language language)
         {
-            return await _languageRepository.UpdateAsync(language);
+            var getLanguage = await _languageRepository.GetByNameAsync(language.Name);
+
+            if (getLanguage == null)
+                return await _languageRepository.UpdateAsync(language);
+
+            if (getLanguage.LanguageId != language.LanguageId)
+                throw new DbUpdateException($"{getLanguage.Name} já existente");
+
+            return true;
         }
         public async Task<bool> DeleteId(Guid id)
         {

@@ -10,7 +10,7 @@ namespace Dotflix.Models
         [Required]
         public Guid LanguageId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nome Requerido")]
         //[RegularExpression(@"[0-9]$", ErrorMessage = "Apenas Letras")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Idioma menor que 3 caracteres")]
         public string Name { get; set; }

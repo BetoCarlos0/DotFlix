@@ -26,8 +26,12 @@ namespace Dotflix.Data.Repository
 
         public async Task<Language> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Language
-                .FindAsync(id);
+            var getLanguage = await _dbContext.Language.FindAsync(id);
+
+            if (getLanguage == null)
+                throw new DbUpdateException("Id não encontrado");
+
+            return getLanguage;
         }
 
         public async Task<Language> GetByNameAsync(string name)
@@ -43,33 +47,32 @@ namespace Dotflix.Data.Repository
             return true;
         }
 
-        public async Task<Language> UpdateAsync(Language language)
+        public async Task<bool> UpdateAsync(Language language)
         {
-            var getLanguage = await _dbContext.Language.
-                FirstOrDefaultAsync(x => x.LanguageId.Equals(language.LanguageId));
-            
-            if (getLanguage == null) return null;
+            var getLanguage = await _dbContext.Language.FirstOrDefaultAsync(x => x.LanguageId.Equals(language.LanguageId));
 
-            getLanguage.Name = language.Name;
+            if (getLanguage != null)
+                getLanguage.Name = language.Name;
+            else
+                throw new DbUpdateException("Id não existe");
 
             await _dbContext.SaveChangesAsync();
 
-            return getLanguage;
+            return true;
         }
 
         public async Task<bool> DeleteId(Guid id)
         {
             var getLanguage = await _dbContext.Language.
-                FirstOrDefaultAsync(x => x.LanguageId == id);
+                FindAsync(id);
 
-            if (getLanguage != null)
-            {
-                _dbContext.Remove(getLanguage);
-                await _dbContext.SaveChangesAsync();
+            if (getLanguage == null)
+                throw new DbUpdateException("Id não existe");
 
-                return true;
-            }
-            return false;
+            _dbContext.Remove(getLanguage);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
     }

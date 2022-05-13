@@ -31,6 +31,56 @@ namespace ApiDotflix.Data
                 {
                     LanguageId = new Guid("b84c7cce-f651-4a0d-98ab-8dc13a7898a9"),
                     Name = "Inglês"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("600fb988-27f1-4dea-8c30-fd79db1bc56a"),
+                    Name = "Espanhol"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("322bbc02-2a62-400d-aaae-ba338c86ce92"),
+                    Name = "Japonês"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("6d94dcae-1134-4322-a9f1-c9a6fe77d205"),
+                    Name = "Chinês"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("a84c7145-63f4-4346-88a0-8e82e395efd1"),
+                    Name = "Latim"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("faaedcb0-a8e5-4770-ae4e-bb6401f7ac26"),
+                    Name = "Russo"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("840efc0a-41ee-4ccb-be9b-141107734408"),
+                    Name = "Urdu"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("24e67585-c03e-4259-8e45-04e905c9a3f4"),
+                    Name = "Basco"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("406339d5-d917-43cc-b9d2-3b284c05d157"),
+                    Name = "Galês"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("1c5c79bf-3e34-4b52-8842-9057029d6f82"),
+                    Name = "Zulu"
+                },
+                new Language
+                {
+                    LanguageId = new Guid("7f479fca-9bd8-4abb-a2c6-66bdca7e7a0f"),
+                    Name = "Luganda"
                 });
 
             context.MovieLanguage.AddRange(

@@ -9,8 +9,6 @@ namespace Dotflix.Models
 
         public string Title { get; set; }
 
-        public string Sinopse { get; set; }
-
         public string Image { get; set; }
 
         public string AgeGroup { get; set; }      // faixa etária

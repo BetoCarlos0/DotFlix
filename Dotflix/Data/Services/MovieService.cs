@@ -2,6 +2,7 @@
 using Dotflix.Models.Contracts;
 using Dotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,9 +18,25 @@ namespace Dotflix.Data.Services
             _movieRepository = movieRepository;
         }
 
-        public async Task<IEnumerable<Movie>> GetAllAsync()
+        public async Task<IEnumerable<MovieDto>> GetAllAsync()
         {
-            return await _movieRepository.GetAllAsync();
+            var movies = await _movieRepository.GetAllAsync();
+            var movieDto = new List<MovieDto>();
+
+            foreach(var movie in movies)
+            {
+                //yield return movie;
+                movieDto.Add(new MovieDto
+                {
+                    MovieId = movie.MovieId,
+                    Title = movie.Title,
+                    RunTime = movie.RunTime,
+                    Image = movie.Image,
+                    AgeGroup = movie.AgeGroup,
+                    Relevance = movie.Relevance
+                });
+            }
+            return movieDto;
         }
 
         public async Task<Movie> GetByIdAsync(Guid id)
@@ -32,14 +49,27 @@ namespace Dotflix.Data.Services
             return await _movieRepository.GetByNameAsync(name);
         }
 
-        public async Task<Movie> AddAsync(Movie movie)
+        public async Task<bool> AddAsync(Movie movie)
         {
-            return await _movieRepository.AddAsync(movie);
+            var getMovie = await _movieRepository.GetByNameAsync(movie.Title);
+
+            if (getMovie == null)
+                return await _movieRepository.AddAsync(movie);
+            else
+                throw new DbUpdateException($"{movie.Title} já existente");
         }
 
-        public async Task<Movie> UpdateAsync(Movie movie) 
+        public async Task<bool> UpdateAsync(Movie movie) 
         {
-            return await _movieRepository.UpdateAsync(movie);
+            var getMovie = await _movieRepository.GetByNameAsync(movie.Title);
+
+            if (getMovie == null)
+                return await _movieRepository.UpdateAsync(movie);
+
+            if (getMovie.MovieId != movie.MovieId)
+                throw new DbUpdateException($"{getMovie.Title} já existente");
+
+            return true;
         }
 
         public async Task<bool> DeleteId(Guid id)
