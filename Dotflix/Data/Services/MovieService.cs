@@ -25,7 +25,6 @@ namespace Dotflix.Data.Services
 
             foreach(var movie in movies)
             {
-                //yield return movie;
                 movieDto.Add(new MovieDto
                 {
                     MovieId = movie.MovieId,
@@ -35,6 +34,7 @@ namespace Dotflix.Data.Services
                     AgeGroup = movie.AgeGroup,
                     Relevance = movie.Relevance
                 });
+
             }
             return movieDto;
         }

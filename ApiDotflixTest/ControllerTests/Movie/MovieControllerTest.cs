@@ -79,9 +79,9 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
                 AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
+                ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss"),
                 MovieLanguages = new List<MovieLanguage>()
                 {
                     new MovieLanguage()
@@ -113,9 +113,9 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
                 AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
+                ReleaseData = new DateTime(2010, 2, 20).ToString("dd/MM/yyyy"),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 MovieLanguages = new List<MovieLanguage>()
                 {
                     new MovieLanguage()
@@ -146,9 +146,9 @@ namespace ApiDotflixTest.ControllerTests
                 Title = null,
                 Sinopse = "um filme de teste",
                 AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20),
+                ReleaseData = new DateTime(2010, 2, 20).ToString("dd/MM/yyyy"),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 MovieLanguages = new List<MovieLanguage>()
                 {
                     new MovieLanguage()
@@ -179,8 +179,8 @@ namespace ApiDotflixTest.ControllerTests
                 MovieId = id,
                 AgeGroup = "0",
                 Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 Sinopse = "uma sinopse",
                 Title = "um filme",
                 Relevance = 45,
@@ -213,8 +213,8 @@ namespace ApiDotflixTest.ControllerTests
                 MovieId = new Guid("d495e18e-3a41-404d-bdb6-d71196699811"),
                 AgeGroup = "0",
                 Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 Sinopse = "uma sinopse",
                 Title = "um filme",
                 Relevance = 45,
@@ -248,8 +248,8 @@ namespace ApiDotflixTest.ControllerTests
                 Title = "outro filme",
                 AgeGroup = "0",
                 Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20),
+                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
+                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 Sinopse = "uma sinopse",
                 Relevance = 45,
                 Languages = new List<Language>()

@@ -15,7 +15,6 @@ namespace Dotflix.Models
 
         public int Relevance { get; set; }        // relevância
 
-        [DataType(DataType.Time)]
-        public DateTime RunTime { get; set; }
+        public string RunTime { get; set; }
     }
 }

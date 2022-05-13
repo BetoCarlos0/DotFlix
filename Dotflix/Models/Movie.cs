@@ -27,20 +27,22 @@ namespace Dotflix.Models
         [StringLength(2, MinimumLength = 1, ErrorMessage = "Faixa etária inválida")]
         public string AgeGroup { get; set; }      // faixa etária
 
-        [Required(ErrorMessage = "Data de lançamento obrigaório")]
-        [DataType(DataType.Date)]
-        public DateTime ReleaseData { get; set; } // data lançamento
-
         [Required(ErrorMessage = "Relevância do filme obrigatório")]
         [Range(0, 100, ErrorMessage = "Porcentagem inválida")]
         public int Relevance { get; set; }        // relevância
 
+        [Required(ErrorMessage = "Data de lançamento obrigaório")]
+        [RegularExpression(@"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$"
+            ,ErrorMessage = "Data Inválida")]
+        public string ReleaseData { get; set; } // data lançamento
+
         [Required(ErrorMessage = "Tempo do Filme obrigatório")]
-        [DataType(DataType.Time)]
-        public DateTime RunTime { get; set; }
+        [RegularExpression(@"^([01234]{1}):([012345]\d):([012345]\d)", ErrorMessage = "Tempo inválido")]
+        public string RunTime { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime Cadastro { get; set; }
+        [DisplayFormat(DataFormatString = "{dd:MM:yyyy}")]
+        public string Cadastro { get; set; }
 
         [Required(ErrorMessage = "Id do Idioma obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
@@ -65,7 +67,7 @@ namespace Dotflix.Models
 
         public void DataCadastro()
         {
-            Cadastro = DateTime.Now;
+            Cadastro = DateTime.Now.Date.ToString();
         }
     }
 }

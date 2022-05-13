@@ -108,24 +108,24 @@ namespace ApiDotflix.Data
                     MovieId = new Guid("d495e18e-3a41-404d-bdb6-d71196699811"),
                     AgeGroup = "18",
                     Image = "img2",
-                    ReleaseData = new DateTime(2021, 5, 10),
-                    RunTime = new DateTime(1, 1, 1, 2, 15, 20),
+                    ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
+                    RunTime = new DateTime(1, 1, 1, 2, 15, 20).ToString("H:mm:ss"),
                     Sinopse = "uma sinopse",
                     Title = "um filme",
                     Relevance = 45,
-                    Cadastro = DateTime.Now
+                    Cadastro = DateTime.Now.Date.ToString("dd/MM/yyyy")
                 },
                 new Movie
                 {
                     MovieId = new Guid("58edeefa-ce6e-4248-90ae-47fcf38313ab"),
                     AgeGroup = "10",
                     Image = "img1",
-                    ReleaseData = new DateTime(2021, 5, 10),
-                    RunTime = new DateTime(1, 1, 1, 2, 20, 20),
+                    ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
+                    RunTime = new DateTime(1, 1, 1, 2, 20, 20).ToString("H:mm:ss"),
                     Sinopse = "outra sinopse",
                     Title = "outro filme",
                     Relevance = 15,
-                    Cadastro = DateTime.Now
+                    Cadastro = DateTime.Now.ToString("dd/MM/yyyy")
                 }
             );
             context.SaveChangesAsync();

@@ -20,18 +20,6 @@ namespace Dotflix.Data.Repository
 
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
-            //var movies = from movie in _dbContext.Movie select new MovieDto()
-            //{
-            //    MovieId = movie.MovieId,
-            //    Title = movie.Title,
-            //    RunTime = movie.RunTime,
-            //    Image = movie.Image,
-            //    AgeGroup = movie.AgeGroup,
-            //    Relevance = movie.Relevance
-            //};
-
-            //return movies.AsEnumerable();
-
             return await _dbContext.Movie
                 .AsNoTracking()
                 .ToListAsync();
@@ -58,6 +46,8 @@ namespace Dotflix.Data.Repository
 
         public async Task<bool> AddAsync(Movie movie)
         {
+            movie.Cadastro = DateTime.Now.ToString("dd/MM/yyyy");
+
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
 
