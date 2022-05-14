@@ -1,13 +1,11 @@
-﻿using Dotflix.Models;
-using Dotflix.Models.Contracts;
-using Microsoft.AspNetCore.Mvc;
+﻿using ApiDotflix.Models;
+using ApiDotflix.Models.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dotflix.Data.Repository
+namespace ApiDotflix.Data.Repository
 {
     public class MovieRepository : IMovieRepository
     {
@@ -25,11 +23,12 @@ namespace Dotflix.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<Movie> GetByIdAsync(Guid id)
+        public async Task<Movie> GetByIdAsync(int id)
         {
             var getMovie = await _dbContext.Movie
-                .Include(x => x.MovieLanguages)
-                    .ThenInclude(x => x.Language)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutKeywords)
+                        .ThenInclude(x => x.Keyword)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
 
             if (getMovie == null)
@@ -46,7 +45,7 @@ namespace Dotflix.Data.Repository
 
         public async Task<bool> AddAsync(Movie movie)
         {
-            movie.Cadastro = DateTime.Now.ToString("dd/MM/yyyy");
+            movie.Register = DateTime.Now.ToString("dd/MM/yyyy");
 
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
@@ -57,8 +56,9 @@ namespace Dotflix.Data.Repository
         public async Task<bool> UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
-                .Include(x => x.MovieLanguages)
-                    .ThenInclude(x => x.Language)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutKeywords)
+                        .ThenInclude(x => x.Keyword)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             if (getMovie == null) return false;
@@ -70,13 +70,14 @@ namespace Dotflix.Data.Repository
             getMovie.ReleaseData = movie.ReleaseData;
             getMovie.RunTime = movie.RunTime;
             getMovie.AgeGroup = movie.AgeGroup;
-            getMovie.MovieLanguages = movie.MovieLanguages;
+            getMovie.About = movie.About;
+            //getMovie.MovieLanguages = movie.MovieLanguages;
 
             await _dbContext.SaveChangesAsync();
 
             return true;
         }
-        public async Task<bool> DeleteId(Guid id)
+        public async Task<bool> DeleteId(int id)
         {
             var getMovie = await _dbContext.Movie
                 .FindAsync(id);

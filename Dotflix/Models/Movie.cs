@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using ApiDotflix.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.Json.Serialization;
 
-namespace Dotflix.Models
+namespace ApiDotflix.Models
 {
     public class Movie
     {
-        public Guid MovieId { get; set; }
+        public int MovieId { get; set; }
 
         [Required(ErrorMessage = "Título obrigatório")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Título menor que 5 caracteres")]
@@ -24,7 +24,8 @@ namespace Dotflix.Models
         public string Image { get; set; }
 
         [Required(ErrorMessage = "Faixa etária obrigatória")]
-        [StringLength(2, MinimumLength = 1, ErrorMessage = "Faixa etária inválida")]
+        [StringLength(3, MinimumLength = 1, ErrorMessage = "Faixa etária inválida")]
+        [RegularExpression(@"^(?:[L|l])|([0-9]{0,2})|(([0-9])([0-9])?([0]))", ErrorMessage = "Faixa etária inválida")]
         public string AgeGroup { get; set; }      // faixa etária
 
         [Required(ErrorMessage = "Relevância do filme obrigatório")]
@@ -42,37 +43,17 @@ namespace Dotflix.Models
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd:MM:yyyy}")]
-        public string Cadastro { get; set; }
+        public string Register { get; set; }
 
-        [Required(ErrorMessage = "Id do Idioma obrigatório")]
-        [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
-
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Language> Languages
-        {
-            get
-            {
-                if (MovieLanguages != null)
-                    return MovieLanguages.Select(x => x.Language);
-                return Enumerable.Empty<Language>();
-            }
-
-            set => MovieLanguages = value.Select(y => new MovieLanguage()
-            {
-                LanguageId = y.LanguageId,
-            }).ToList();
-        }
+        [Required(ErrorMessage = "Id de Sobre obrigatório")]
+        public About About { get; set; }
 
         public void DataCadastro()
         {
-            Cadastro = DateTime.Now.Date.ToString();
+            Register = DateTime.Now.Date.ToString();
         }
     }
 }
-//public IEnumerable<About> Abouts { get; set; }
-//public IEnumerable<MovieKeyword> MovieKeywords { get; set; }
 /*
 public class MovieGenre
 {
@@ -87,24 +68,8 @@ public class Genre
     public string Name { get; set; }
     public IEnumerable<MovieGenre> MovieGenres { get; set; }
 }
-
-public class MovieKeyword
-{
-    public int MovieId { get; set; }
-    public int KeywordId { get; set; }
-    public Movie Movie { get; set; }
-    public Keyword Keywords { get; set; }
-}
-public class Keyword
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<MovieKeyword> MovieKeyword { get; set; }
-}
-
 public class About // elenco
 {
-    public int Id { get; set; }
     public Info Deriction { get; set; }
     public Info Cast { get; set; } // elenco
     public IEnumerable<MovieGenre> MovieGenres { get; set; }

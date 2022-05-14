@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Dotflix.Models
+namespace ApiDotflix.Models
 {
     public class MovieDto
     {
-        public Guid MovieId { get; set; }
+        public int MovieId { get; set; }
 
         public string Title { get; set; }
 

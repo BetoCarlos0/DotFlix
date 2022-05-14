@@ -1,7 +1,7 @@
-﻿using Dotflix.Models;
+﻿using ApiDotflix.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dotflix.Data
+namespace ApiDotflix.Data
 {
     public class DotflixDbContext : DbContext
     {
@@ -9,8 +9,11 @@ namespace Dotflix.Data
         {}
 
         public DbSet<Movie> Movie { get; set; }
-        public DbSet<Language> Language { get; set; }
-        public DbSet<MovieLanguage> MovieLanguage { get; set; }
+        //public DbSet<Language1> Language { get; set; }
+        //public DbSet<MovieLanguage> MovieLanguage { get; set; }
+        public DbSet<Keyword> Keyword { get; set; }
+        public DbSet<AboutKeyword> AboutKeyword { get; set; }
+        public DbSet<About> About { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

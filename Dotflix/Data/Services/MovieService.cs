@@ -1,13 +1,11 @@
-﻿using Dotflix.Models;
-using Dotflix.Models.Contracts;
-using Dotflix.Models.Contracts.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using ApiDotflix.Models;
+using ApiDotflix.Models.Contracts;
+using ApiDotflix.Models.Contracts.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Dotflix.Data.Services
+namespace ApiDotflix.Data.Services
 {
     public class MovieService : IMovieService
     {
@@ -39,7 +37,7 @@ namespace Dotflix.Data.Services
             return movieDto;
         }
 
-        public async Task<Movie> GetByIdAsync(Guid id)
+        public async Task<Movie> GetByIdAsync(int id)
         {
             return await _movieRepository.GetByIdAsync(id);
         }
@@ -72,7 +70,7 @@ namespace Dotflix.Data.Services
             return true;
         }
 
-        public async Task<bool> DeleteId(Guid id)
+        public async Task<bool> DeleteId(int id)
         {
             return await _movieRepository.DeleteId(id);
         }

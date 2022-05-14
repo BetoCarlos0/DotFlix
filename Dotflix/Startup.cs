@@ -1,24 +1,19 @@
-using Dotflix.Data;
-using Dotflix.Data.Repository;
-using Dotflix.Data.Services;
-using Dotflix.Models.Contracts;
-using Dotflix.Models.Contracts.Services;
+using ApiDotflix.Data;
+using ApiDotflix.Data.Repository;
+using ApiDotflix.Data.Services;
+using ApiDotflix.Models.Contracts;
+using ApiDotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using System;
-using System.Net;
-using System.Text.Json.Serialization;
 
-namespace Dotflix
+namespace ApiDotflix
 {
     public class Startup
     {
@@ -38,8 +33,11 @@ namespace Dotflix
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
 
-            services.AddScoped<ILanguageRepository, LanguageRepository>();
-            services.AddScoped<ILanguageService, LanguageService>();
+            services.AddScoped<IKeywordRepository, KeywordRepository>();
+            services.AddScoped<IKeywordService, KeywordService>();
+
+            //services.AddScoped<IAboutRepository, AboutRepository>();
+            //services.AddScoped<IAboutService, AboutService>();
 
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),

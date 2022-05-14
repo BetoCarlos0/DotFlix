@@ -4,37 +4,36 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
     [Route("api/[controller]s")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class AboutController : ControllerBase
     {
-        private readonly IMovieService _movieService;
+        private readonly IAboutService _aboutService;
 
-        public MovieController(IMovieService movieService)
+        public AboutController(IAboutService aboutService)
         {
-            _movieService = movieService;
+            _aboutService = aboutService;
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /*[ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetAllMovies()
         {
-            return Ok(await _movieService.GetAllAsync());
-        }
+            return Ok(await _aboutService.GetAllAsync());
+        }*/
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<Movie>> GetAbout(int id)
         {
             try
             {
-                return Ok(await _movieService.GetByIdAsync(id));
+                return Ok(await _aboutService.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -47,19 +46,19 @@ namespace ApiDotflix.Controllers
             }
         }
 
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        /*[ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> CreateMovie(Movie movie)
+        public async Task<IActionResult> CreateMovie(Movie about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                await _movieService.AddAsync(movie).ConfigureAwait(false);
+                await _aboutService.AddAsync(about).ConfigureAwait(false);
 
                 return CreatedAtAction(nameof(GetMovie),
-                        new { id = movie.MovieId }, movie);
+                        new { id = about.MovieId }, about);
             }
             catch (DbUpdateException ex)
             {
@@ -70,21 +69,21 @@ namespace ApiDotflix.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Erro ao recuperar dados do banco de dados");
             }
-        }
+        }*/
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMovie(int id, Movie movie)
+        public async Task<IActionResult> UpdateAbout(int id, About about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
-            if (id != movie.MovieId)
+            if (id != about.MovieId)
                 return BadRequest("Id e Filme incompatíveis");
 
             try
             {
-                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
+                return Ok(await _aboutService.UpdateAsync(about).ConfigureAwait(false));
             }
             catch (DbUpdateException ex)
             {
@@ -96,14 +95,14 @@ namespace ApiDotflix.Controllers
             }
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /*[ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                return Ok(await _movieService.DeleteId(id));
+                return Ok(await _aboutService.DeleteId(id));
             }
             catch (DbUpdateException ex)
             {
@@ -114,6 +113,6 @@ namespace ApiDotflix.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Erro ao recuperar dados do banco de dados");
             }
-        }
+        }*/
     }
 }

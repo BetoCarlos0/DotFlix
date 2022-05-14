@@ -4,37 +4,36 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
     [Route("api/[controller]s")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class KeywordController : Controller
     {
-        private readonly IMovieService _movieService;
+        private readonly IKeywordService _keywordService;
 
-        public MovieController(IMovieService movieService)
+        public KeywordController(IKeywordService keywordService)
         {
-            _movieService = movieService;
+            _keywordService = keywordService;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> GetAllMovies()
+        public async Task<ActionResult<Keyword>> GetAllKeywords()
         {
-            return Ok(await _movieService.GetAllAsync());
+            return Ok(await _keywordService.GetAllAsync());
         }
-
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<Keyword>> GetKeyword(int id)
         {
             try
             {
-                return Ok(await _movieService.GetByIdAsync(id));
+                return Ok(await _keywordService.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -50,16 +49,16 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> CreateMovie(Movie movie)
+        public async Task<IActionResult> CreateKeyword(Keyword keyword)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                await _movieService.AddAsync(movie).ConfigureAwait(false);
+                await _keywordService.AddAsync(keyword).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetMovie),
-                        new { id = movie.MovieId }, movie);
+                return CreatedAtAction(nameof(GetKeyword),
+                    new { id = keyword.KeywordId}, keyword);
             }
             catch (DbUpdateException ex)
             {
@@ -75,16 +74,16 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMovie(int id, Movie movie)
+        public async Task<IActionResult> UpdateKeyword(int id, Keyword keyword)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
-            if (id != movie.MovieId)
-                return BadRequest("Id e Filme incompatíveis");
+            if (id != keyword.KeywordId)
+                return BadRequest("Id e Idioma incompatíveis");
 
             try
             {
-                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
+                return Ok(await _keywordService.UpdateAsync(keyword));
             }
             catch (DbUpdateException ex)
             {
@@ -92,18 +91,19 @@ namespace ApiDotflix.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
             }
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                return Ok(await _movieService.DeleteId(id));
+                return Ok(await _keywordService.DeleteId(id));
             }
             catch (DbUpdateException ex)
             {

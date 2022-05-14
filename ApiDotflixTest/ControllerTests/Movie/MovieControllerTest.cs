@@ -1,8 +1,8 @@
-﻿using Dotflix.Controllers;
-using Dotflix.Data.Services;
-using Dotflix.Models;
-using Dotflix.Models.Contracts;
-using Dotflix.Models.Contracts.Services;
+﻿using ApiDotflix.Controllers;
+using ApiDotflix.Data.Services;
+using ApiDotflix.Models;
+using ApiDotflix.Models.Contracts;
+using ApiDotflix.Models.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -37,10 +37,10 @@ namespace ApiDotflixTest.ControllerTests
         public async Task GetMovieById_WhenCalled_ReturnOk()
         {
             //arrange
-            var id = new Guid("d495e18e-3a41-404d-bdb6-d71196699811");
+            int id = 100;
             
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
+            mockService.Setup(x => x.GetByIdAsync(It.IsAny<int>()));
             var movieController = new MovieController(mockService.Object);
 
             //act
@@ -54,10 +54,10 @@ namespace ApiDotflixTest.ControllerTests
         [Fact, Trait("Movie", "GetMovie")]
         public async Task GetMovieById_WhenCalled_ReturnNotFound()
         {
-            var id = new Guid("d495e18e-3a41-404d-bdb6-d71196699812");
+            int id = 102;
 
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new DbUpdateException());
+            mockService.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ThrowsAsync(new DbUpdateException());
             var movieController = new MovieController(mockService.Object);
 
             //act
@@ -67,14 +67,14 @@ namespace ApiDotflixTest.ControllerTests
             var result = movie.Result;
             Assert.IsType<NotFoundObjectResult>(result);
         }
-
+        /*
         [Fact, Trait("Movie", "CreateMovie")]
         public async Task CreateMovie_DuplicateTitle_ReturnBadRequest()
         {
             //arrange
             var newMovie = new Movie
             {
-                MovieId = new Guid("0140adbe-eac0-4e7e-8b85-126181ed456b"),
+                MovieId = 100,
                 Title = "um filme",
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
@@ -86,7 +86,7 @@ namespace ApiDotflixTest.ControllerTests
                 {
                     new MovieLanguage()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -108,7 +108,7 @@ namespace ApiDotflixTest.ControllerTests
             //arrange
             var newMovie = new Movie
             {
-                MovieId = new Guid("dd376a06-e466-4596-9769-ddcc5fe14664"),
+                MovieId = 100,
                 Title = "novo filme",
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
@@ -120,7 +120,7 @@ namespace ApiDotflixTest.ControllerTests
                 {
                     new MovieLanguage()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -142,7 +142,7 @@ namespace ApiDotflixTest.ControllerTests
             //arrange
             var newMovie = new Movie
             {
-                MovieId = new Guid("0140adbe-eac0-4e7e-8b85-126181ed456b"),
+                MovieId = 100,
                 Title = null,
                 Sinopse = "um filme de teste",
                 AgeGroup = "14",
@@ -153,7 +153,7 @@ namespace ApiDotflixTest.ControllerTests
                 {
                     new MovieLanguage()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -173,7 +173,7 @@ namespace ApiDotflixTest.ControllerTests
         public async Task UpdateMovie_WhenCalled_ReturnOk()
         {
             //arrange
-            Guid id = new Guid();
+            int id = 100;
             var updateMovie = new Movie
             {
                 MovieId = id,
@@ -184,11 +184,11 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "uma sinopse",
                 Title = "um filme",
                 Relevance = 45,
-                Languages = new List<Language>()
+                Languages = new List<Language1>()
                 {
-                    new Language()
+                    new Language1()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -207,10 +207,10 @@ namespace ApiDotflixTest.ControllerTests
         public async Task UpdateMovie_CompareId_ReturnBadRequest()
         {
             //arrange
-            Guid id = new Guid("d495e18e-3a41-404d-bdb6-d71196699812");
+            int id = 100;
             var updateMovie = new Movie
             {
-                MovieId = new Guid("d495e18e-3a41-404d-bdb6-d71196699811"),
+                MovieId = 102,
                 AgeGroup = "0",
                 Image = "img2",
                 ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
@@ -218,11 +218,11 @@ namespace ApiDotflixTest.ControllerTests
                 Sinopse = "uma sinopse",
                 Title = "um filme",
                 Relevance = 45,
-                Languages = new List<Language>()
+                Languages = new List<Language1>()
                 {
-                    new Language()
+                    new Language1()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -241,10 +241,10 @@ namespace ApiDotflixTest.ControllerTests
         public async Task UpdateMovie_DuplicateTitle_ReturnBadRequest()
         {
             //arrange
-            Guid id = new Guid("d495e18e-3a41-404d-bdb6-d71196699811");
+            int id = 100;
             var updateMovie = new Movie
             {
-                MovieId = new Guid("d495e18e-3a41-404d-bdb6-d71196699811"),
+                MovieId = 100,
                 Title = "outro filme",
                 AgeGroup = "0",
                 Image = "img2",
@@ -252,11 +252,11 @@ namespace ApiDotflixTest.ControllerTests
                 RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
                 Sinopse = "uma sinopse",
                 Relevance = 45,
-                Languages = new List<Language>()
+                Languages = new List<Language1>()
                 {
-                    new Language()
+                    new Language1()
                     {
-                        LanguageId = new Guid("c9db8681-a670-4750-a839-f75f9e85d0f5")
+                        LanguageId = 100
                     }
                 }
             };
@@ -270,14 +270,14 @@ namespace ApiDotflixTest.ControllerTests
             //assert
             Assert.IsType<BadRequestObjectResult>(movie);
         }
-        
+        */
         [Fact, Trait("Movie", "DeleteMovie")]
         public async Task DeleteMovie_WhenCalled_ReturnOk()
         {
             //arrange
-            Guid id = new Guid("d495e18e-3a41-404d-bdb6-d71196699811");
+            int id = 100;
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.DeleteId(It.IsAny<Guid>()));
+            mockService.Setup(x => x.DeleteId(It.IsAny<int>()));
             var movieController = new MovieController(mockService.Object);
 
             //act
@@ -291,9 +291,9 @@ namespace ApiDotflixTest.ControllerTests
         public async Task DeleteMovie_WhenCalled_ReturnNotFound()
         {
             //arrange
-            Guid id = new Guid("d495e18e-3a41-404d-bdb6-d71196699812");
+            int id = 102;
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.DeleteId(It.IsAny<Guid>())).ThrowsAsync(new DbUpdateException());
+            mockService.Setup(x => x.DeleteId(It.IsAny<int>())).ThrowsAsync(new DbUpdateException());
             var movieController = new MovieController(mockService.Object);
 
             //act

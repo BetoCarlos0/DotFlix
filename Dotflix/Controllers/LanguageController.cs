@@ -1,119 +1,29 @@
-﻿using Dotflix.Models;
-using Dotflix.Models.Contracts.Services;
-using Microsoft.AspNetCore.Http;
+﻿using ApiDotflix.Models;
+using ApiDotflix.Models.Contracts.Services;
+using ApiDotflix.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
-namespace Dotflix.Controllers
+namespace ApiDotflix.Controllers
 {
     [Route("api/[controller]s")]
     [ApiController]
     public class LanguageController : ControllerBase
     {
-        private readonly ILanguageService _languageService;
-
-        public LanguageController(ILanguageService languageService)
-        {
-            _languageService = languageService;
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<Language>> GetAllLanguages()
+        public ActionResult<Languages> GetAllIdiomas()
         {
-            return Ok(await _languageService.GetAllAsync());
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Language>> GetLanguage(Guid id)
-        {
-            try
+            List<EnumValue> values = new List<EnumValue>();
+            foreach (var itemType in Enum.GetValues(typeof(Languages)))
             {
-                return Ok(await _languageService.GetByIdAsync(id));
+                values.Add(new EnumValue()
+                {
+                    Name = Enum.GetName(typeof(Languages), itemType),
+                    Value = (int)itemType
+                });
             }
-            catch (DbUpdateException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
-        }
-
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost]
-        public async Task<IActionResult> CreateLanguage(Language language)
-        {
-            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
-
-            try
-            {
-                await _languageService.AddAsync(language).ConfigureAwait(false);
-
-                return CreatedAtAction(nameof(GetLanguage),
-                    new { id = language.LanguageId}, language);
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLanguage(Guid id, Language language)
-        {
-            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
-
-            if (id != language.LanguageId)
-                return BadRequest("Id e Idioma incompatíveis");
-
-            try
-            {
-                return Ok(await _languageService.UpdateAsync(language));
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            try
-            {
-                return Ok(await _languageService.DeleteId(id));
-            }
-            catch (DbUpdateException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            return Ok(values);
         }
     }
 }

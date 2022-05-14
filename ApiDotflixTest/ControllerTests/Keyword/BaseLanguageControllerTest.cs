@@ -1,6 +1,6 @@
-﻿using Dotflix.Controllers;
-using Dotflix.Models;
-using Dotflix.Models.Contracts.Services;
+﻿using ApiDotflix.Controllers;
+using ApiDotflix.Models;
+using ApiDotflix.Models.Contracts.Services;
 using Moq;
 using System.Collections.Generic;
 
