@@ -16,14 +16,6 @@ namespace ApiDotflix.Data.Repository
             _dbContext = dotflixDbContext;
         }
 
-        public async Task<IEnumerable<About>> GetAllAsync()
-        {
-            return await _dbContext.About
-                //.Include(x => x.Languages)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task<About> GetByIdAsync(int id)
         {
             var getKeyword = await _dbContext.About
@@ -31,6 +23,8 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Keyword)
                 .Include(x => x.AboutLanguages)
                     .ThenInclude(x => x.Language)
+                .Include(x => x.AboutGenres)
+                    .ThenInclude(x => x.Genre)
                 .FirstOrDefaultAsync(x => x.AboutId.Equals(id));
 
             if (getKeyword == null)
@@ -44,19 +38,17 @@ namespace ApiDotflix.Data.Repository
             var getAbout = await _dbContext.About
                 .Include(x => x.AboutKeywords)
                     .ThenInclude(x => x.Keyword)
+                .Include(x => x.AboutLanguages)
+                    .ThenInclude(x => x.Language)
+                .Include(x => x.AboutGenres)
+                    .ThenInclude(x => x.Genre)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(about.AboutId));
 
             if (getAbout == null) return false;
 
             getAbout.AboutKeywords = about.AboutKeywords;
-            //getAbout. = movie.Title;
-            //getAbout.Sinopse = movie.Sinopse;
-            //getAbout.Relevance = movie.Relevance;
-            //getAbout.ReleaseData = movie.ReleaseData;
-            //getAbout.RunTime = movie.RunTime;
-            //getAbout.AgeGroup = movie.AgeGroup;
-            //getAbout.About = movie.About;
-            //getMovie.MovieLanguages = movie.MovieLanguages;
+            getAbout.AboutLanguages = about.AboutLanguages;
+            getAbout.AboutGenres = about.AboutGenres;
 
             await _dbContext.SaveChangesAsync();
 

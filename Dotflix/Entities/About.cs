@@ -15,6 +15,10 @@ namespace ApiDotflix.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public Movie Movie { get; set; }
 
+        [Required(ErrorMessage = "Id do Gênero obrigatório")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<AboutGenre> AboutGenres { get; set; }
+
         [Required(ErrorMessage = "Id do Idioma obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<AboutLanguage> AboutLanguages { get; set; }
@@ -22,6 +26,17 @@ namespace ApiDotflix.Entities
         [Required(ErrorMessage = "Id da palavra chave obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<AboutKeyword> AboutKeywords { get; set; }
+
+        [NotMapped]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public IEnumerable<Genre> Genres
+        {
+            get => AboutGenres.Select(x => x.Genre);
+            set => AboutGenres = value.Select(y => new AboutGenre()
+            {
+                GenreId = y.GenreId,
+            }).ToList();
+        }
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]

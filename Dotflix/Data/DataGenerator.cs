@@ -75,27 +75,27 @@ namespace ApiDotflix.Data
                 new Keyword
                 {
                     KeywordId = 100,
-                    Name = "Ação"
+                    Name = "Fascinante"
                 },
                 new Keyword
                 {
                     KeywordId = 101,
-                    Name = "Aventura"
+                    Name = "Provocante"
                 },
                 new Keyword
                 {
                     KeywordId = 102,
-                    Name = "Cinema de Arte"
+                    Name = "Crime Verídico"
                 },
                 new Keyword
                 {
                     KeywordId = 103,
-                    Name = "Comédia"
+                    Name = "Mistério"
                 },
                 new Keyword
                 {
                     KeywordId = 104,
-                    Name = "Dança"
+                    Name = "Realistas"
                 });
 
             context.Movie.AddRange(
@@ -169,6 +169,50 @@ namespace ApiDotflix.Data
                 {
                     AboutId = 101,
                     LanguageId = 101
+                });
+
+            context.Genre.AddRange(
+                new Genre
+                {
+                    GenreId = 100,
+                    Name = "Ação"
+                },
+                new Genre
+                {
+                    GenreId = 101,
+                    Name = "Aventura"
+                },
+                new Genre
+                {
+                    GenreId = 102,
+                    Name = "Cinema de Arte"
+                },
+                new Genre
+                {
+                    GenreId = 103,
+                    Name = "Comédia"
+                },
+                new Genre
+                {
+                    GenreId = 104,
+                    Name = "Dança"
+                });
+
+            context.AboutGenre.AddRange(
+                new AboutGenre
+                {
+                    AboutId = 100,
+                    GenreId = 100
+                },
+                new AboutGenre
+                {
+                    AboutId = 101,
+                    GenreId = 100
+                },
+                new AboutGenre
+                {
+                    AboutId = 101,
+                    GenreId = 101
                 });
 
             context.SaveChangesAsync();

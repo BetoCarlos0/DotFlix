@@ -39,6 +39,9 @@ namespace ApiDotflix
             services.AddScoped<IAboutRepository, AboutRepository>();
             services.AddScoped<IAboutService, AboutService>();
 
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IGenreService, GenreService>();
+
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
             //        x => x.MigrationsAssembly(typeof(DotflixDbContext).Assembly.FullName)));

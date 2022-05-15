@@ -46,19 +46,6 @@ namespace ApiDotflix.Entities
     }
 }
 /*
-public class MovieGenre
-{
-    public int GenreId { get; set; }
-    public int MovieId { get; set; }
-    public Movie Movie { get; set; }
-    public Genre Genre { get; set; }
-}
-public class Genre
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<MovieGenre> MovieGenres { get; set; }
-}
 public class About // elenco
 {
     public Info Deriction { get; set; }

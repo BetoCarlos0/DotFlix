@@ -14,6 +14,8 @@ namespace ApiDotflix.Data
         public DbSet<Keyword> Keyword { get; set; }
         public DbSet<AboutKeyword> AboutKeyword { get; set; }
         public DbSet<About> About { get; set; }
+        public DbSet<Genre> Genre { get; set; }
+        public DbSet<AboutGenre> AboutGenre { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
