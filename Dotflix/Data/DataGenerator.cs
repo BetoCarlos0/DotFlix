@@ -3,6 +3,7 @@ using ApiDotflix.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ApiDotflix.Data
@@ -19,6 +20,58 @@ namespace ApiDotflix.Data
             {
                 return;
             }
+
+            context.Language.AddRange(
+                new Language
+                {
+                    LanguageId = 100,
+                    Name = "Portugês"
+                },
+                new Language
+                {
+                    LanguageId = 101,
+                    Name = "Inglês"
+                },
+                new Language
+                {
+                    LanguageId = 102,
+                    Name = "Chinês"
+                },
+                new Language
+                {
+                    LanguageId = 103,
+                    Name = "Espanhol"
+                },
+                new Language
+                {
+                    LanguageId = 104,
+                    Name = "Árabe"
+                },
+                new Language
+                {
+                    LanguageId = 105,
+                    Name = "Russo"
+                },
+                new Language
+                {
+                    LanguageId = 106,
+                    Name = "Urdu"
+                },
+                new Language
+                {
+                    LanguageId = 107,
+                    Name = "Coreano"
+                },
+                new Language
+                {
+                    LanguageId = 108,
+                    Name = "Alemão"
+                },
+                new Language
+                {
+                    LanguageId = 109,
+                    Name = "Frabcês" 
+                });
 
             context.Keyword.AddRange(
                 new Keyword
@@ -47,25 +100,6 @@ namespace ApiDotflix.Data
                     Name = "Dança"
                 });
 
-            context.AboutKeyword.AddRange(
-                new AboutKeyword
-                {
-                    AboutId = 100,
-                    KeywordId = 100
-                },
-                new AboutKeyword
-                {
-                    AboutId = 101,
-                    KeywordId = 100
-                },
-                new AboutKeyword
-                {
-                    AboutId = 101,
-                    KeywordId = 101
-                }
-                );
-
-
             context.Movie.AddRange(
                 new Movie
                 {
@@ -92,6 +126,53 @@ namespace ApiDotflix.Data
                     Register = DateTime.Now.ToString("dd/MM/yyyy")
                 }
             );
+
+            context.About.AddRange(
+                new About
+                {
+                    AboutId = 100,
+                    MovieId = 100
+                },
+                new About
+                {
+                    AboutId = 101,
+                    MovieId = 101
+                });
+
+            context.AboutKeyword.AddRange(
+                new AboutKeyword
+                {
+                    AboutId = 100,
+                    KeywordId = 100
+                },
+                new AboutKeyword
+                {
+                    AboutId = 101,
+                    KeywordId = 100
+                },
+                new AboutKeyword
+                {
+                    AboutId = 101,
+                    KeywordId = 101
+                });
+
+            context.AboutLanguage.AddRange(
+                new AboutLanguage
+                {
+                    AboutId = 100,
+                    LanguageId = 100
+                },
+                new AboutLanguage
+                {
+                    AboutId = 101,
+                    LanguageId = 100
+                },
+                new AboutLanguage
+                {
+                    AboutId = 101,
+                    LanguageId = 101
+                });
+
             context.SaveChangesAsync();
         }
     }

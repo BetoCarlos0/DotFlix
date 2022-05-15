@@ -29,6 +29,9 @@ namespace ApiDotflix.Data.Repository
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutKeywords)
                         .ThenInclude(x => x.Keyword)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutLanguages)
+                        .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
 
             if (getMovie == null)
@@ -56,9 +59,7 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutKeywords)
-                        .ThenInclude(x => x.Keyword)
+                //.Include(x => x.About)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             if (getMovie == null) return false;
@@ -70,7 +71,7 @@ namespace ApiDotflix.Data.Repository
             getMovie.ReleaseData = movie.ReleaseData;
             getMovie.RunTime = movie.RunTime;
             getMovie.AgeGroup = movie.AgeGroup;
-            getMovie.About = movie.About;
+            //getMovie.About = movie.About;
             //getMovie.MovieLanguages = movie.MovieLanguages;
 
             await _dbContext.SaveChangesAsync();
@@ -80,7 +81,8 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> DeleteId(int id)
         {
             var getMovie = await _dbContext.Movie
-                .FindAsync(id);
+                .Include(x => x.About)
+                .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
 
             if (getMovie == null)
                 throw new DbUpdateException("Id não existe");

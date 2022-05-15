@@ -24,12 +24,12 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<Keyword> GetByIdAsync(int id)
         {
-            var getLanguage = await _dbContext.Keyword.FindAsync(id);
+            var getKeyword = await _dbContext.Keyword.FindAsync(id);
 
-            if (getLanguage == null)
+            if (getKeyword == null)
                 throw new DbUpdateException("Id não encontrado");
 
-            return getLanguage;
+            return getKeyword;
         }
 
         public async Task<Keyword> GetByNameAsync(string name)
@@ -37,9 +37,9 @@ namespace ApiDotflix.Data.Repository
             return await _dbContext.Keyword.FirstOrDefaultAsync(x => x.Name.Equals(name));
         }
 
-        public async Task<bool> AddAsync(Keyword language)
+        public async Task<bool> AddAsync(Keyword keyword)
         {
-            await _dbContext.Keyword.AddAsync(language);
+            await _dbContext.Keyword.AddAsync(keyword);
             await _dbContext.SaveChangesAsync();
 
             return true;

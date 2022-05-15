@@ -36,8 +36,8 @@ namespace ApiDotflix
             services.AddScoped<IKeywordRepository, KeywordRepository>();
             services.AddScoped<IKeywordService, KeywordService>();
 
-            //services.AddScoped<IAboutRepository, AboutRepository>();
-            //services.AddScoped<IAboutService, AboutService>();
+            services.AddScoped<IAboutRepository, AboutRepository>();
+            services.AddScoped<IAboutService, AboutService>();
 
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),

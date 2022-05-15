@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/[controller]s")]
+    [Route("api/movies")]
     [ApiController]
     public class MovieController : ControllerBase
     {
@@ -77,7 +77,7 @@ namespace ApiDotflix.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovie(int id, Movie movie)
         {
-            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+            //if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             if (id != movie.MovieId)
                 return BadRequest("Id e Filme incompatíveis");
@@ -90,10 +90,10 @@ namespace ApiDotflix.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception)
+            /*catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            }*/
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,11 +109,11 @@ namespace ApiDotflix.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception)
+            /*catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Erro ao recuperar dados do banco de dados");
-            }
+            }*/
         }
     }
 }

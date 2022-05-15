@@ -9,8 +9,8 @@ namespace ApiDotflix.Data
         {}
 
         public DbSet<Movie> Movie { get; set; }
-        //public DbSet<Language1> Language { get; set; }
-        //public DbSet<MovieLanguage> MovieLanguage { get; set; }
+        public DbSet<Language> Language { get; set; }
+        public DbSet<AboutLanguage> AboutLanguage { get; set; }
         public DbSet<Keyword> Keyword { get; set; }
         public DbSet<AboutKeyword> AboutKeyword { get; set; }
         public DbSet<About> About { get; set; }

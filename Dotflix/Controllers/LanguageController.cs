@@ -1,29 +1,26 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts.Services;
-using ApiDotflix.Models.Enum;
+﻿using ApiDotflix.Data;
+using ApiDotflix.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/[controller]s")]
+    [Route("api/languages")]
     [ApiController]
     public class LanguageController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<Languages> GetAllIdiomas()
+        private readonly DotflixDbContext _dbContext;
+
+        public LanguageController(DotflixDbContext dotflixDbContext)
         {
-            List<EnumValue> values = new List<EnumValue>();
-            foreach (var itemType in Enum.GetValues(typeof(Languages)))
-            {
-                values.Add(new EnumValue()
-                {
-                    Name = Enum.GetName(typeof(Languages), itemType),
-                    Value = (int)itemType
-                });
-            }
-            return Ok(values);
+            _dbContext = dotflixDbContext;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<Language>> GetAllLanguages()
+        {
+            return Ok(await _dbContext.Language.AsNoTracking().ToListAsync());
         }
     }
 }

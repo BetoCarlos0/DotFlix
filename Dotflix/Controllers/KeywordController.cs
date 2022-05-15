@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/[controller]s")]
+    [Route("api/keywords")]
     [ApiController]
     public class KeywordController : Controller
     {

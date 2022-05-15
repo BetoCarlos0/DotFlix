@@ -41,17 +41,12 @@ namespace ApiDotflix.Models
         [RegularExpression(@"^([01234]{1}):([012345]\d):([012345]\d)", ErrorMessage = "Tempo inválido")]
         public string RunTime { get; set; }
 
-        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd:MM:yyyy}")]
         public string Register { get; set; }
 
+
         [Required(ErrorMessage = "Id de Sobre obrigatório")]
         public About About { get; set; }
-
-        public void DataCadastro()
-        {
-            Register = DateTime.Now.Date.ToString();
-        }
     }
 }
 /*

@@ -1,5 +1,4 @@
-﻿using ApiDotflix.Models.Enum;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,29 +11,37 @@ namespace ApiDotflix.Models
         public int AboutId { get; set; }
 
         public int MovieId { get; set; }
-        public IEnumerable<EnumValue> Language { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public Movie Movie { get; set; }
+
+        [Required(ErrorMessage = "Id do Idioma obrigatório")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<AboutLanguage> AboutLanguages { get; set; }
 
         [Required(ErrorMessage = "Id da palavra chave obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
-        public IEnumerable<AboutKeyword> AboutKeywords { get; set; }
-
-        //public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
+        public virtual ICollection<AboutKeyword> AboutKeywords { get; set; }
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public IEnumerable<Keyword> Keywords
         {
-            get
-            {
-                if (AboutKeywords != null)
-                    return AboutKeywords.Select(x => x.Keyword);
-                return Enumerable.Empty<Keyword>();
-            }
-
+            get => AboutKeywords.Select(x => x.Keyword);
             set => AboutKeywords = value.Select(y => new AboutKeyword()
             {
                 KeywordId = y.KeywordId,
+            }).ToList();
+        }
+
+        [NotMapped]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public IEnumerable<Language> Languages
+        {
+            get => AboutLanguages.Select(x => x.Language);
+            set => AboutLanguages = value.Select(y => new AboutLanguage()
+            {
+                LanguageId = y.LanguageId,
             }).ToList();
         }
     }

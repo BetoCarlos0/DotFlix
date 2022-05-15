@@ -26,14 +26,14 @@ namespace ApiDotflix.Data.Services
             return await _keywordRepository.GetByIdAsync(id);
         }
 
-        public async Task<bool> AddAsync(Keyword language)
+        public async Task<bool> AddAsync(Keyword keyword)
         {
-            var getLanguage = await _keywordRepository.GetByNameAsync(language.Name);
+            var getKey = await _keywordRepository.GetByNameAsync(keyword.Name);
 
-            if (getLanguage == null)
-                return await _keywordRepository.AddAsync(language);
+            if (getKey == null)
+                return await _keywordRepository.AddAsync(keyword);
             else
-                throw new DbUpdateException($"{getLanguage.Name} já existente");
+                throw new DbUpdateException($"{getKey.Name} já existente");
         }
 
         public async Task<bool> UpdateAsync(Keyword keyword)
