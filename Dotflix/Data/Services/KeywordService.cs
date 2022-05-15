@@ -1,4 +1,5 @@
-﻿using ApiDotflix.Entities;
+﻿using ApiDotflix.Data.Repository;
+using ApiDotflix.Entities;
 using ApiDotflix.Entities.Models.Contracts;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.EntityFrameworkCore;
@@ -7,15 +8,19 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Services
 {
-    public class KeywordService : IKeywordService
+    public class KeywordService : BaseService<Keyword, KeywordRepository> // : IKeywordService
+    //public class KeywordService : BaseService<Keyword, DotflixDbContext>
     {
-        private readonly IKeywordRepository _keywordRepository;
+        //private readonly IKeywordRepository _keywordRepository;
+        //public KeywordService(DotflixDbContext context) : base(context)
+        //{
 
-        public KeywordService(IKeywordRepository keywordRepository)
+        //}
+        public KeywordService(KeywordRepository keywordRepository) : base(keywordRepository)
         {
-            _keywordRepository = keywordRepository;
+            //_keywordRepository = keywordRepository;
         }
-
+        /*
         public async Task<IEnumerable<Keyword>> GetAllAsync()
         {
             return await _keywordRepository.GetAllAsync();
@@ -51,6 +56,6 @@ namespace ApiDotflix.Data.Services
         public async Task<bool> DeleteId(int id)
         {
             return await _keywordRepository.DeleteId(id);
-        }
+        }*/
     }
 }

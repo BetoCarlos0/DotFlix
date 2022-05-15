@@ -1,40 +1,44 @@
-﻿using ApiDotflix.Data.Services;
-using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts.Services;
+﻿using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/keywords")]
-    [ApiController]
-    public class KeywordController : BaseController<Keyword, KeywordService> // : Controller
+    public abstract class BaseController<T, TService> : ControllerBase where T : class where TService : IBaseService<T>
     {
-        //private readonly IKeywordService _keywordService;
+        private readonly TService _baseService;
 
-        public KeywordController(KeywordService keywordService) : base(keywordService)
+        protected BaseController(TService baseService)
         {
-            //_keywordService = keywordService;
+            _baseService = baseService;
         }
-        /*
+
+        /*[HttpGet]
+        public async Task<ActionResult<IEnumerable<T>>> GetAll()
+        {
+            return Ok(await _baseService.GetAllAsync());
+        }*/
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<Keyword>> GetAllKeywords()
+        public async Task<ActionResult<T>> GetAllKeywords()
         {
-            return Ok(await _keywordService.GetAllAsync());
+            return Ok(await _baseService.GetAllAsync());
         }
-        
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Keyword>> GetKeyword(int id)
+        public async Task<ActionResult<T>> GetKeyword(int id)
         {
             try
             {
-                return Ok(await _keywordService.GetByIdAsync(id));
+                return Ok(await _baseService.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -50,16 +54,15 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> CreateKeyword(Keyword keyword)
+        public async Task<IActionResult> CreateKeyword(T keyword)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                await _keywordService.AddAsync(keyword).ConfigureAwait(false);
-
-                return CreatedAtAction(nameof(GetKeyword),
-                    new { id = keyword.KeywordId}, keyword);
+                //return CreatedAtAction(nameof(GetKeyword),
+                //    new { id = keyword.KeywordId }, keyword);
+                return Ok(await _baseService.AddAsync(keyword).ConfigureAwait(false));
             }
             catch (DbUpdateException ex)
             {
@@ -75,20 +78,20 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateKeyword(int id, Keyword keyword)
+        public async Task<IActionResult> UpdateKeyword(T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
-            if (id != keyword.KeywordId)
-                return BadRequest("Id e Idioma incompatíveis");
+            //if (id != entity.KeywordId)
+            //    return BadRequest("Id e Idioma incompatíveis");
 
             try
             {
-                return Ok(await _keywordService.UpdateAsync(keyword));
+                return Ok(await _baseService.UpdateAsync(entity));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Erro ao salvar dados, verifique ID");
             }
             catch (Exception)
             {
@@ -104,7 +107,7 @@ namespace ApiDotflix.Controllers
         {
             try
             {
-                return Ok(await _keywordService.DeleteId(id));
+                return Ok(await _baseService.RemoveByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -115,6 +118,6 @@ namespace ApiDotflix.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Erro ao recuperar dados do banco de dados");
             }
-        }*/
+        }
     }
 }

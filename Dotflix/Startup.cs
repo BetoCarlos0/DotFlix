@@ -1,3 +1,4 @@
+using ApiDotflix.Controllers;
 using ApiDotflix.Data;
 using ApiDotflix.Data.Repository;
 using ApiDotflix.Data.Services;
@@ -33,14 +34,17 @@ namespace ApiDotflix
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
 
-            services.AddScoped<IKeywordRepository, KeywordRepository>();
-            services.AddScoped<IKeywordService, KeywordService>();
+            //services.AddScoped<IKeywordRepository, KeywordRepository>();
+            //services.AddScoped<IKeywordService, KeywordService>();
 
             services.AddScoped<IAboutRepository, AboutRepository>();
             services.AddScoped<IAboutService, AboutService>();
 
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IGenreService, GenreService>();
+
+            services.AddScoped<KeywordService>();
+            services.AddScoped<KeywordRepository>();
 
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),

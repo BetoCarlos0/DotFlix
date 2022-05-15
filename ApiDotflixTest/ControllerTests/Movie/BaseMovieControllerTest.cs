@@ -1,6 +1,5 @@
 ﻿using ApiDotflix.Controllers;
 using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts.Services;
 using Moq;
 using System.Collections.Generic;
 

@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Repository
 {
-    public class KeywordRepository : IKeywordRepository
+    public class KeywordRepository : BaseRepository<Keyword, DotflixDbContext> // : IKeywordRepository
     {
-        private readonly DotflixDbContext _dbContext;
+        //private readonly DotflixDbContext _dbContext;
 
-        public KeywordRepository(DotflixDbContext dotflixDbContext)
+        public KeywordRepository(DotflixDbContext dotflixDbContext) : base(dotflixDbContext)
         {
-            _dbContext = dotflixDbContext;
+            //_dbContext = dotflixDbContext;
         }
-
+        /*
         public async Task<IEnumerable<Keyword>> GetAllAsync()
         {
             return await _dbContext.Keyword
                 .AsNoTracking()
                 .ToListAsync();
         }
-
+        
         public async Task<Keyword> GetByIdAsync(int id)
         {
             var getKeyword = await _dbContext.Keyword.FindAsync(id);
@@ -71,7 +71,7 @@ namespace ApiDotflix.Data.Repository
             await _dbContext.SaveChangesAsync();
 
             return true;
-        }
+        }*/
 
     }
 }

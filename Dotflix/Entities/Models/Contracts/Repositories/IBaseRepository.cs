@@ -9,6 +9,6 @@ namespace ApiDotflix.Entities.Models.Contracts.Repositories
         Task<T> GetByIdAsync(int id);
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<bool> DeleteByIdAsync(int id);
+        Task<bool> RemoveByIdAsync(int id);
     }
 }

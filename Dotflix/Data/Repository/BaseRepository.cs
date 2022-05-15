@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public abstract class BaseRepository<T, TContext> : IBaseRepository<T> where T : class where TContext : DbContext
     {
-        private readonly DotflixDbContext _dbContext;
+        private readonly TContext _dbContext;
 
-        public BaseRepository(DotflixDbContext dbContext)
+        public BaseRepository(TContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -56,7 +56,7 @@ namespace ApiDotflix.Data.Repository
             //throw new System.NotImplementedException();
         }
 
-        public async Task<bool> DeleteByIdAsync(int id)
+        public async Task<bool> RemoveByIdAsync(int id)
         {
             var getEntity = await _dbContext.Set<T>()
                 .FindAsync(id);
@@ -64,7 +64,7 @@ namespace ApiDotflix.Data.Repository
             if (getEntity == null)
                 throw new DbUpdateException("Id não existe");
 
-            _dbContext.Remove(getEntity);
+            _dbContext.Set<T>().Remove(getEntity);
             await _dbContext.SaveChangesAsync();
 
             return true;
