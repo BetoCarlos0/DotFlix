@@ -1,4 +1,4 @@
-﻿using ApiDotflix.Models;
+﻿using ApiDotflix.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiDotflix.Data

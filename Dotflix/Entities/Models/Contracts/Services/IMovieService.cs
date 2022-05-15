@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ApiDotflix.Entities.Dtos.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ApiDotflix.Models.Contracts
+namespace ApiDotflix.Entities.Models.Contracts.Services
 {
-    public interface IMovieRepository
+    public interface IMovieService
     {
-        Task<IEnumerable<Movie>> GetAllAsync();
+        Task<IEnumerable<MovieDto>> GetAllAsync();
         Task<Movie> GetByIdAsync(int id);
         Task<Movie> GetByNameAsync(string name);
         Task<bool> AddAsync(Movie movie);

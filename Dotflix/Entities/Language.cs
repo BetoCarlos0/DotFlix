@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ApiDotflix.Models
+namespace ApiDotflix.Entities
 {
     public class Language
     {

@@ -1,5 +1,6 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts.Services;
+﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Dtos.Models;
+using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +78,7 @@ namespace ApiDotflix.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovie(int id, Movie movie)
         {
-            //if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             if (id != movie.MovieId)
                 return BadRequest("Id e Filme incompatíveis");
@@ -90,10 +91,10 @@ namespace ApiDotflix.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            /*catch (Exception)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }*/
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,11 +110,11 @@ namespace ApiDotflix.Controllers
             {
                 return NotFound(ex.Message);
             }
-            /*catch (Exception)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Erro ao recuperar dados do banco de dados");
-            }*/
+            }
         }
     }
 }

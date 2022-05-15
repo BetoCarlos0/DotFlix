@@ -1,9 +1,9 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts;
 
 namespace ApiDotflix.Data.Repository
 {
@@ -59,7 +59,6 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
-                //.Include(x => x.About)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             if (getMovie == null) return false;
@@ -71,8 +70,6 @@ namespace ApiDotflix.Data.Repository
             getMovie.ReleaseData = movie.ReleaseData;
             getMovie.RunTime = movie.RunTime;
             getMovie.AgeGroup = movie.AgeGroup;
-            //getMovie.About = movie.About;
-            //getMovie.MovieLanguages = movie.MovieLanguages;
 
             await _dbContext.SaveChangesAsync();
 

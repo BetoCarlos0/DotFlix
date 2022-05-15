@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace ApiDotflix.Models
+namespace ApiDotflix.Entities
 {
     public class About
     {

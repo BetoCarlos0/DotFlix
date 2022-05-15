@@ -1,8 +1,8 @@
 using ApiDotflix.Data;
 using ApiDotflix.Data.Repository;
 using ApiDotflix.Data.Services;
-using ApiDotflix.Models.Contracts;
-using ApiDotflix.Models.Contracts.Services;
+using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

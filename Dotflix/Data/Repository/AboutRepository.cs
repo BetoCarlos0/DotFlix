@@ -1,5 +1,5 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts;
+﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

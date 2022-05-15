@@ -1,9 +1,7 @@
-﻿using ApiDotflix.Data;
-using ApiDotflix.Models;
+﻿using ApiDotflix.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ApiDotflix.Data

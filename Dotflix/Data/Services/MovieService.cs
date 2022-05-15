@@ -1,6 +1,7 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts;
-using ApiDotflix.Models.Contracts.Services;
+﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Dtos.Models;
+using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;

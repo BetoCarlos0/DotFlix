@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ApiDotflix.Models.Contracts
+namespace ApiDotflix.Entities.Models.Contracts
 {
     public interface IAboutRepository
     {

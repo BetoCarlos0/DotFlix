@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ApiDotflix.Models.Contracts.Services
+namespace ApiDotflix.Entities.Models.Contracts.Services
 {
     public interface IAboutService
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ApiDotflix.Models
+﻿namespace ApiDotflix.Entities.Dtos.Models
 {
     public class MovieDto
     {

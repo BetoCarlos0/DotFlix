@@ -1,7 +1,6 @@
-﻿using ApiDotflix.Models;
-using ApiDotflix.Models.Contracts;
-using ApiDotflix.Models.Contracts.Services;
-using Microsoft.EntityFrameworkCore;
+﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Services;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Services
