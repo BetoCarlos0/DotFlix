@@ -1,26 +1,27 @@
-﻿using ApiDotflix.Entities.Models.Contracts.Services;
-using Microsoft.EntityFrameworkCore;
+﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using System;
-using ApiDotflix.Entities.Models.Contracts.Repositories;
-using ApiDotflix.Entities;
+using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    /*public abstract class BaseController<T, TRepository> : ControllerBase where T : class where TRepository : IBaseRepository<T>
+    [Route("api/directors")]
+    [ApiController]
+    public class DirectorController : ControllerBase
     {
-        private readonly TRepository _baseRepository;
+        private readonly IBaseRepository<Director> _baseRepository;
 
-        protected BaseController(TRepository baseService)
+        public DirectorController(IBaseRepository<Director> baseRepository)
         {
-            _baseRepository = baseService;
+            _baseRepository = baseRepository;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<T>> GetAllAsync()
+        public async Task<ActionResult<Director>> GetAllAsync()
         {
             return Ok(await _baseRepository.GetAllAsync());
         }
@@ -28,7 +29,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<T>> GetByIdAsync(int id)
+        public async Task<ActionResult<Director>> GetByIdDirector(int id)
         {
             try
             {
@@ -44,19 +45,20 @@ namespace ApiDotflix.Controllers
                     "Erro ao recuperar dados do banco de dados");
             }
         }
-        
+
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(T entity)
+        public async Task<IActionResult> CreateAsync(Director entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                return await _baseRepository.AddAsync(entity).ConfigureAwait(false);
+                await _baseRepository.AddAsync(entity).ConfigureAwait(false);
 
-                //return CreatedAtAction("GetByIdAsync", new { id = entity.Id }, entity);
+                return CreatedAtAction(nameof(GetByIdDirector),
+                    new { id = entity.Id }, entity);
             }
             catch (DbUpdateException ex)
             {
@@ -72,7 +74,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(T entity)
+        public async Task<IActionResult> UpdateAsync(Director entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -110,5 +112,5 @@ namespace ApiDotflix.Controllers
                     "Erro ao recuperar dados do banco de dados");
             }
         }
-    }*/
+    }
 }

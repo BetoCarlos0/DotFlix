@@ -15,6 +15,11 @@ namespace ApiDotflix.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public Movie Movie { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int DirectorId { get; set; }
+
+        public Director Director { get; set; }
+
         [Required(ErrorMessage = "Id do Gênero obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<AboutGenre> AboutGenres { get; set; }
@@ -34,7 +39,7 @@ namespace ApiDotflix.Entities
             get => AboutGenres.Select(x => x.Genre);
             set => AboutGenres = value.Select(y => new AboutGenre()
             {
-                GenreId = y.GenreId,
+                GenreId = y.Id,
             }).ToList();
         }
 

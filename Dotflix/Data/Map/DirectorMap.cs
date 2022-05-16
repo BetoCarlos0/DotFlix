@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class GenreMap : IEntityTypeConfiguration<Genre>
+    public class DirectorMap : IEntityTypeConfiguration<Director>
     {
-        public void Configure(EntityTypeBuilder<Genre> builder)
+        public void Configure(EntityTypeBuilder<Director> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .HasColumnName("Genre_Id");
+                .HasColumnName("Director_Id");
 
             builder.Property(x => x.Name)
                 .HasColumnType("varchar")

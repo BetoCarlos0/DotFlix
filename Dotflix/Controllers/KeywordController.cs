@@ -31,7 +31,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Keyword>> GetByIdAsync(int id)
+        public async Task<ActionResult<Keyword>> GetByIdKey(int id)
         {
             try
             {
@@ -57,9 +57,10 @@ namespace ApiDotflix.Controllers
 
             try
             {
-                return Ok(await _baseRepository.AddAsync(entity).ConfigureAwait(false));
+                await _baseRepository.AddAsync(entity).ConfigureAwait(false);
 
-                //return CreatedAtAction("GetByIdAsync", new { id = entity.Id }, entity);
+                return CreatedAtAction(nameof(GetByIdKey),
+                    new { id = entity.Id }, entity);
             }
             catch (DbUpdateException ex)
             {

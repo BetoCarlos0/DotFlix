@@ -68,7 +68,7 @@ namespace ApiDotflix.Data
                 new Language
                 {
                     LanguageId = 109,
-                    Name = "Frabcês" 
+                    Name = "Frabcês"
                 });
 
             context.Keyword.AddRange(
@@ -129,12 +129,14 @@ namespace ApiDotflix.Data
                 new About
                 {
                     AboutId = 100,
-                    MovieId = 100
+                    MovieId = 100,
+                    DirectorId = 100
                 },
                 new About
                 {
                     AboutId = 101,
-                    MovieId = 101
+                    MovieId = 101,
+                    DirectorId = 101
                 });
 
             context.AboutKeyword.AddRange(
@@ -174,27 +176,27 @@ namespace ApiDotflix.Data
             context.Genre.AddRange(
                 new Genre
                 {
-                    GenreId = 100,
+                    Id = 100,
                     Name = "Ação"
                 },
                 new Genre
                 {
-                    GenreId = 101,
+                    Id = 101,
                     Name = "Aventura"
                 },
                 new Genre
                 {
-                    GenreId = 102,
+                    Id = 102,
                     Name = "Cinema de Arte"
                 },
                 new Genre
                 {
-                    GenreId = 103,
+                    Id = 103,
                     Name = "Comédia"
                 },
                 new Genre
                 {
-                    GenreId = 104,
+                    Id = 104,
                     Name = "Dança"
                 });
 
@@ -213,6 +215,23 @@ namespace ApiDotflix.Data
                 {
                     AboutId = 101,
                     GenreId = 101
+                });
+
+            context.Director.AddRange(
+                new Director
+                {
+                    Id = 100,
+                    Name = "João M Dias"
+                },
+                new Director
+                {
+                    Id = 101,
+                    Name = "Carlos D Sousa"
+                },
+                new Director
+                {
+                    Id = 102,
+                    Name = "Diego F Brito"
                 });
 
             context.SaveChangesAsync();

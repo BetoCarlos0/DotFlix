@@ -16,6 +16,7 @@ namespace ApiDotflix.Data
         public DbSet<About> About { get; set; }
         public DbSet<Genre> Genre { get; set; }
         public DbSet<AboutGenre> AboutGenre { get; set; }
+        public DbSet<Director> Director { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

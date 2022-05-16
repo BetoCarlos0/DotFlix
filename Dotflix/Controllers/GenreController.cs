@@ -1,4 +1,5 @@
 ﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,30 +11,30 @@ namespace ApiDotflix.Controllers
 {
     [Route("api/genres")]
     [ApiController]
-    public class GenreController : Controller
+    public class GenreController : ControllerBase
     {
-        private readonly IGenreService _genreService;
+        private readonly IBaseRepository<Genre> _baseRepository;
 
-        public GenreController(IGenreService genreService)
+        public GenreController(IBaseRepository<Genre> genreService)
         {
-            _genreService = genreService;
+            _baseRepository = genreService;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<Genre>> GetAllGenres()
+        public async Task<ActionResult<Genre>> GetAllAsync()
         {
-            return Ok(await _genreService.GetAllAsync());
+            return Ok(await _baseRepository.GetAllAsync());
         }
         
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Genre>> GetGenre(int id)
+        public async Task<ActionResult<Genre>> GetByIdGenre(int id)
         {
             try
             {
-                return Ok(await _genreService.GetByIdAsync(id));
+                return Ok(await _baseRepository.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -49,16 +50,16 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> CreateGenre(Genre genre)
+        public async Task<IActionResult> CreateGenre(Genre entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                await _genreService.AddAsync(genre).ConfigureAwait(false);
+                await _baseRepository.AddAsync(entity).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetGenre),
-                    new { id = genre.GenreId}, genre);
+                return CreatedAtAction(nameof(GetByIdGenre),
+                    new { id = entity.Id}, entity);
             }
             catch (DbUpdateException ex)
             {
@@ -74,16 +75,16 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGenre(int id, Genre genre)
+        public async Task<IActionResult> UpdateGenre(int id, Genre entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
-            if (id != genre.GenreId)
+            if (id != entity.Id)
                 return BadRequest("Id e Idioma incompatíveis");
 
             try
             {
-                return Ok(await _genreService.UpdateAsync(genre));
+                return Ok(await _baseRepository.UpdateAsync(entity));
             }
             catch (DbUpdateException ex)
             {
@@ -103,7 +104,7 @@ namespace ApiDotflix.Controllers
         {
             try
             {
-                return Ok(await _genreService.DeleteId(id));
+                return Ok(await _baseRepository.RemoveByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
