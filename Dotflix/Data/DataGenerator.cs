@@ -74,27 +74,27 @@ namespace ApiDotflix.Data
             context.Keyword.AddRange(
                 new Keyword
                 {
-                    KeywordId = 100,
+                    Id = 100,
                     Name = "Fascinante"
                 },
                 new Keyword
                 {
-                    KeywordId = 101,
+                    Id = 101,
                     Name = "Provocante"
                 },
                 new Keyword
                 {
-                    KeywordId = 102,
+                    Id = 102,
                     Name = "Crime Verídico"
                 },
                 new Keyword
                 {
-                    KeywordId = 103,
+                    Id = 103,
                     Name = "Mistério"
                 },
                 new Keyword
                 {
-                    KeywordId = 104,
+                    Id = 104,
                     Name = "Realistas"
                 });
 

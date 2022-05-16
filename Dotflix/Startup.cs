@@ -2,7 +2,7 @@ using ApiDotflix.Controllers;
 using ApiDotflix.Data;
 using ApiDotflix.Data.Repository;
 using ApiDotflix.Data.Services;
-using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,17 +34,15 @@ namespace ApiDotflix
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
 
-            //services.AddScoped<IKeywordRepository, KeywordRepository>();
-            //services.AddScoped<IKeywordService, KeywordService>();
-
             services.AddScoped<IAboutRepository, AboutRepository>();
             services.AddScoped<IAboutService, AboutService>();
 
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IGenreService, GenreService>();
 
-            services.AddScoped<KeywordService>();
-            services.AddScoped<KeywordRepository>();
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+            //services.AddScoped<KeywordRepository>();
 
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),
@@ -73,8 +71,6 @@ namespace ApiDotflix
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
         {
-            //app.UseErrorHandler(logger);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -93,40 +89,5 @@ namespace ApiDotflix
                 endpoints.MapControllers();
             });
         }
-        /*public static class ErrorHandlerExtensions
-        {
-            public static IApplicationBuilder UseErrorHandler(
-                                              this IApplicationBuilder appBuilder,
-                                              ILoggerFactory loggerFactory)
-            {
-                return appBuilder.UseExceptionHandler(builder =>
-                {
-                    builder.Run(async context =>
-                    {
-                        var exceptionHandlerFeature = context
-                                                        .Features
-                                                        .Get<IExceptionHandlerFeature>();
-
-                        if (exceptionHandlerFeature != null)
-                        {
-
-                            var logger = loggerFactory.CreateLogger("ErrorHandler");
-                            logger.LogError($"Error: {exceptionHandlerFeature.Error}");
-
-                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                            context.Response.ContentType = "application/json";
-
-                            var json = new
-                            {
-                                context.Response.StatusCode,
-                                Message = "Internal Server Error",
-                            };
-
-                            await context.Response.WriteAsync(JsonConvert.SerializeObject(json));
-                        }
-                    });
-                });
-            }
-        }*/
     }
 }

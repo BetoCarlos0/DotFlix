@@ -1,5 +1,5 @@
 ﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using System.Threading.Tasks;
 

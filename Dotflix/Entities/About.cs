@@ -45,7 +45,7 @@ namespace ApiDotflix.Entities
             get => AboutKeywords.Select(x => x.Keyword);
             set => AboutKeywords = value.Select(y => new AboutKeyword()
             {
-                KeywordId = y.KeywordId,
+                KeywordId = y.Id,
             }).ToList();
         }
 

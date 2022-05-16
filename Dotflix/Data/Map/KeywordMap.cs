@@ -8,8 +8,8 @@ namespace ApiDotflix.Data.Map
     {
         public void Configure(EntityTypeBuilder<Keyword> builder)
         {
-            builder.HasKey(x => x.KeywordId);
-            builder.Property(x => x.KeywordId)
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
                 .HasColumnName("Keyword_Id");
 
             builder.Property(x => x.Name)

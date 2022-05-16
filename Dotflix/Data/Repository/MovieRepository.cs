@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using ApiDotflix.Entities;
 using ApiDotflix.Entities.Models.Contracts;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 
 namespace ApiDotflix.Data.Repository
 {
