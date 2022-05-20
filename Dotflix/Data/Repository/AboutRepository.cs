@@ -26,6 +26,8 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Language)
                 .Include(x => x.AboutGenres)
                     .ThenInclude(x => x.Genre)
+                .Include(x => x.AboutCasts)
+                    .ThenInclude(x => x.Cast)
                 .Include(x => x.Director)
                 .FirstOrDefaultAsync(x => x.AboutId.Equals(id));
 
@@ -44,6 +46,8 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Language)
                 .Include(x => x.AboutGenres)
                     .ThenInclude(x => x.Genre)
+                .Include(x => x.AboutCasts)
+                    .ThenInclude(x => x.Cast)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(about.AboutId));
 
             if (getAbout == null) return false;

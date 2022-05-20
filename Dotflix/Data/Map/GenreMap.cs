@@ -1,21 +1,11 @@
-﻿using ApiDotflix.Entities;
+﻿using ApiDotflix.Data.Repository;
+using ApiDotflix.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class GenreMap : IEntityTypeConfiguration<Genre>
+    public class GenreMap : BaseRepositoryMap<Genre>
     {
-        public void Configure(EntityTypeBuilder<Genre> builder)
-        {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id)
-                .HasColumnName("Genre_Id");
-
-            builder.Property(x => x.Name)
-                .HasColumnType("varchar")
-                .HasMaxLength(30)
-                .IsRequired();
-        }
     }
 }

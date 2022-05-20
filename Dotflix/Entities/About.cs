@@ -20,6 +20,13 @@ namespace ApiDotflix.Entities
 
         public Director Director { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<AboutRoadMap>? AboutRoadMaps { get; set; }
+
+        [Required(ErrorMessage = "Id do Elenco obrigatório")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<AboutCast> AboutCasts { get; set; }
+
         [Required(ErrorMessage = "Id do Gênero obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<AboutGenre> AboutGenres { get; set; }
@@ -28,9 +35,34 @@ namespace ApiDotflix.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<AboutLanguage> AboutLanguages { get; set; }
 
-        [Required(ErrorMessage = "Id da palavra chave obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutKeyword> AboutKeywords { get; set; }
+        public virtual ICollection<AboutKeyword>? AboutKeywords { get; set; }
+
+        [NotMapped]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public IEnumerable<RoadMap>? RoadMaps
+        {
+            get {
+                if (AboutRoadMaps != null)
+                    return AboutRoadMaps.Select(x => x.RoadMap);
+                return Enumerable.Empty<RoadMap>();
+            }
+            set => AboutRoadMaps = value.Select(y => new AboutRoadMap()
+            {
+                RoadMapId = y.Id,
+            }).ToList();
+        }
+
+        [NotMapped]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public IEnumerable<Cast> Casts
+        {
+            get => AboutCasts.Select(x => x.Cast);
+            set => AboutCasts = value.Select(y => new AboutCast()
+            {
+                AboutId = y.Id,
+            }).ToList();
+        }
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
@@ -45,9 +77,14 @@ namespace ApiDotflix.Entities
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Keyword> Keywords
+        public IEnumerable<Keyword>? Keywords
         {
-            get => AboutKeywords.Select(x => x.Keyword);
+            get
+            {
+                if (AboutKeywords != null)
+                    return AboutKeywords.Select(x => x.Keyword);
+                return Enumerable.Empty<Keyword>();
+            }
             set => AboutKeywords = value.Select(y => new AboutKeyword()
             {
                 KeywordId = y.Id,
@@ -61,7 +98,7 @@ namespace ApiDotflix.Entities
             get => AboutLanguages.Select(x => x.Language);
             set => AboutLanguages = value.Select(y => new AboutLanguage()
             {
-                LanguageId = y.LanguageId,
+                LanguageId = y.Id,
             }).ToList();
         }
     }

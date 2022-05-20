@@ -22,52 +22,52 @@ namespace ApiDotflix.Data
             context.Language.AddRange(
                 new Language
                 {
-                    LanguageId = 100,
+                    Id = 100,
                     Name = "Portugês"
                 },
                 new Language
                 {
-                    LanguageId = 101,
+                    Id = 101,
                     Name = "Inglês"
                 },
                 new Language
                 {
-                    LanguageId = 102,
+                    Id = 102,
                     Name = "Chinês"
                 },
                 new Language
                 {
-                    LanguageId = 103,
+                    Id = 103,
                     Name = "Espanhol"
                 },
                 new Language
                 {
-                    LanguageId = 104,
+                    Id = 104,
                     Name = "Árabe"
                 },
                 new Language
                 {
-                    LanguageId = 105,
+                    Id = 105,
                     Name = "Russo"
                 },
                 new Language
                 {
-                    LanguageId = 106,
+                    Id = 106,
                     Name = "Urdu"
                 },
                 new Language
                 {
-                    LanguageId = 107,
+                    Id = 107,
                     Name = "Coreano"
                 },
                 new Language
                 {
-                    LanguageId = 108,
+                    Id = 108,
                     Name = "Alemão"
                 },
                 new Language
                 {
-                    LanguageId = 109,
+                    Id = 109,
                     Name = "Frabcês"
                 });
 
@@ -233,6 +233,74 @@ namespace ApiDotflix.Data
                     Id = 102,
                     Name = "Diego F Brito"
                 });
+
+            context.AboutCast.AddRange(
+                new AboutCast
+                {
+                    AboutId = 100,
+                    CastId = 100
+                },
+                new AboutCast
+                {
+                    AboutId = 101,
+                    CastId = 100
+                },
+                new AboutCast
+                {
+                    AboutId = 101,
+                    CastId = 101
+                });
+
+            context.Cast.AddRange(
+                new Cast
+                {
+                    Id = 100,
+                    Name = "Jack Chan"
+                },
+                new Cast
+                {
+                    Id = 101,
+                    Name = "Will Smitch"
+                },
+                new Cast
+                {
+                    Id = 102,
+                    Name = "Julius"
+                });
+            /*
+            context.AboutRoadMap.AddRange(
+                new AboutRoadMap
+                {
+                    AboutId = 100,
+                    RoadMapId = 100
+                },
+                new AboutRoadMap
+                {
+                    AboutId = 101,
+                    RoadMapId = 100
+                },
+                new AboutRoadMap
+                {
+                    AboutId = 101,
+                    RoadMapId = 101
+                });
+
+            context.RoadMap.AddRange(
+                new RoadMap
+                {
+                    Id = 100,
+                    Name = "Chris"
+                },
+                new RoadMap
+                {
+                    Id = 101,
+                    Name = "Brown"
+                },
+                new RoadMap
+                {
+                    Id = 102,
+                    Name = "Carlos"
+                });*/
 
             context.SaveChangesAsync();
         }

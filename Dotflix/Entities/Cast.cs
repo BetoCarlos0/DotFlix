@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace ApiDotflix.Entities
 {
-    public class Language : BaseEntity
+    public class Cast : BaseEntity
     {
         [JsonIgnore]
-        public IEnumerable<AboutLanguage> AboutLanguages { get; set; }
+        public IEnumerable<AboutCast> AboutCast { get; set; }
     }
 }
