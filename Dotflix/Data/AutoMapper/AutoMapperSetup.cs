@@ -10,7 +10,7 @@ namespace ApiDotflix.Data.AutoMapper
         {
             CreateMap<Movie, MovieOutputDto>();
 
-            CreateMap<MovieInputDto, Movie>();
+            CreateMap<MoviePostInputDto, Movie>();
         }
     }
 }

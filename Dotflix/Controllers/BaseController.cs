@@ -27,7 +27,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<T>> GetByIdDirector(int id)
+        public async Task<ActionResult<T>> GetById(int id)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace ApiDotflix.Controllers
             {
                 await _baseRepository.AddAsync(entity).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetByIdDirector),
+                return CreatedAtAction(nameof(GetById),
                     new { id = entity.Id }, entity);
             }
             catch (DbUpdateException ex)

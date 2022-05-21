@@ -51,7 +51,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("post")]
-        public async Task<IActionResult> CreateMovie(MovieInputDto movie)
+        public async Task<IActionResult> CreateMovie(MoviePostInputDto movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -59,8 +59,7 @@ namespace ApiDotflix.Controllers
             {
                 await _movieService.AddAsync(movie).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetMovie),
-                        new { id = movie.MovieId }, movie);
+                return Ok();
             }
             catch (DbUpdateException ex)
             {

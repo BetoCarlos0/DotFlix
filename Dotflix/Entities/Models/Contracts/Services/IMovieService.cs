@@ -9,7 +9,7 @@ namespace ApiDotflix.Entities.Models.Contracts.Services
         Task<IEnumerable<MovieOutputDto>> GetAllAsync();
         Task<Movie> GetByIdAsync(int id);
         Task<Movie> GetByNameAsync(string name);
-        Task<bool> AddAsync(MovieInputDto movie);
+        Task<bool> AddAsync(MoviePostInputDto movie);
         Task<bool> UpdateAsync(Movie movie);
         Task<bool> DeleteId(int id);
     }
