@@ -5,6 +5,8 @@ using System;
 using ApiDotflix.Entities;
 using ApiDotflix.Entities.Models.Contracts;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
+using ApiDotflix.Entities.Models.Dtos;
+using ApiDotflix.Entities.Models;
 
 namespace ApiDotflix.Data.Repository
 {
@@ -33,6 +35,15 @@ namespace ApiDotflix.Data.Repository
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutLanguages)
                         .ThenInclude(x => x.Language)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutCasts)
+                        .ThenInclude(x => x.Cast)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutGenres)
+                        .ThenInclude(x => x.Genre)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutRoadMaps)
+                        .ThenInclude(x => x.RoadMap)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
 
             if (getMovie == null)
@@ -49,8 +60,6 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<bool> AddAsync(Movie movie)
         {
-            movie.Register = DateTime.Now.ToString("dd/MM/yyyy");
-
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
 
@@ -60,6 +69,21 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> UpdateAsync(Movie movie)
         {
             var getMovie = await _dbContext.Movie
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutKeywords)
+                        .ThenInclude(x => x.Keyword)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutLanguages)
+                        .ThenInclude(x => x.Language)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutCasts)
+                        .ThenInclude(x => x.Cast)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutGenres)
+                        .ThenInclude(x => x.Genre)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutRoadMaps)
+                        .ThenInclude(x => x.RoadMap)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             if (getMovie == null) return false;
@@ -71,6 +95,7 @@ namespace ApiDotflix.Data.Repository
             getMovie.ReleaseData = movie.ReleaseData;
             getMovie.RunTime = movie.RunTime;
             getMovie.AgeGroup = movie.AgeGroup;
+            getMovie.About = movie.About;
 
             await _dbContext.SaveChangesAsync();
 

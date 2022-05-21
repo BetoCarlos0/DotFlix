@@ -1,9 +1,6 @@
 ﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Repository
@@ -28,6 +25,8 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Genre)
                 .Include(x => x.AboutCasts)
                     .ThenInclude(x => x.Cast)
+                .Include(x => x.AboutRoadMaps)
+                    .ThenInclude(x => x.RoadMap)
                 .Include(x => x.Director)
                 .FirstOrDefaultAsync(x => x.AboutId.Equals(id));
 
@@ -48,7 +47,9 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Genre)
                 .Include(x => x.AboutCasts)
                     .ThenInclude(x => x.Cast)
-                .FirstOrDefaultAsync(x => x.MovieId.Equals(about.AboutId));
+                .Include(x => x.AboutRoadMaps)
+                    .ThenInclude(x => x.RoadMap)
+                .FirstOrDefaultAsync(x => x.AboutId.Equals(about.AboutId));
 
             if (getAbout == null) return false;
 

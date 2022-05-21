@@ -1,5 +1,6 @@
 using ApiDotflix.Controllers;
 using ApiDotflix.Data;
+using ApiDotflix.Data.AutoMapper;
 using ApiDotflix.Data.Repository;
 using ApiDotflix.Data.Services;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
@@ -28,6 +29,7 @@ namespace ApiDotflix
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(AutoMapperSetup));
 
             services.AddControllers();
 
@@ -37,12 +39,7 @@ namespace ApiDotflix
             services.AddScoped<IAboutRepository, AboutRepository>();
             services.AddScoped<IAboutService, AboutService>();
 
-            //services.AddScoped<IGenreRepository, GenreRepository>();
-            //services.AddScoped<IGenreService, GenreService>();
-
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
-            //services.AddScoped<KeywordRepository>();
 
             //services.AddDbContext<DotflixDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"),

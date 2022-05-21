@@ -267,7 +267,7 @@ namespace ApiDotflix.Data
                     Id = 102,
                     Name = "Julius"
                 });
-            /*
+            
             context.AboutRoadMap.AddRange(
                 new AboutRoadMap
                 {
@@ -300,7 +300,7 @@ namespace ApiDotflix.Data
                 {
                     Id = 102,
                     Name = "Carlos"
-                });*/
+                });
 
             context.SaveChangesAsync();
         }

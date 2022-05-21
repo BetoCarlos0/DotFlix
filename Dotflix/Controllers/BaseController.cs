@@ -1,41 +1,37 @@
-﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts.Services;
-using ApiDotflix.Entities.Models.Dtos;
+﻿using ApiDotflix.Entities.Models;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/movies")]
-    [ApiController]
-    public class MovieController : ControllerBase
+    public class BaseController<T> : ControllerBase where T : BaseEntity
     {
-        private readonly IMovieService _movieService;
+        private readonly IBaseRepository<T> _baseRepository;
 
-        public MovieController(IMovieService movieService)
+        public BaseController(IBaseRepository<T> baseRepository)
         {
-            _movieService = movieService;
+            _baseRepository = baseRepository;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("get")]
-        public async Task<ActionResult<IEnumerable<MovieOutputDto>>> GetAllMovies()
+        public async Task<ActionResult<T>> GetAllAsync()
         {
-            return Ok(await _movieService.GetAllAsync());
+            return Ok(await _baseRepository.GetAllAsync());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<T>> GetByIdDirector(int id)
         {
             try
             {
-                return Ok(await _movieService.GetByIdAsync(id));
+                return Ok(await _baseRepository.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -51,38 +47,16 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("post")]
-        public async Task<IActionResult> CreateMovie(MovieInputDto movie)
+        public async Task<IActionResult> CreateAsync(T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                await _movieService.AddAsync(movie).ConfigureAwait(false);
+                await _baseRepository.AddAsync(entity).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetMovie),
-                        new { id = movie.MovieId }, movie);
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            //catch (Exception)
-            //{
-            //    return StatusCode(StatusCodes.Status500InternalServerError,
-            //        "Erro ao recuperar dados do banco de dados");
-            //}
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put/{id}")]
-        public async Task<IActionResult> UpdateMovie(Movie movie)
-        {
-            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
-
-            try
-            {
-                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
+                return CreatedAtAction(nameof(GetByIdDirector),
+                    new { id = entity.Id }, entity);
             }
             catch (DbUpdateException ex)
             {
@@ -96,13 +70,35 @@ namespace ApiDotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateAsync(T entity)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
+            try
+            {
+                return Ok(await _baseRepository.UpdateAsync(entity));
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest("Erro ao salvar dados, verifique ID");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                return Ok(await _movieService.DeleteId(id));
+                return Ok(await _baseRepository.RemoveByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {

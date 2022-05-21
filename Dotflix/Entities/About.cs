@@ -15,9 +15,9 @@ namespace ApiDotflix.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public Movie Movie { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public int DirectorId { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
         public Director Director { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
@@ -60,7 +60,7 @@ namespace ApiDotflix.Entities
             get => AboutCasts.Select(x => x.Cast);
             set => AboutCasts = value.Select(y => new AboutCast()
             {
-                AboutId = y.Id,
+                CastId = y.Id,
             }).ToList();
         }
 
