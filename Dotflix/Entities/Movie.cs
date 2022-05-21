@@ -45,15 +45,3 @@ namespace ApiDotflix.Entities
         public About About { get; set; }
     }
 }
-/*
-public class About // elenco
-{
-    public Info Deriction { get; set; }
-    public Info Cast { get; set; } // elenco
-    public IEnumerable<MovieGenre> MovieGenres { get; set; }
-}
-public class Info
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-}*/

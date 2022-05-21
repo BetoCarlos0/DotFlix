@@ -7,6 +7,7 @@ using ApiDotflix.Entities.Models.Contracts;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Dtos;
 using ApiDotflix.Entities.Models;
+using System.Linq;
 
 namespace ApiDotflix.Data.Repository
 {
@@ -60,6 +61,13 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<bool> AddAsync(Movie movie)
         {
+            if (!movie.About.Genres.Any())
+                throw new DbUpdateException("Gênero Vazio");
+            if (!movie.About.Languages.Any())
+                throw new DbUpdateException("Idioma Vazio");
+            if (!movie.About.Casts.Any())
+                throw new DbUpdateException("Elenco Vazio");
+
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
 
