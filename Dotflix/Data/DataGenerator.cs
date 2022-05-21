@@ -22,79 +22,79 @@ namespace ApiDotflix.Data
             context.Language.AddRange(
                 new Language
                 {
-                    LanguageId = 100,
+                    Id = 100,
                     Name = "Portugês"
                 },
                 new Language
                 {
-                    LanguageId = 101,
+                    Id = 101,
                     Name = "Inglês"
                 },
                 new Language
                 {
-                    LanguageId = 102,
+                    Id = 102,
                     Name = "Chinês"
                 },
                 new Language
                 {
-                    LanguageId = 103,
+                    Id = 103,
                     Name = "Espanhol"
                 },
                 new Language
                 {
-                    LanguageId = 104,
+                    Id = 104,
                     Name = "Árabe"
                 },
                 new Language
                 {
-                    LanguageId = 105,
+                    Id = 105,
                     Name = "Russo"
                 },
                 new Language
                 {
-                    LanguageId = 106,
+                    Id = 106,
                     Name = "Urdu"
                 },
                 new Language
                 {
-                    LanguageId = 107,
+                    Id = 107,
                     Name = "Coreano"
                 },
                 new Language
                 {
-                    LanguageId = 108,
+                    Id = 108,
                     Name = "Alemão"
                 },
                 new Language
                 {
-                    LanguageId = 109,
-                    Name = "Frabcês" 
+                    Id = 109,
+                    Name = "Frabcês"
                 });
 
             context.Keyword.AddRange(
                 new Keyword
                 {
-                    KeywordId = 100,
+                    Id = 100,
                     Name = "Fascinante"
                 },
                 new Keyword
                 {
-                    KeywordId = 101,
+                    Id = 101,
                     Name = "Provocante"
                 },
                 new Keyword
                 {
-                    KeywordId = 102,
+                    Id = 102,
                     Name = "Crime Verídico"
                 },
                 new Keyword
                 {
-                    KeywordId = 103,
+                    Id = 103,
                     Name = "Mistério"
                 },
                 new Keyword
                 {
-                    KeywordId = 104,
+                    Id = 104,
                     Name = "Realistas"
                 });
 
@@ -129,12 +129,14 @@ namespace ApiDotflix.Data
                 new About
                 {
                     AboutId = 100,
-                    MovieId = 100
+                    MovieId = 100,
+                    DirectorId = 100
                 },
                 new About
                 {
                     AboutId = 101,
-                    MovieId = 101
+                    MovieId = 101,
+                    DirectorId = 101
                 });
 
             context.AboutKeyword.AddRange(
@@ -174,27 +176,27 @@ namespace ApiDotflix.Data
             context.Genre.AddRange(
                 new Genre
                 {
-                    GenreId = 100,
+                    Id = 100,
                     Name = "Ação"
                 },
                 new Genre
                 {
-                    GenreId = 101,
+                    Id = 101,
                     Name = "Aventura"
                 },
                 new Genre
                 {
-                    GenreId = 102,
+                    Id = 102,
                     Name = "Cinema de Arte"
                 },
                 new Genre
                 {
-                    GenreId = 103,
+                    Id = 103,
                     Name = "Comédia"
                 },
                 new Genre
                 {
-                    GenreId = 104,
+                    Id = 104,
                     Name = "Dança"
                 });
 
@@ -213,6 +215,91 @@ namespace ApiDotflix.Data
                 {
                     AboutId = 101,
                     GenreId = 101
+                });
+
+            context.Director.AddRange(
+                new Director
+                {
+                    Id = 100,
+                    Name = "João M Dias"
+                },
+                new Director
+                {
+                    Id = 101,
+                    Name = "Carlos D Sousa"
+                },
+                new Director
+                {
+                    Id = 102,
+                    Name = "Diego F Brito"
+                });
+
+            context.AboutCast.AddRange(
+                new AboutCast
+                {
+                    AboutId = 100,
+                    CastId = 100
+                },
+                new AboutCast
+                {
+                    AboutId = 101,
+                    CastId = 100
+                },
+                new AboutCast
+                {
+                    AboutId = 101,
+                    CastId = 101
+                });
+
+            context.Cast.AddRange(
+                new Cast
+                {
+                    Id = 100,
+                    Name = "Jack Chan"
+                },
+                new Cast
+                {
+                    Id = 101,
+                    Name = "Will Smitch"
+                },
+                new Cast
+                {
+                    Id = 102,
+                    Name = "Julius"
+                });
+            
+            context.AboutRoadMap.AddRange(
+                new AboutRoadMap
+                {
+                    AboutId = 100,
+                    RoadMapId = 100
+                },
+                new AboutRoadMap
+                {
+                    AboutId = 101,
+                    RoadMapId = 100
+                },
+                new AboutRoadMap
+                {
+                    AboutId = 101,
+                    RoadMapId = 101
+                });
+
+            context.RoadMap.AddRange(
+                new RoadMap
+                {
+                    Id = 100,
+                    Name = "Chris"
+                },
+                new RoadMap
+                {
+                    Id = 101,
+                    Name = "Brown"
+                },
+                new RoadMap
+                {
+                    Id = 102,
+                    Name = "Carlos"
                 });
 
             context.SaveChangesAsync();

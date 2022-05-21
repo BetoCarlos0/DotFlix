@@ -1,6 +1,6 @@
-﻿namespace ApiDotflix.Entities.Dtos.Models
+﻿namespace ApiDotflix.Entities.Models.Dtos
 {
-    public class MovieDto
+    public class MovieOutputDto
     {
         public int MovieId { get; set; }
 

@@ -17,7 +17,7 @@ namespace ApiDotflix.Controllers
             _dbContext = dotflixDbContext;
         }
 
-        [HttpGet]
+        [HttpGet("get")]
         public async Task<ActionResult<Language>> GetAllLanguages()
         {
             return Ok(await _dbContext.Language.AsNoTracking().ToListAsync());

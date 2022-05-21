@@ -1,6 +1,6 @@
 ﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Dtos.Models;
 using ApiDotflix.Entities.Models.Contracts.Services;
+using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,15 +22,15 @@ namespace ApiDotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> GetAllMovies()
+        [HttpGet("get")]
+        public async Task<ActionResult<IEnumerable<MovieOutputDto>>> GetAllMovies()
         {
             return Ok(await _movieService.GetAllAsync());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             try
@@ -50,8 +50,8 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost]
-        public async Task<IActionResult> CreateMovie(Movie movie)
+        [HttpPost("post")]
+        public async Task<IActionResult> CreateMovie(MoviePostInputDto movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -59,8 +59,29 @@ namespace ApiDotflix.Controllers
             {
                 await _movieService.AddAsync(movie).ConfigureAwait(false);
 
-                return CreatedAtAction(nameof(GetMovie),
-                        new { id = movie.MovieId }, movie);
+                return Ok();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            //catch (Exception)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError,
+            //        "Erro ao recuperar dados do banco de dados");
+            //}
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateMovie(Movie movie)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
+            try
+            {
+                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
             }
             catch (DbUpdateException ex)
             {
@@ -74,32 +95,8 @@ namespace ApiDotflix.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMovie(int id, Movie movie)
-        {
-            if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
-
-            if (id != movie.MovieId)
-                return BadRequest("Id e Filme incompatíveis");
-
-            try
-            {
-                return Ok(await _movieService.UpdateAsync(movie).ConfigureAwait(false));
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try

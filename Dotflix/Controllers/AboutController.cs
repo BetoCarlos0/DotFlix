@@ -21,7 +21,7 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<About>> GetAbout(int id)
         {
             try
@@ -41,13 +41,10 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAbout(int id, About about)
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateAbout(About about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
-
-            if (id != about.AboutId)
-                return BadRequest("Id e Filme incompatíveis");
 
             try
             {
@@ -59,7 +56,8 @@ namespace ApiDotflix.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ApiDotflix.Entities.Models.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ApiDotflix.Entities.Models.Contracts
+namespace ApiDotflix.Entities.Models.Contracts.Repositories
 {
     public interface IMovieRepository
     {

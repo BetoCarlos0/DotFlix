@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class KeywordMap : BaseRepositoryMap<Keyword>
+    public class DirectorMap : BaseRepositoryMap<Director>
     {
     }
 }

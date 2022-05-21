@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiDotflix.Controllers
 {
-    [Route("api/keywords")]
+    [Route("api/directors")]
     [ApiController]
-    public class KeywordController : BaseController<Keyword>
+    public class DirectorController : BaseController<Director>
     {
-        public KeywordController(IBaseRepository<Keyword> baseRepository) : base(baseRepository)
+        public DirectorController(IBaseRepository<Director> baseRepository) : base(baseRepository)
         {
         }
     }

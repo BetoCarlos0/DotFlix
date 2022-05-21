@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ApiDotflix.Entities.Models.Contracts.Repositories
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IBaseRepository<T> where T : BaseEntity
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);

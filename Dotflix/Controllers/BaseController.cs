@@ -1,44 +1,37 @@
-﻿using ApiDotflix.Entities.Models.Contracts.Services;
+﻿using ApiDotflix.Entities.Models;
+using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Controllers
 {
-    public abstract class BaseController<T, TService> : ControllerBase where T : class where TService : IBaseService<T>
+    public class BaseController<T> : ControllerBase where T : BaseEntity
     {
-        private readonly TService _baseService;
+        private readonly IBaseRepository<T> _baseRepository;
 
-        protected BaseController(TService baseService)
+        public BaseController(IBaseRepository<T> baseRepository)
         {
-            _baseService = baseService;
+            _baseRepository = baseRepository;
         }
 
-        /*[HttpGet]
-        public async Task<ActionResult<IEnumerable<T>>> GetAll()
-        {
-            return Ok(await _baseService.GetAllAsync());
-        }*/
-
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet]
-        public async Task<ActionResult<T>> GetAllKeywords()
+        [HttpGet("get")]
+        public async Task<ActionResult<T>> GetAllAsync()
         {
-            return Ok(await _baseService.GetAllAsync());
+            return Ok(await _baseRepository.GetAllAsync());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<T>> GetKeyword(int id)
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<T>> GetById(int id)
         {
             try
             {
-                return Ok(await _baseService.GetByIdAsync(id));
+                return Ok(await _baseRepository.GetByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
@@ -53,16 +46,17 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost]
-        public async Task<IActionResult> CreateKeyword(T keyword)
+        [HttpPost("post")]
+        public async Task<IActionResult> CreateAsync(T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
             try
             {
-                //return CreatedAtAction(nameof(GetKeyword),
-                //    new { id = keyword.KeywordId }, keyword);
-                return Ok(await _baseService.AddAsync(keyword).ConfigureAwait(false));
+                await _baseRepository.AddAsync(entity).ConfigureAwait(false);
+
+                return CreatedAtAction(nameof(GetById),
+                    new { id = entity.Id }, entity);
             }
             catch (DbUpdateException ex)
             {
@@ -77,17 +71,14 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateKeyword(T entity)
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateAsync(T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
-            //if (id != entity.KeywordId)
-            //    return BadRequest("Id e Idioma incompatíveis");
-
             try
             {
-                return Ok(await _baseService.UpdateAsync(entity));
+                return Ok(await _baseRepository.UpdateAsync(entity));
             }
             catch (DbUpdateException)
             {
@@ -102,12 +93,12 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                return Ok(await _baseService.RemoveByIdAsync(id));
+                return Ok(await _baseRepository.RemoveByIdAsync(id));
             }
             catch (DbUpdateException ex)
             {
