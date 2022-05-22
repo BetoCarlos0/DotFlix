@@ -74,8 +74,8 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put/{id}")]
-        public async Task<IActionResult> UpdateMovie(Movie movie)
+        [HttpPut("put")]
+        public async Task<IActionResult> UpdateMovie(MoviePutInputDto movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -87,11 +87,11 @@ namespace ApiDotflix.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            //catch (Exception)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError,
+            //        "Erro ao recuperar dados do banco de dados");
+            //}
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

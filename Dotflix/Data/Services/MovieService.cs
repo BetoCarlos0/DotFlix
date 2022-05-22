@@ -3,8 +3,6 @@ using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,12 +12,10 @@ namespace ApiDotflix.Data.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IMapper _mapper;
 
-        public MovieService(IMovieRepository movieRepository, IMapper mapper)
+        public MovieService(IMovieRepository movieRepository)
         {
             _movieRepository = movieRepository;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<MovieOutputDto>> GetAllAsync()
@@ -31,7 +27,11 @@ namespace ApiDotflix.Data.Services
 
         public async Task<Movie> GetByIdAsync(int id)
         {
-            return await _movieRepository.GetByIdAsync(id);
+            var movie = await _movieRepository.GetByIdAsync(id);
+
+            movie.AgeGroup = GetAgeGroup(movie.AgeGroupId);
+
+            return movie;
         }
 
         public async Task<Movie> GetByNameAsync(string name)
@@ -41,25 +41,15 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> AddAsync(MoviePostInputDto movieDto)
         {
-            var getMovie = await _movieRepository.GetByNameAsync(movieDto.Title);
-
-            if (getMovie != null)
-                throw new DbUpdateException($"{getMovie.Title} já existente");
-
             var movie = MappingInputMovie(movieDto);
 
             return await _movieRepository.AddAsync(movie);
         }
 
-        public async Task<bool> UpdateAsync(Movie movie) 
+        public async Task<bool> UpdateAsync(MoviePutInputDto movie)
         {
-            var getMovie = await _movieRepository.GetByNameAsync(movie.Title);
 
-            if (getMovie == null)
-                return await _movieRepository.UpdateAsync(movie);
-
-            if (getMovie.MovieId != movie.MovieId)
-                throw new DbUpdateException($"{getMovie.Title} já existente");
+            await _movieRepository.UpdateAsync(movie);
 
             return true;
         }
@@ -78,7 +68,7 @@ namespace ApiDotflix.Data.Services
             movie.Sinopse = movieDto.Sinopse;
             movie.RunTime = movieDto.RunTime;
             movie.Image = movieDto.Image;
-            movie.AgeGroup = movieDto.AgeGroup;
+            movie.AgeGroupId = movieDto.AgeGroupId;
             movie.Relevance = movieDto.Relevance;
             movie.ReleaseData = movieDto.ReleaseData;
             movie.Register = DateTime.Now.ToString("dd/MM/yyyy");
@@ -118,13 +108,37 @@ namespace ApiDotflix.Data.Services
                 {
                     MovieId = movie.MovieId,
                     Title = movie.Title,
-                    AgeGroup = movie.AgeGroup,
+                    AgeGroup = GetAgeGroup(movie.AgeGroupId),
                     Image = movie.Image,
                     Relevance = movie.Relevance,
                     RunTime = movie.RunTime
                 });
             }
             return ListMovie;
+        }
+        private AgeGroup GetAgeGroup(string id)
+        {
+            var ageGroup = new List<AgeGroup>()
+            {
+                new AgeGroup("L", "Livre", "Não expõe crianças a conteúdo potencialmente prejudiciais"),
+                new AgeGroup("10", "Não recomendado para menores de 10 anos",
+                            "Conteúdo violento ou linguagem inapropírada para crianças"),
+                new AgeGroup("12", "Não recomendado para menores de 12 anos",
+                            "Cenas podem conter agressão física, consumo de drogas e insinuação sexual"),
+                new AgeGroup("14", "Não recomendado para menores de 14 anos",
+                            "Conteúdos mais violentos e/ou de linguagem sexual mais acentuada"),
+                new AgeGroup("16", "Não recomendado para menores de 16 anos",
+                            "Conteúdo mais violentos, com cenas de tortura, suicídio, estupro ou nudez total"),
+                new AgeGroup("18", "Não recomendado para menores de 18 anos",
+                            "Conteúdos violentos e sexuais extremos. Cenas de sexo, incesto ou atos repetidos de tortura, multilação ou abuso sexual")
+            };
+
+            foreach (var age in ageGroup)
+            {
+                if (age.Symbol == id)
+                    return age;
+            }
+            return null;
         }
     }
 }

@@ -102,7 +102,9 @@ namespace ApiDotflix.Data
                 new Movie
                 {
                     MovieId = 100,
-                    AgeGroup = "18",
+                    AgeGroupId = "14",
+                    AgeGroup = new AgeGroup("14", "Não recomendado para menores de 14 anos",
+                            "Conteúdos mais violentos e/ou de linguagem sexual mais acentuada"),
                     Image = "img2",
                     ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
                     RunTime = new DateTime(1, 1, 1, 2, 15, 20).ToString("H:mm:ss"),
@@ -114,7 +116,9 @@ namespace ApiDotflix.Data
                 new Movie
                 {
                     MovieId = 101,
-                    AgeGroup = "10",
+                    AgeGroupId = "10",
+                    AgeGroup = new AgeGroup("10", "Não recomendado para menores de 10 anos",
+                            "Conteúdo violento ou linguagem inapropírada para crianças"),
                     Image = "img1",
                     ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
                     RunTime = new DateTime(1, 1, 1, 2, 20, 20).ToString("H:mm:ss"),

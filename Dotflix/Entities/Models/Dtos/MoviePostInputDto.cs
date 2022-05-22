@@ -20,10 +20,11 @@ namespace ApiDotflix.Entities.Models.Dtos
         [Required(ErrorMessage = "Imagem obrigatória")]
         public string Image { get; set; }
 
-        [Required(ErrorMessage = "Faixa etária obrigatória")]
-        [StringLength(3, MinimumLength = 1, ErrorMessage = "Faixa etária inválida")]
-        [RegularExpression(@"^(?:[L|l])|([0-9]{0,2})|(([0-9])([0-9])?([0]))", ErrorMessage = "Faixa etária inválida")]
-        public string AgeGroup { get; set; }      // faixa etária
+        [Required(ErrorMessage = "Classificação indicativa Id obrigatória")]
+        public string AgeGroupId { get; set; }
+
+        [JsonIgnore]
+        public AgeGroup AgeGroup { get; set; }      // faixa etária
 
         [Required(ErrorMessage = "Relevância do filme obrigatório")]
         [Range(0, 100, ErrorMessage = "Porcentagem inválida")]

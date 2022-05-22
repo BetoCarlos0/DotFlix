@@ -1,5 +1,4 @@
 ﻿using ApiDotflix.Controllers;
-using ApiDotflix.Models;
 using Moq;
 using System.Collections.Generic;
 

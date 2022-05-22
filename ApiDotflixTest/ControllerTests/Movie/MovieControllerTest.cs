@@ -1,6 +1,5 @@
 ﻿using ApiDotflix.Controllers;
 using ApiDotflix.Data.Services;
-using ApiDotflix.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;

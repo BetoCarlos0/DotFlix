@@ -33,10 +33,10 @@ namespace ApiDotflix.Data.Map
                 .HasMaxLength(20)
                 .IsRequired();
 
-            builder.Property(x => x.AgeGroup)
-                .HasColumnName("Age_group")
+            builder.Property(x => x.AgeGroupId)
+                .HasColumnName("Age_group_Id")
                 .HasColumnType("varchar")
-                .HasMaxLength(10)
+                .HasMaxLength(5)
                 .IsRequired();
 
             builder.Property(x => x.Relevance)

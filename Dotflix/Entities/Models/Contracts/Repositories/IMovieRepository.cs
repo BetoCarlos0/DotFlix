@@ -11,7 +11,7 @@ namespace ApiDotflix.Entities.Models.Contracts.Repositories
         Task<Movie> GetByIdAsync(int id);
         Task<Movie> GetByNameAsync(string name);
         Task<bool> AddAsync(Movie movie);
-        Task<bool> UpdateAsync(Movie movie);
+        Task<bool> UpdateAsync(MoviePutInputDto movie);
         Task<bool> DeleteId(int id);
     }
 }

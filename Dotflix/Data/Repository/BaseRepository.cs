@@ -33,7 +33,7 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<bool> AddAsync(T entity)
         {
-            await GetByName(entity);
+            await NameExiste(entity);
 
             await _entities.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            await GetByName(entity);
+            await NameExiste(entity);
 
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace ApiDotflix.Data.Repository
             return true;
         }
 
-        private async Task GetByName(T entity)
+        private async Task NameExiste(T entity)
         {
             var getEntity = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Name.Equals(entity.Name));
 

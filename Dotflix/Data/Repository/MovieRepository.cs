@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Dtos;
-using ApiDotflix.Entities.Models;
 using System.Linq;
 
 namespace ApiDotflix.Data.Repository
@@ -61,6 +58,8 @@ namespace ApiDotflix.Data.Repository
 
         public async Task<bool> AddAsync(Movie movie)
         {
+            await NameExist(movie.MovieId, movie.Title);
+
             if (!movie.About.Genres.Any())
                 throw new DbUpdateException("Gênero Vazio");
             if (!movie.About.Languages.Any())
@@ -74,8 +73,9 @@ namespace ApiDotflix.Data.Repository
             return true;
         }
 
-        public async Task<bool> UpdateAsync(Movie movie)
+        public async Task<bool> UpdateAsync(MoviePutInputDto movie)
         {
+
             var getMovie = await _dbContext.Movie
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutKeywords)
@@ -94,16 +94,17 @@ namespace ApiDotflix.Data.Repository
                         .ThenInclude(x => x.RoadMap)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
-            if (getMovie == null) return false;
+            await NameExist(movie.MovieId, movie.Title);
 
+            if (getMovie == null) return false;
+            
             getMovie.Image = movie.Image;
             getMovie.Title = movie.Title;
             getMovie.Sinopse = movie.Sinopse;
             getMovie.Relevance = movie.Relevance;
             getMovie.ReleaseData = movie.ReleaseData;
             getMovie.RunTime = movie.RunTime;
-            getMovie.AgeGroup = movie.AgeGroup;
-            getMovie.About = movie.About;
+            getMovie.AgeGroupId = movie.AgeGroupId;
 
             await _dbContext.SaveChangesAsync();
 
@@ -111,17 +112,29 @@ namespace ApiDotflix.Data.Repository
         }
         public async Task<bool> DeleteId(int id)
         {
-            var getMovie = await _dbContext.Movie
-                .Include(x => x.About)
-                .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
+            
 
-            if (getMovie == null)
-                throw new DbUpdateException("Id não existe");
-
-            _dbContext.Movie.Remove(getMovie);
+            _dbContext.Movie.Remove(await ExistMovie(id));
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+        private async Task<Movie> ExistMovie(int id)
+        {
+            var getMovie = await _dbContext.Movie.FindAsync(id);
+
+            if (getMovie == null)
+                throw new DbUpdateException("Id não encontrado");
+
+            return getMovie;
+        }
+        private async Task NameExist(int id, string title)
+        {
+            var getMovie = await _dbContext.Movie
+                .FirstOrDefaultAsync(x => x.Title.Equals(title));
+
+            if (getMovie != null && id != getMovie.MovieId)
+                throw new DbUpdateException($"{title} já existente");
         }
     }
 }

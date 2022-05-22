@@ -10,7 +10,7 @@ namespace ApiDotflix.Entities.Models.Contracts.Services
         Task<Movie> GetByIdAsync(int id);
         Task<Movie> GetByNameAsync(string name);
         Task<bool> AddAsync(MoviePostInputDto movie);
-        Task<bool> UpdateAsync(Movie movie);
+        Task<bool> UpdateAsync(MoviePutInputDto movie);
         Task<bool> DeleteId(int id);
     }
 }

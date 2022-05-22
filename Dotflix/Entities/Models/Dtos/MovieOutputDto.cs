@@ -8,7 +8,7 @@
 
         public string Image { get; set; }
 
-        public string AgeGroup { get; set; }      // faixa etária
+        public AgeGroup AgeGroup { get; set; }      // faixa etária
 
         public int Relevance { get; set; }        // relevância
 
