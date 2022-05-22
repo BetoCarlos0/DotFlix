@@ -33,17 +33,17 @@ namespace ApiDotflix.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            //catch (Exception)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError,
+            //        "Erro ao recuperar dados do banco de dados");
+            //}
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("put")]
-        public async Task<IActionResult> UpdateAbout(About about)
+        public async Task<IActionResult> UpdateAbout(AboutPutInputDto about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -55,11 +55,11 @@ namespace ApiDotflix.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Erro ao recuperar dados do banco de dados");
-            }
+            //catch (Exception)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError,
+            //        "Erro ao recuperar dados do banco de dados");
+            //}
         }
     }
 }

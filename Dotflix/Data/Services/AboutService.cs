@@ -34,9 +34,9 @@ namespace ApiDotflix.Data.Services
             return aboutDto;
         }
 
-        public async Task<bool> UpdateAsync(About about) 
+        public async Task<bool> UpdateAsync(AboutPutInputDto aboutDto) 
         {
-            return await _aboutRepository.UpdateAsync(about);
+            return await _aboutRepository.UpdateAsync(aboutDto);
         }
     }
 }

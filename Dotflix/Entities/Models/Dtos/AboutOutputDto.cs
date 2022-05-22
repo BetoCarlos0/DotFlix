@@ -10,7 +10,7 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         public Director Director { get; set; }
 
-        public IEnumerable<RoadMap>? RoadMaps { get; set; }
+        public IEnumerable<RoadMap> RoadMaps { get; set; }
 
         public IEnumerable<Cast> Casts { get; set; }
 
@@ -18,6 +18,6 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         public IEnumerable<Language> Languages { get; set; }
 
-        public IEnumerable<Keyword>? Keywords { get; set; }
+        public IEnumerable<Keyword> Keywords { get; set; }
     }
 }
