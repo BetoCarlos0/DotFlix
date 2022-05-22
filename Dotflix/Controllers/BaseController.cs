@@ -71,7 +71,7 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put/{id}")]
+        [HttpPut("put")]
         public async Task<IActionResult> UpdateAsync(T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));

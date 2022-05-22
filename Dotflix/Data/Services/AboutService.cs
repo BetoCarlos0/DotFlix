@@ -1,6 +1,7 @@
 ﻿using ApiDotflix.Entities;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
+using ApiDotflix.Entities.Models.Dtos;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Services
@@ -14,9 +15,23 @@ namespace ApiDotflix.Data.Services
             _aboutRepository = aboutRepository;
         }
 
-        public async Task<About> GetByIdAsync(int id)
+        public async Task<AboutOutputDto> GetByIdAsync(int id)
         {
-            return await _aboutRepository.GetByIdAsync(id);
+            var about = await _aboutRepository.GetByIdAsync(id);
+
+            var aboutDto = new AboutOutputDto
+            {
+                AboutId = about.AboutId,
+                MovieId = about.MovieId,
+                Director = about.Director,
+                Keywords = about.Keywords,
+                Languages = about.Languages,
+                Genres = about.Genres,
+                RoadMaps = about.RoadMaps,
+                Casts = about.Casts,
+            };
+
+            return aboutDto;
         }
 
         public async Task<bool> UpdateAsync(About about) 

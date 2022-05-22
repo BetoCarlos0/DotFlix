@@ -1,5 +1,6 @@
 ﻿using ApiDotflix.Entities;
 using ApiDotflix.Entities.Models.Contracts.Services;
+using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<About>> GetAbout(int id)
+        public async Task<ActionResult<AboutOutputDto>> GetAbout(int id)
         {
             try
             {
@@ -41,7 +42,7 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put/{id}")]
+        [HttpPut("put")]
         public async Task<IActionResult> UpdateAbout(About about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
