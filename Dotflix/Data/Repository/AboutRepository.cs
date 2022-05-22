@@ -58,6 +58,8 @@ namespace ApiDotflix.Data.Repository
 
             var about = MappingInputAbout(aboutDto);
 
+            //_dbContext.Entry(about).State = EntityState.Modified;
+
             getAbout.Keywords = about.Keywords;
             getAbout.Languages = about.Languages;
             getAbout.Genres = about.Genres;
@@ -72,17 +74,17 @@ namespace ApiDotflix.Data.Repository
         }
         private About MappingInputAbout(AboutPutInputDto aboutDto)
         {
-            var about = new About();
-
-            about.MovieId = aboutDto.MovieId;
-            about.DirectorId = aboutDto.DirectorId;
-            about.Languages = MappingListEntity<Language>(aboutDto.Languages);
-            about.Keywords = MappingListEntity<Keyword>(aboutDto.Keywords);
-            about.Casts = MappingListEntity<Cast>(aboutDto.Casts);
-            about.Genres = MappingListEntity<Genre>(aboutDto.Genres);
-            about.RoadMaps = MappingListEntity<RoadMap>(aboutDto.RoadMaps);
-
-
+            var about = new About
+            {
+                AboutId = aboutDto.AboutId,
+                MovieId = aboutDto.MovieId,
+                DirectorId = aboutDto.DirectorId,
+                Languages = MappingListEntity<Language>(aboutDto.Languages),
+                Keywords = MappingListEntity<Keyword>(aboutDto.Keywords),
+                Casts = MappingListEntity<Cast>(aboutDto.Casts),
+                Genres = MappingListEntity<Genre>(aboutDto.Genres),
+                RoadMaps = MappingListEntity<RoadMap>(aboutDto.RoadMaps)
+            };
 
             return about;
         }

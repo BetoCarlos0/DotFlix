@@ -39,20 +39,17 @@ namespace ApiDotflix.Entities.Models.Dtos
         [RegularExpression(@"^([01234]{1}):([012345]\d):([012345]\d)", ErrorMessage = "Tempo inválido")]
         public string RunTime { get; set; }
 
-        [DisplayFormat(DataFormatString = "{dd:MM:yyyy}")]
-        public string Register { get; set; }
-
         [Required(ErrorMessage = "Id de Sobre obrigatório")]
         public AboutDto About { get; set; }
     }
 
     public class AboutDto
     {
-        [JsonIgnore]
-        public int AboutId { get; set; }
+        //[JsonIgnore]
+        //public int AboutId { get; set; }
 
-        [JsonIgnore]
-        public int MovieId { get; set; }
+        //[JsonIgnore]
+        //public int MovieId { get; set; }
 
         [Required(ErrorMessage = "Id do Diretor obrigatório")]
         public int DirectorId { get; set; }
