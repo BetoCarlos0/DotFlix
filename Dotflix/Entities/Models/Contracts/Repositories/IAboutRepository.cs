@@ -8,6 +8,6 @@ namespace ApiDotflix.Entities.Models.Contracts.Repositories
     public interface IAboutRepository
     {
         Task<About> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(AboutPutInputDto movie);
+        Task<bool> UpdateAsync(About movie);
     }
 }

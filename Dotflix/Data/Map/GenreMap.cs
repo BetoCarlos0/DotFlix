@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class GenreMap : BaseRepositoryMap<Genre>
+    public class GenreMap : BaseMap<Genre>
     {
     }
 }

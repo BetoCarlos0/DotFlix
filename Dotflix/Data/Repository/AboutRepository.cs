@@ -3,6 +3,7 @@ using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace ApiDotflix.Data.Repository
             return getKeyword;
         }
 
-        public async Task<bool> UpdateAsync(AboutPutInputDto aboutDto)
+        public async Task<bool> UpdateAsync(About about)
         {
             var getAbout = await _dbContext.About
                 .Include(x => x.AboutKeywords)
@@ -52,16 +53,16 @@ namespace ApiDotflix.Data.Repository
                     .ThenInclude(x => x.Cast)
                 .Include(x => x.AboutRoadMaps)
                     .ThenInclude(x => x.RoadMap)
-                .FirstOrDefaultAsync(x => x.AboutId.Equals(aboutDto.AboutId));
+                .FirstOrDefaultAsync(x => x.AboutId.Equals(about.AboutId));
 
             if (getAbout == null) return false;
 
-            var about = MappingInputAbout(aboutDto);
+            //var about = MappingInputAbout(aboutDto);
 
             //_dbContext.Entry(about).State = EntityState.Modified;
 
-            getAbout.Keywords = about.Keywords;
             getAbout.Languages = about.Languages;
+            getAbout.Keywords = about.Keywords;
             getAbout.Genres = about.Genres;
             getAbout.RoadMaps = about.RoadMaps;
             getAbout.Casts = about.Casts;
@@ -71,35 +72,6 @@ namespace ApiDotflix.Data.Repository
             await _dbContext.SaveChangesAsync();
 
             return true;
-        }
-        private About MappingInputAbout(AboutPutInputDto aboutDto)
-        {
-            var about = new About
-            {
-                AboutId = aboutDto.AboutId,
-                MovieId = aboutDto.MovieId,
-                DirectorId = aboutDto.DirectorId,
-                Languages = MappingListEntity<Language>(aboutDto.Languages),
-                Keywords = MappingListEntity<Keyword>(aboutDto.Keywords),
-                Casts = MappingListEntity<Cast>(aboutDto.Casts),
-                Genres = MappingListEntity<Genre>(aboutDto.Genres),
-                RoadMaps = MappingListEntity<RoadMap>(aboutDto.RoadMaps)
-            };
-
-            return about;
-        }
-
-        private IEnumerable<T> MappingListEntity<T>(IEnumerable<BaseEntityDto> convertEntity) where T : BaseEntity, new()
-        {
-            var entity = new List<T>();
-
-            if (convertEntity != null)
-            {
-                foreach (var convert in convertEntity)
-                    entity.Add(new T() { Id = convert.Id });
-            }
-
-            return entity;
         }
     }
 }

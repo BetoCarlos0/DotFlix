@@ -1,11 +1,10 @@
 ﻿using ApiDotflix.Entities.Models;
-using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ApiDotflix.Data.Repository
+namespace ApiDotflix.Data.Map
 {
-    public class BaseRepositoryMap<T> : IEntityTypeConfiguration<T>, IBaseRepositoryMap<T> where T : BaseEntity
+    public class BaseMap<T> : IEntityTypeConfiguration<T>, IBaseMap<T> where T : BaseEntity
     {
         public void Configure(EntityTypeBuilder<T> builder)
         {

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ApiDotflix.Entities.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,22 +22,22 @@ namespace ApiDotflix.Entities
         public Director Director { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutRoadMap>? AboutRoadMaps { get; set; }
+        public ICollection<AboutRoadMap>? AboutRoadMaps { get; set; }
 
         [Required(ErrorMessage = "Id do Elenco obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutCast> AboutCasts { get; set; }
+        public ICollection<AboutCast> AboutCasts { get; set; }
 
         [Required(ErrorMessage = "Id do Gênero obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutGenre> AboutGenres { get; set; }
+        public ICollection<AboutGenre> AboutGenres { get; set; }
 
         [Required(ErrorMessage = "Id do Idioma obrigatório")]
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutLanguage> AboutLanguages { get; set; }
+        public ICollection<AboutLanguage> AboutLanguages { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual ICollection<AboutKeyword>? AboutKeywords { get; set; }
+        public ICollection<AboutKeyword>? AboutKeywords { get; set; }
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
@@ -93,7 +94,7 @@ namespace ApiDotflix.Entities
 
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Language> Languages
+        public IEnumerable<BaseEntity> Languages
         {
             get => AboutLanguages.Select(x => x.Language);
             set => AboutLanguages = value.Select(y => new AboutLanguage()

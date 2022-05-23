@@ -25,6 +25,6 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         public IEnumerable<BaseEntityDto>? RoadMaps { get; set; }
 
-        public List<BaseEntityDto>? Keywords { get; set; }
+        public IEnumerable<Keyword>? Keywords { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using ApiDotflix.Entities;
 
 namespace ApiDotflix.Data.Map
 {
-    public class CastMap : BaseRepositoryMap<Cast>
+    public class CastMap : BaseMap<Cast>
     {
     }
 }

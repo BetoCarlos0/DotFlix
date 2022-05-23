@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class LanguageMap : BaseRepositoryMap<Language>
+    public class LanguageMap : BaseMap<Language>
     {
     }
 }
