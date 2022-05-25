@@ -7,6 +7,6 @@ namespace ApiDotflix.Entities.Models.Contracts.Services
     public interface IAboutService
     {
         Task<AboutOutputDto> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(About movie);
+        Task<bool> UpdateAsync(AboutInputDto movie);
     }
 }

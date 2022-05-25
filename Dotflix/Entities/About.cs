@@ -13,32 +13,27 @@ namespace ApiDotflix.Entities
 
         public int MovieId { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public Movie Movie { get; set; }
 
         public int DirectorId { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
         public Director Director { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<AboutRoadMap>? AboutRoadMaps { get; set; }
 
         [Required(ErrorMessage = "Id do Elenco obrigatório")]
-        [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<AboutCast> AboutCasts { get; set; }
+        public IEnumerable<AboutCast> AboutCasts { get; set; }
 
         [Required(ErrorMessage = "Id do Gênero obrigatório")]
-        [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<AboutGenre> AboutGenres { get; set; }
+        public IEnumerable<AboutGenre> AboutGenres { get; set; }
+
+        public IEnumerable<AboutKeyword>? AboutKeywords { get; set; }
 
         [Required(ErrorMessage = "Id do Idioma obrigatório")]
-        [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<AboutLanguage> AboutLanguages { get; set; }
+        public IEnumerable<AboutLanguage> AboutLanguages { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<AboutKeyword>? AboutKeywords { get; set; }
-
+        public IEnumerable<AboutRoadMap>? AboutRoadMaps { get; set; }
+        
+        /*
         [NotMapped]
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public IEnumerable<RoadMap>? RoadMaps
@@ -101,6 +96,6 @@ namespace ApiDotflix.Entities
             {
                 LanguageId = y.Id,
             }).ToList();
-        }
+        }*/
     }
 }

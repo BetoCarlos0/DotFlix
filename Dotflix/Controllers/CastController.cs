@@ -1,4 +1,5 @@
 ﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

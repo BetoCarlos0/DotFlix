@@ -16,7 +16,7 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         public IEnumerable<Genre> Genres { get; set; }
 
-        public IEnumerable<BaseEntity> Languages { get; set; }
+        public IEnumerable<Language> Languages { get; set; }
 
         public IEnumerable<Keyword> Keywords { get; set; }
     }

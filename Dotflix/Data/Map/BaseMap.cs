@@ -10,7 +10,7 @@ namespace ApiDotflix.Data.Map
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .HasColumnName(typeof(T).Name+"_Id")
+                .HasColumnName("Id")
                 .UseIdentityColumn(100, 1);
 
             builder.Property(x => x.Name)

@@ -67,9 +67,4 @@ namespace ApiDotflix.Entities.Models.Dtos
         [Required(ErrorMessage = "Idioma obrigatório")]
         public List<BaseEntityDto> Languages { get; set; }
     }
-    public class BaseEntityDto
-    {
-        [Required(ErrorMessage = "Id obrigatório")]
-        public int Id { get; set; }
-    }
 }

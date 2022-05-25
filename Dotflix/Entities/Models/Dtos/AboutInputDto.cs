@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace ApiDotflix.Entities.Models.Dtos
 {
-    public class AboutPutInputDto
+    public class AboutInputDto
     {
         public int AboutId { get; set; }
 
@@ -16,15 +16,15 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         [Required(ErrorMessage = "Elenco obrigatório")]
         public IEnumerable<BaseEntityDto> Casts { get; set; }
-
+        /*
         [Required(ErrorMessage = "Gênero obrigatório")]
-        public IEnumerable<BaseEntityDto> Genres { get; set; }
+        public IEnumerable<Entities> Genres { get; set; }
 
         [Required(ErrorMessage = "Idioma obrigatório")]
-        public IEnumerable<BaseEntityDto> Languages { get; set; }
+        public IEnumerable<Entities> Languages { get; set; }
 
-        public IEnumerable<BaseEntityDto>? RoadMaps { get; set; }
+        public IEnumerable<Entities>? RoadMaps { get; set; }
 
-        public IEnumerable<Keyword>? Keywords { get; set; }
+        public IEnumerable<Entities>? Keywords { get; set; }*/
     }
 }

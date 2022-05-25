@@ -72,14 +72,14 @@ namespace ApiDotflix.Data.Services
             movie.Relevance = movieDto.Relevance;
             movie.ReleaseData = movieDto.ReleaseData;
             movie.Register = DateTime.Now.ToString("dd/MM/yyyy");
-
+            /*
             about.DirectorId = movieDto.About.DirectorId;
             about.Languages = MappingListEntity<Language>(movieDto.About.Languages);
             about.Keywords = MappingListEntity<Keyword>(movieDto.About.Keywords);
             about.Casts = MappingListEntity<Cast>(movieDto.About.Casts);
             about.Genres = MappingListEntity<Genre>(movieDto.About.Genres);
             about.RoadMaps = MappingListEntity<RoadMap>(movieDto.About.RoadMaps);
-
+            */
             movie.About = about;
 
             return movie;

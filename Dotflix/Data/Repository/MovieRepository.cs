@@ -33,9 +33,9 @@ namespace ApiDotflix.Data.Repository
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutLanguages)
                         .ThenInclude(x => x.Language)
-                .Include(x => x.About)
+                /*.Include(x => x.About)
                     .ThenInclude(x => x.AboutCasts)
-                        .ThenInclude(x => x.Cast)
+                        .ThenInclude(x => x.Cast)*/
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutGenres)
                         .ThenInclude(x => x.Genre)
@@ -59,14 +59,14 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> AddAsync(Movie movie)
         {
             await NameExist(movie.MovieId, movie.Title);
-
+            /*
             if (!movie.About.Genres.Any())
                 throw new DbUpdateException("Gênero Vazio");
             if (!movie.About.Languages.Any())
                 throw new DbUpdateException("Idioma Vazio");
             if (!movie.About.Casts.Any())
                 throw new DbUpdateException("Elenco Vazio");
-
+            */
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
 
@@ -83,9 +83,9 @@ namespace ApiDotflix.Data.Repository
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutLanguages)
                         .ThenInclude(x => x.Language)
-                .Include(x => x.About)
+                /*.Include(x => x.About)
                     .ThenInclude(x => x.AboutCasts)
-                        .ThenInclude(x => x.Cast)
+                        .ThenInclude(x => x.Cast)*/
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutGenres)
                         .ThenInclude(x => x.Genre)

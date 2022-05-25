@@ -43,7 +43,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("put")]
-        public async Task<IActionResult> UpdateAbout(About about)
+        public async Task<IActionResult> UpdateAbout(AboutInputDto about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
