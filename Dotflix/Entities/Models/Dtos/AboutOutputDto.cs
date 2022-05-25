@@ -10,9 +10,9 @@ namespace ApiDotflix.Entities.Models.Dtos
 
         public Director Director { get; set; }
 
-        public IEnumerable<RoadMap> RoadMaps { get; set; }
-
         public IEnumerable<Cast> Casts { get; set; }
+
+        public IEnumerable<RoadMap> RoadMaps { get; set; }
 
         public IEnumerable<Genre> Genres { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models.Contracts.Services;
+﻿using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +32,11 @@ namespace ApiDotflix.Controllers
             {
                 return NotFound(ex.Message);
             }
-            //catch (Exception)
-            //{
-            //    return StatusCode(StatusCodes.Status500InternalServerError,
-            //        "Erro ao recuperar dados do banco de dados");
-            //}
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,11 +54,11 @@ namespace ApiDotflix.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            //catch (Exception)
-            //{
-            //    return StatusCode(StatusCodes.Status500InternalServerError,
-            //        "Erro ao recuperar dados do banco de dados");
-            //}
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Erro ao recuperar dados do banco de dados");
+            }
         }
     }
 }

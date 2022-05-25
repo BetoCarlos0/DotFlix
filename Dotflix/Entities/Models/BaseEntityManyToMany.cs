@@ -2,15 +2,15 @@
 
 namespace ApiDotflix.Entities.Models
 {
-    public class BaseEntityManyToMany// : IBaseEntityManyToMany
+    public class BaseEntityManyToMany<T> : IBaseEntityManyToMany<T> where T : BaseEntity
     {
         public int Id { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public int AboutId { get; set; }
 
         [JsonIgnore]
         public About About { get; set; }
-        [JsonIgnore]
-        public BaseEntity SonEntity { get; set; }
+        //[JsonIgnore]
+        public T SonEntity { get; set; }
     }
 }

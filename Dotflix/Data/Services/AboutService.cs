@@ -42,34 +42,45 @@ namespace ApiDotflix.Data.Services
                 AboutId = aboutDto.AboutId,
                 MovieId = aboutDto.MovieId,
                 DirectorId = aboutDto.DirectorId,
-                AboutCasts = MappingMToMEntities(aboutDto.Casts.Select(x => x.Id)),
-                //Genres = MappingEntities(about.AboutGenres.Select(x => x.Genre)),
-                //Keywords = MappingEntities(about.AboutKeywords.Select(x => x.Keyword)),
-                //Languages = MappingEntities(about.AboutLanguages.Select(x => x.Language)),
-                //RoadMaps = MappingEntities(about.AboutRoadMaps.Select(x => x.RoadMap))
-            };
-            about.AboutCasts.Select(x => x.CastId);
+            };            
             
             var aboutCast = new List<AboutCast>();
             foreach (var entity in aboutDto.Casts)
             {
                 aboutCast.Add(new AboutCast() { CastId = entity.Id });
             }
-            about.AboutCasts = aboutCast;
 
-            //about.AboutCasts.Concat(aboutCast);
-            return about;
-        }
-
-        private IEnumerable<T> MappingMToMEntities<T>(IEnumerable<int> entity) where T : int, new()// where TEntity : BaseEntityDto
-        {
-            var newEntity = new List<T>();
-            if (entity != null)
+            var aboutGenre = new List<AboutGenre>();
+            foreach (var entity in aboutDto.Genres)
             {
-                foreach (var entities in entity)
-                    newEntity.Add(new T() {Id = entities.Id});
+                aboutGenre.Add(new AboutGenre() { GenreId = entity.Id });
             }
-            return newEntity;
+
+            var aboutKeyword = new List<AboutKeyword>();
+            foreach (var entity in aboutDto.Keywords)
+            {
+                aboutKeyword.Add(new AboutKeyword() { KeywordId = entity.Id });
+            }
+
+            var aboutLanguage = new List<AboutLanguage>();
+            foreach (var entity in aboutDto.Casts)
+            {
+                aboutLanguage.Add(new AboutLanguage() { LanguageId = entity.Id });
+            }
+
+            var aboutRoad = new List<AboutRoadMap>();
+            foreach (var entity in aboutDto.Casts)
+            {
+                aboutRoad.Add(new AboutRoadMap() { RoadMapId = entity.Id });
+            }
+
+            about.AboutCasts = aboutCast;
+            about.AboutGenres = aboutGenre;
+            about.AboutKeywords = aboutKeyword;
+            about.AboutLanguages = aboutLanguage;
+            about.AboutRoadMaps = aboutRoad;
+
+            return about;
         }
         
         private AboutOutputDto MappingOutputAbout(About about)

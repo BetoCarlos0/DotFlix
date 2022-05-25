@@ -1,10 +1,11 @@
 ﻿using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ApiDotflix.Data.Map
 {
-    public class AboutCastMap : IEntityTypeConfiguration<AboutCast>
+    public class AboutCastMap : IEntityTypeConfiguration<AboutCast>// : BaseMTMMap<AboutCast> //
     {
         public void Configure(EntityTypeBuilder<AboutCast> builder)
         {

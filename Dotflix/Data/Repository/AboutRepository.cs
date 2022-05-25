@@ -1,10 +1,6 @@
 ﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
-using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Repository
@@ -56,18 +52,15 @@ namespace ApiDotflix.Data.Repository
                 .FirstOrDefaultAsync(x => x.AboutId.Equals(about.AboutId));
 
             if (getAbout == null) return false;
-
-            //var about = MappingInputAbout(aboutDto);
-
             
             getAbout.AboutCasts = about.AboutCasts;
-            //getAbout.Languages = about.Languages;
-            //getAbout.Keywords = about.Keywords;
-            //getAbout.Genres = about.Genres;
-            //getAbout.RoadMaps = about.RoadMaps;
-            //getAbout.MovieId = about.MovieId;
-            //getAbout.DirectorId = about.DirectorId;
-            
+            getAbout.AboutGenres = about.AboutGenres;
+            getAbout.AboutKeywords = about.AboutKeywords;
+            getAbout.AboutLanguages = about.AboutLanguages;
+            getAbout.AboutRoadMaps = about.AboutRoadMaps;
+            getAbout.MovieId = about.MovieId;
+            getAbout.DirectorId = about.DirectorId;
+
             _dbContext.Entry(getAbout).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
