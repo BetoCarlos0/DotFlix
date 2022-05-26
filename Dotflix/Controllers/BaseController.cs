@@ -1,5 +1,6 @@
 ﻿using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
+using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

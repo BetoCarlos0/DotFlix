@@ -1,10 +1,10 @@
-﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models;
+﻿using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
+using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ApiDotflix.Data.Repository
 {

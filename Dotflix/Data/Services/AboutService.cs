@@ -2,7 +2,6 @@
 using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
 using System.Threading.Tasks;
-using ApiDotflix.Mapping;
 
 namespace ApiDotflix.Data.Services
 {
@@ -19,14 +18,14 @@ namespace ApiDotflix.Data.Services
         {
             var about = await _aboutRepository.GetByIdAsync(id);
 
-            var aboutDto = MappingEntities.MappingOutputAbout(about);
+            var aboutDto = Mapping.MappingOutputAbout(about);
 
             return aboutDto;
         }
 
         public async Task<bool> UpdateAsync(AboutInputDto aboutDto) 
         {
-            var about = MappingEntities.MappingInputAbout(aboutDto);
+            var about = Mapping.MappingInputAbout(aboutDto);
 
             return await _aboutRepository.UpdateAsync(about);
         }

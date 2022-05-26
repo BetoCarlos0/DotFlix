@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ApiDotflix.Mapping
+namespace ApiDotflix
 {
-    public static class MappingEntities
+    public static class Mapping
     {
         public static Movie MappingInputMovie(MoviePostInputDto movieDto)
         {
@@ -56,6 +56,50 @@ namespace ApiDotflix.Mapping
 
             return aboutDto;
         }
+
+        public static List<MovieOutputDto> MappingMovieOutput(IEnumerable<Movie> movies)
+        {
+            var ListMovie = new List<MovieOutputDto>();
+
+            foreach (var movie in movies)
+            {
+                ListMovie.Add(new MovieOutputDto
+                {
+                    MovieId = movie.MovieId,
+                    Title = movie.Title,
+                    AgeGroup = GetAgeGroup(movie.AgeGroupId),
+                    Image = movie.Image,
+                    Relevance = movie.Relevance,
+                    RunTime = movie.RunTime
+                });
+            }
+            return ListMovie;
+        }
+        public static AgeGroup GetAgeGroup(string id)
+        {
+            var ageGroup = new List<AgeGroup>()
+            {
+                new AgeGroup("L", "Livre", "Não expõe crianças a conteúdo potencialmente prejudiciais"),
+                new AgeGroup("10", "Não recomendado para menores de 10 anos",
+                            "Conteúdo violento ou linguagem inapropírada para crianças"),
+                new AgeGroup("12", "Não recomendado para menores de 12 anos",
+                            "Cenas podem conter agressão física, consumo de drogas e insinuação sexual"),
+                new AgeGroup("14", "Não recomendado para menores de 14 anos",
+                            "Conteúdos mais violentos e/ou de linguagem sexual mais acentuada"),
+                new AgeGroup("16", "Não recomendado para menores de 16 anos",
+                            "Conteúdo mais violentos, com cenas de tortura, suicídio, estupro ou nudez total"),
+                new AgeGroup("18", "Não recomendado para menores de 18 anos",
+                            "Conteúdos violentos e sexuais extremos. Cenas de sexo, incesto ou atos repetidos de tortura, multilação ou abuso sexual")
+            };
+
+            foreach (var age in ageGroup)
+            {
+                if (age.Symbol == id)
+                    return age;
+            }
+            return null;
+        }
+
         public static IEnumerable<T> MappingAbout<T>(IEnumerable<T> entity) where T : BaseEntity, new()
         {
             var newEntity = new List<T>();

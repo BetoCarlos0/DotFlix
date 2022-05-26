@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ApiDotflix.Entities.Models.Dtos;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Entities.Models.Contracts.Repositories
