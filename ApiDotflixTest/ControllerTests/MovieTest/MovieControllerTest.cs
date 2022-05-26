@@ -1,5 +1,8 @@
 ﻿using ApiDotflix.Controllers;
 using ApiDotflix.Data.Services;
+using ApiDotflix.Entities;
+using ApiDotflix.Entities.Models.Contracts.Services;
+using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -14,7 +17,7 @@ namespace ApiDotflixTest.ControllerTests
 {
     public class MovieControllerTest : BaseMovieControllerTest
     {
-        /*[Fact, Trait("Movie", "GetMovie")]
+        [Fact, Trait("Movie", "GetMovie")]
         public async Task GetAllMovies_Whencalled_ReturnOk()
         {
             //arrange
@@ -64,31 +67,50 @@ namespace ApiDotflixTest.ControllerTests
             var result = movie.Result;
             Assert.IsType<NotFoundObjectResult>(result);
         }
-        /*
+        
         [Fact, Trait("Movie", "CreateMovie")]
         public async Task CreateMovie_DuplicateTitle_ReturnBadRequest()
         {
             //arrange
-            var newMovie = new Movie
+            var newMovie = new MoviePostInputDto
             {
-                MovieId = 100,
                 Title = "um filme",
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
-                AgeGroup = "14",
+                AgeGroupId = "14",
                 ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
                 Relevance = 10,
                 RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss"),
-                MovieLanguages = new List<MovieLanguage>()
+                About = new AboutInputDto
                 {
-                    new MovieLanguage()
+                    AboutId = 100,
+                    MovieId = 100,
+                    DirectorId = 100,
+                    Languages = new List<BaseEntityDto>
                     {
-                        LanguageId = 100
+                        new BaseEntityDto
+                        {
+                            Id = 100
+                        }
+                    },
+                    Genres = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
+                    },
+                    Casts = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
                     }
                 }
             };
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.AddAsync(It.IsAny<Movie>())).ThrowsAsync(new DbUpdateException());
+            mockService.Setup(x => x.AddAsync(It.IsAny<MoviePostInputDto>())).ThrowsAsync(new DbUpdateException());
             var movieController = new MovieController(mockService.Object);
 
             //act
@@ -103,26 +125,45 @@ namespace ApiDotflixTest.ControllerTests
         public async Task CreateMovie_WhenCalled_ReturnCreated()
         {
             //arrange
-            var newMovie = new Movie
+            var newMovie = new MoviePostInputDto
             {
-                MovieId = 100,
-                Title = "novo filme",
+                Title = "teste um filme",
                 Sinopse = "um filme de teste",
                 Image = "imgTeste",
-                AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20).ToString("dd/MM/yyyy"),
+                AgeGroupId = "14",
+                ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
-                MovieLanguages = new List<MovieLanguage>()
+                RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss"),
+                About = new AboutInputDto
                 {
-                    new MovieLanguage()
+                    AboutId = 100,
+                    MovieId = 100,
+                    DirectorId = 100,
+                    Languages = new List<BaseEntityDto>
                     {
-                        LanguageId = 100
+                        new BaseEntityDto
+                        {
+                            Id = 100
+                        }
+                    },
+                    Genres = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
+                    },
+                    Casts = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
                     }
                 }
             };
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.AddAsync(It.IsAny<Movie>()));
+            mockService.Setup(x => x.AddAsync(It.IsAny<MoviePostInputDto>()));
             var movieController = new MovieController(mockService.Object);
 
             //act
@@ -130,32 +171,52 @@ namespace ApiDotflixTest.ControllerTests
 
             //assert
             var result = movie;
-            Assert.IsType<CreatedAtActionResult>(movie);
+            Assert.IsType<OkResult>(movie);
         }
         
         [Fact, Trait("Movie", "PostMovie")]
         public async Task CreateMovie_FieldNull_ReturnBadRequest()
         {
             //arrange
-            var newMovie = new Movie
+            var newMovie = new MoviePostInputDto
             {
-                MovieId = 100,
-                Title = null,
+                Title = "",
                 Sinopse = "um filme de teste",
-                AgeGroup = "14",
-                ReleaseData = new DateTime(2010, 2, 20).ToString("dd/MM/yyyy"),
+                Image = "imgTeste",
+                AgeGroupId = "14",
+                ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
                 Relevance = 10,
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
-                MovieLanguages = new List<MovieLanguage>()
+                RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss"),
+                About = new AboutInputDto
                 {
-                    new MovieLanguage()
+                    AboutId = 100,
+                    MovieId = 100,
+                    DirectorId = 100,
+                    Languages = new List<BaseEntityDto>
                     {
-                        LanguageId = 100
+                        new BaseEntityDto
+                        {
+                            Id = 100
+                        }
+                    },
+                    Genres = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
+                    },
+                    Casts = new List<BaseEntityDto>
+                    {
+                        new BaseEntityDto
+                        {
+                            Id = 101
+                        }
                     }
                 }
             };
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.AddAsync(It.IsAny<Movie>()));
+            mockService.Setup(x => x.AddAsync(It.IsAny<MoviePostInputDto>()));
             var movieController = new MovieController(mockService.Object);
             movieController.ModelState.AddModelError("Title", "Required");
 
@@ -171,67 +232,27 @@ namespace ApiDotflixTest.ControllerTests
         {
             //arrange
             int id = 100;
-            var updateMovie = new Movie
+            var putMovie = new MoviePutInputDto
             {
                 MovieId = id,
-                AgeGroup = "0",
-                Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
-                Sinopse = "uma sinopse",
-                Title = "um filme",
-                Relevance = 45,
-                Languages = new List<Language1>()
-                {
-                    new Language1()
-                    {
-                        LanguageId = 100
-                    }
-                }
+                Title = "teste filme",
+                Sinopse = "um filme de teste",
+                Image = "imgTeste",
+                AgeGroupId = "14",
+                ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
+                Relevance = 10,
+                RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss")
             };
+
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.UpdateAsync(It.IsAny<Movie>()));
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<MoviePutInputDto>()));
             var movieController = new MovieController(mockService.Object);
 
             //act
-            var movie = await movieController.UpdateMovie(id, updateMovie);
+            var movie = await movieController.UpdateMovie(putMovie);
 
             //assert
             Assert.IsType<OkObjectResult>(movie);
-        }
-        
-        [Fact, Trait("Movie", "PutMovie")]
-        public async Task UpdateMovie_CompareId_ReturnBadRequest()
-        {
-            //arrange
-            int id = 100;
-            var updateMovie = new Movie
-            {
-                MovieId = 102,
-                AgeGroup = "0",
-                Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
-                Sinopse = "uma sinopse",
-                Title = "um filme",
-                Relevance = 45,
-                Languages = new List<Language1>()
-                {
-                    new Language1()
-                    {
-                        LanguageId = 100
-                    }
-                }
-            };
-            var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.UpdateAsync(It.IsAny<Movie>()));
-            var movieController = new MovieController(mockService.Object);
-
-            //act
-            var movie = await movieController.UpdateMovie(id, updateMovie);
-
-            //assert
-            Assert.IsType<BadRequestObjectResult>(movie);
         }
         
         [Fact, Trait("Movie", "UpdateMovie")]
@@ -239,30 +260,23 @@ namespace ApiDotflixTest.ControllerTests
         {
             //arrange
             int id = 100;
-            var updateMovie = new Movie
+            var putMovie = new MoviePutInputDto
             {
-                MovieId = 100,
-                Title = "outro filme",
-                AgeGroup = "0",
-                Image = "img2",
-                ReleaseData = new DateTime(2021, 5, 10).ToString("dd/MM/yyyy"),
-                RunTime = new DateTime(2021, 5, 10, 15, 20, 20).ToString("H:mm:ss"),
-                Sinopse = "uma sinopse",
-                Relevance = 45,
-                Languages = new List<Language1>()
-                {
-                    new Language1()
-                    {
-                        LanguageId = 100
-                    }
-                }
+                MovieId = id,
+                Title = "um filme",
+                Sinopse = "um filme de teste",
+                Image = "imgTeste",
+                AgeGroupId = "14",
+                ReleaseData = new DateTime(2010, 2, 20).Date.ToString("dd/MM/yyyy"),
+                Relevance = 10,
+                RunTime = new DateTime(2021, 5, 10, 02, 20, 30).ToString("H:mm:ss")
             };
             var mockService = new Mock<IMovieService>();
-            mockService.Setup(x => x.UpdateAsync(It.IsAny<Movie>())).ThrowsAsync(new DbUpdateException());
+            mockService.Setup(x => x.UpdateAsync(It.IsAny<MoviePutInputDto>())).ThrowsAsync(new DbUpdateException());
             var movieController = new MovieController(mockService.Object);
 
             //act
-            var movie = await movieController.UpdateMovie(id, updateMovie);
+            var movie = await movieController.UpdateMovie(putMovie);
 
             //assert
             Assert.IsType<BadRequestObjectResult>(movie);
@@ -298,6 +312,6 @@ namespace ApiDotflixTest.ControllerTests
 
             //assert
             Assert.IsType<NotFoundObjectResult>(movie);
-        }*/
+        }
     }
 }

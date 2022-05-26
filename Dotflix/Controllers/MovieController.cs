@@ -31,7 +31,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<MovieOutputById>> GetMovie(int id)
         {
             try
             {

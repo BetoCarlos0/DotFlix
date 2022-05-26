@@ -40,31 +40,6 @@ namespace ApiDotflix.Entities.Models.Dtos
         public string RunTime { get; set; }
 
         [Required(ErrorMessage = "Id de Sobre obrigatório")]
-        public AboutDto About { get; set; }
-    }
-
-    public class AboutDto
-    {
-        //[JsonIgnore]
-        //public int AboutId { get; set; }
-
-        //[JsonIgnore]
-        //public int MovieId { get; set; }
-
-        [Required(ErrorMessage = "Id do Diretor obrigatório")]
-        public int DirectorId { get; set; }
-
-        public List<BaseEntityDto>? RoadMaps { get; set; }  // roteiro
-
-        [Required(ErrorMessage = "Elenco obrigatório")]
-        public List<BaseEntityDto> Casts { get; set; }      // elenco
-
-        [Required(ErrorMessage = "Gênero obrigatório")]
-        public List<BaseEntityDto> Genres { get; set; }
-
-        public List<BaseEntityDto>? Keywords { get; set; }
-
-        [Required(ErrorMessage = "Idioma obrigatório")]
-        public List<BaseEntityDto> Languages { get; set; }
+        public AboutInputDto About { get; set; }
     }
 }

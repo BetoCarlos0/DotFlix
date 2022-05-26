@@ -1,9 +1,8 @@
 ﻿using ApiDotflix.Entities;
-using ApiDotflix.Entities.Models;
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
-using System;
+using ApiDotflix.Mapping;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,13 +24,23 @@ namespace ApiDotflix.Data.Services
             return MappingMovieOutput(movies);
         }
 
-        public async Task<Movie> GetByIdAsync(int id)
+        public async Task<MovieOutputById> GetByIdAsync(int id)
         {
             var movie = await _movieRepository.GetByIdAsync(id);
 
-            movie.AgeGroup = GetAgeGroup(movie.AgeGroupId);
-
-            return movie;
+            var movieDto = new MovieOutputById
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Sinopse = movie.Sinopse,
+                Image = movie.Image,
+                AgeGroup = GetAgeGroup(movie.AgeGroupId),
+                Relevance = movie.Relevance,
+                ReleaseData = movie.ReleaseData,
+                RunTime = movie.RunTime,
+                About = MappingEntities.MappingOutputAbout(movie.About)
+            };
+            return movieDto;
         }
 
         public async Task<Movie> GetByNameAsync(string name)
@@ -41,7 +50,7 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> AddAsync(MoviePostInputDto movieDto)
         {
-            var movie = MappingInputMovie(movieDto);
+            var movie = MappingEntities.MappingInputMovie(movieDto);
 
             return await _movieRepository.AddAsync(movie);
         }
@@ -57,45 +66,6 @@ namespace ApiDotflix.Data.Services
         public async Task<bool> DeleteId(int id)
         {
             return await _movieRepository.DeleteId(id);
-        }
-
-        private Movie MappingInputMovie(MoviePostInputDto movieDto)
-        {
-            var movie = new Movie();
-            var about = new About();
-
-            movie.Title = movieDto.Title;
-            movie.Sinopse = movieDto.Sinopse;
-            movie.RunTime = movieDto.RunTime;
-            movie.Image = movieDto.Image;
-            movie.AgeGroupId = movieDto.AgeGroupId;
-            movie.Relevance = movieDto.Relevance;
-            movie.ReleaseData = movieDto.ReleaseData;
-            movie.Register = DateTime.Now.ToString("dd/MM/yyyy");
-            /*
-            about.DirectorId = movieDto.About.DirectorId;
-            about.Languages = MappingListEntity<Language>(movieDto.About.Languages);
-            about.Keywords = MappingListEntity<Keyword>(movieDto.About.Keywords);
-            about.Casts = MappingListEntity<Cast>(movieDto.About.Casts);
-            about.Genres = MappingListEntity<Genre>(movieDto.About.Genres);
-            about.RoadMaps = MappingListEntity<RoadMap>(movieDto.About.RoadMaps);
-            */
-            movie.About = about;
-
-            return movie;
-        }
-
-        private IEnumerable<T> MappingListEntity<T>(IEnumerable<BaseEntityDto> convertEntity) where T : BaseEntity, new()
-        {
-            var entity = new List<T>();
-
-            if (convertEntity != null)
-            {
-                foreach (var convert in convertEntity)
-                    entity.Add(new T() { Id = convert.Id});
-            }
-
-            return entity;
         }
 
         private List<MovieOutputDto> MappingMovieOutput(IEnumerable<Movie> movies)

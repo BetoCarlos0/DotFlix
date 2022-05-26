@@ -28,20 +28,22 @@ namespace ApiDotflix.Data.Repository
         {
             var getMovie = await _dbContext.Movie
                 .Include(x => x.About)
+                    .ThenInclude(x => x.AboutCasts)
+                        .ThenInclude(x => x.Cast)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.AboutGenres)
+                        .ThenInclude(x => x.Genre)
+                .Include(x => x.About)
                     .ThenInclude(x => x.AboutKeywords)
                         .ThenInclude(x => x.Keyword)
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutLanguages)
                         .ThenInclude(x => x.Language)
-                /*.Include(x => x.About)
-                    .ThenInclude(x => x.AboutCasts)
-                        .ThenInclude(x => x.Cast)*/
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutGenres)
-                        .ThenInclude(x => x.Genre)
                 .Include(x => x.About)
                     .ThenInclude(x => x.AboutRoadMaps)
                         .ThenInclude(x => x.RoadMap)
+                .Include(x => x.About)
+                    .ThenInclude(x => x.Director)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(id));
 
             if (getMovie == null)
@@ -59,14 +61,14 @@ namespace ApiDotflix.Data.Repository
         public async Task<bool> AddAsync(Movie movie)
         {
             await NameExist(movie.MovieId, movie.Title);
-            /*
-            if (!movie.About.Genres.Any())
+            
+            if (!movie.About.AboutGenres.Any())
                 throw new DbUpdateException("Gênero Vazio");
-            if (!movie.About.Languages.Any())
+            if (!movie.About.AboutLanguages.Any())
                 throw new DbUpdateException("Idioma Vazio");
-            if (!movie.About.Casts.Any())
+            if (!movie.About.AboutCasts.Any())
                 throw new DbUpdateException("Elenco Vazio");
-            */
+            
             await _dbContext.Movie.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
 
@@ -77,21 +79,6 @@ namespace ApiDotflix.Data.Repository
         {
 
             var getMovie = await _dbContext.Movie
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutKeywords)
-                        .ThenInclude(x => x.Keyword)
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutLanguages)
-                        .ThenInclude(x => x.Language)
-                /*.Include(x => x.About)
-                    .ThenInclude(x => x.AboutCasts)
-                        .ThenInclude(x => x.Cast)*/
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutGenres)
-                        .ThenInclude(x => x.Genre)
-                .Include(x => x.About)
-                    .ThenInclude(x => x.AboutRoadMaps)
-                        .ThenInclude(x => x.RoadMap)
                 .FirstOrDefaultAsync(x => x.MovieId.Equals(movie.MovieId));
 
             await NameExist(movie.MovieId, movie.Title);
@@ -112,7 +99,7 @@ namespace ApiDotflix.Data.Repository
         }
         public async Task<bool> DeleteId(int id)
         {
-            
+            await ExistMovie(id);
 
             _dbContext.Movie.Remove(await ExistMovie(id));
             await _dbContext.SaveChangesAsync();

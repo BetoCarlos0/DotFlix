@@ -7,7 +7,7 @@ namespace ApiDotflix.Entities.Models.Contracts.Services
     public interface IMovieService
     {
         Task<IEnumerable<MovieOutputDto>> GetAllAsync();
-        Task<Movie> GetByIdAsync(int id);
+        Task<MovieOutputById> GetByIdAsync(int id);
         Task<Movie> GetByNameAsync(string name);
         Task<bool> AddAsync(MoviePostInputDto movie);
         Task<bool> UpdateAsync(MoviePutInputDto movie);

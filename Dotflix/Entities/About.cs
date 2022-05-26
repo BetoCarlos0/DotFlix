@@ -1,9 +1,6 @@
-﻿using ApiDotflix.Entities.Models;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace ApiDotflix.Entities
 {
@@ -13,12 +10,13 @@ namespace ApiDotflix.Entities
 
         public int MovieId { get; set; }
 
+        [JsonIgnore]
         public Movie Movie { get; set; }
 
+        [JsonIgnore]
         public int DirectorId { get; set; }
 
         public Director Director { get; set; }
-
 
         [Required(ErrorMessage = "Id do Elenco obrigatório")]
         public IEnumerable<AboutCast> AboutCasts { get; set; }
@@ -32,70 +30,5 @@ namespace ApiDotflix.Entities
         public IEnumerable<AboutLanguage> AboutLanguages { get; set; }
 
         public IEnumerable<AboutRoadMap>? AboutRoadMaps { get; set; }
-        
-        /*
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<RoadMap>? RoadMaps
-        {
-            get {
-                if (AboutRoadMaps != null)
-                    return AboutRoadMaps.Select(x => x.RoadMap);
-                return Enumerable.Empty<RoadMap>();
-            }
-            set => AboutRoadMaps = value.Select(y => new AboutRoadMap()
-            {
-                RoadMapId = y.Id,
-            }).ToList();
-        }
-
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Cast> Casts
-        {
-            get => AboutCasts.Select(x => x.Cast);
-            set => AboutCasts = value.Select(y => new AboutCast()
-            {
-                CastId = y.Id,
-            }).ToList();
-        }
-
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Genre> Genres
-        {
-            get => AboutGenres.Select(x => x.Genre);
-            set => AboutGenres = value.Select(y => new AboutGenre()
-            {
-                GenreId = y.Id,
-            }).ToList();
-        }
-
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<Keyword>? Keywords
-        {
-            get
-            {
-                if (AboutKeywords != null)
-                    return AboutKeywords.Select(x => x.Keyword);
-                return Enumerable.Empty<Keyword>();
-            }
-            set => AboutKeywords = value.Select(y => new AboutKeyword()
-            {
-                KeywordId = y.Id,
-            }).ToList();
-        }
-
-        [NotMapped]
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        public IEnumerable<BaseEntity> Languages
-        {
-            get => AboutLanguages.Select(x => x.Language);
-            set => AboutLanguages = value.Select(y => new AboutLanguage()
-            {
-                LanguageId = y.Id,
-            }).ToList();
-        }*/
     }
 }
