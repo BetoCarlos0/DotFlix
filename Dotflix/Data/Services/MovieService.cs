@@ -4,6 +4,7 @@ using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> AddAsync(MoviePostInputDto movieDto)
         {
-            await UploadImage(movieDto.ImageUrl, movieDto.Image, movieDto.Title);
+            movieDto.ImageUrl = await UploadImage(movieDto.ImageUrl, movieDto.Image, movieDto.Title);
 
             var movie = Mapping.MappingInputMovie(movieDto);
 
@@ -74,22 +75,21 @@ namespace ApiDotflix.Data.Services
             return await _movieRepository.DeleteId(id);
         }
 
-        private async Task UploadImage(string imageUrl, IFormFile image, string title)
+        private async Task<string> UploadImage(string imageUrl, IFormFile image, string title)
         {
             if (image != null)
             {
                 if (!Directory.Exists(_env.WebRootPath + "\\Uploads\\"))
                     Directory.CreateDirectory(_env.WebRootPath + "\\Uploads\\");
 
-                imageUrl = Path.Combine(_env.WebRootPath + "\\Uploads\\", $"{title}");
+                imageUrl = Path.Combine("Uploads", $"{title}-{image.FileName}");
 
-                //var fileStream = new FileStream(imageUrl, FileMode.Create);
-                //await image.CopyToAsync(fileStream).ConfigureAwait(false);
+                using FileStream fileStream = File.Create(_env.WebRootPath +@"\"+ imageUrl);
 
-                using var fileStream = File.Create(imageUrl);
                 await image.CopyToAsync(fileStream);
-                
+                await fileStream.FlushAsync();
             }
+            return imageUrl;
         }
             
     }

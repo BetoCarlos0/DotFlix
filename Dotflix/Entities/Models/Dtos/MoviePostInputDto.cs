@@ -16,6 +16,7 @@ namespace ApiDotflix.Entities.Models.Dtos
         [StringLength(250, MinimumLength = 5, ErrorMessage = "Sinopse menor que 5 caracteres")]
         public string Sinopse { get; set; }
 
+        [JsonIgnore]
         [Required(ErrorMessage = "Imagem obrigatória")]
         public string ImageUrl { get; set; }
         [NotMapped]
