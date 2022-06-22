@@ -15,7 +15,7 @@ using Xunit;
 
 namespace ApiDotflixTest.ControllerTests
 {
-    public class MovieControllerTest : BaseMovieControllerTest
+    public class MovieControllerTest
     {
         [Fact, Trait("Movie", "GetMovie")]
         public async Task GetAllMovies_Whencalled_ReturnOk()

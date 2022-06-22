@@ -70,9 +70,13 @@ namespace ApiDotflix
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dotflix v1"));
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();

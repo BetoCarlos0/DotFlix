@@ -16,7 +16,7 @@ namespace ApiDotflix
             movie.Title = movieDto.Title;
             movie.Sinopse = movieDto.Sinopse;
             movie.RunTime = movieDto.RunTime;
-            movie.Image = movieDto.Image;
+            movie.ImageUrl = movieDto.ImageUrl;
             movie.AgeGroupId = movieDto.AgeGroupId;
             movie.Relevance = movieDto.Relevance;
             movie.ReleaseData = movieDto.ReleaseData;
@@ -68,7 +68,7 @@ namespace ApiDotflix
                     MovieId = movie.MovieId,
                     Title = movie.Title,
                     AgeGroup = GetAgeGroup(movie.AgeGroupId),
-                    Image = movie.Image,
+                    ImageUrl = movie.ImageUrl,
                     Relevance = movie.Relevance,
                     RunTime = movie.RunTime
                 });

@@ -51,7 +51,7 @@ namespace ApiDotflix.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("post")]
-        public async Task<IActionResult> CreateMovie(MoviePostInputDto movie)
+        public async Task<IActionResult> CreateMovie([FromForm] MoviePostInputDto movie)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 

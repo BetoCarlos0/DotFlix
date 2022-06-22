@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +19,10 @@ namespace ApiDotflix.Entities
         public string Sinopse { get; set; }
 
         [Required(ErrorMessage = "Imagem obrigatória")]
-        public string Image { get; set; }
+        public string ImageUrl { get; set; }
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
 
         [Required(ErrorMessage = "Classificação indicativa Id obrigatória")]
         public string AgeGroupId { get; set; }

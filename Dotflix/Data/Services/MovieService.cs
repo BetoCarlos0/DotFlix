@@ -2,7 +2,10 @@
 using ApiDotflix.Entities.Models.Contracts.Repositories;
 using ApiDotflix.Entities.Models.Contracts.Services;
 using ApiDotflix.Entities.Models.Dtos;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ApiDotflix.Data.Services
@@ -10,10 +13,12 @@ namespace ApiDotflix.Data.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IWebHostEnvironment _env;
 
-        public MovieService(IMovieRepository movieRepository)
+        public MovieService(IMovieRepository movieRepository, IWebHostEnvironment env)
         {
             _movieRepository = movieRepository;
+            _env = env;
         }
 
         public async Task<IEnumerable<MovieOutputDto>> GetAllAsync()
@@ -32,7 +37,7 @@ namespace ApiDotflix.Data.Services
                 MovieId = movie.MovieId,
                 Title = movie.Title,
                 Sinopse = movie.Sinopse,
-                Image = movie.Image,
+                Image = movie.ImageUrl,
                 AgeGroup = Mapping.GetAgeGroup(movie.AgeGroupId),
                 Relevance = movie.Relevance,
                 ReleaseData = movie.ReleaseData,
@@ -49,6 +54,8 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> AddAsync(MoviePostInputDto movieDto)
         {
+            await UploadImage(movieDto.ImageUrl, movieDto.Image, movieDto.Title);
+
             var movie = Mapping.MappingInputMovie(movieDto);
 
             return await _movieRepository.AddAsync(movie);
@@ -66,5 +73,24 @@ namespace ApiDotflix.Data.Services
         {
             return await _movieRepository.DeleteId(id);
         }
+
+        private async Task UploadImage(string imageUrl, IFormFile image, string title)
+        {
+            if (image != null)
+            {
+                if (!Directory.Exists(_env.WebRootPath + "\\Uploads\\"))
+                    Directory.CreateDirectory(_env.WebRootPath + "\\Uploads\\");
+
+                imageUrl = Path.Combine(_env.WebRootPath + "\\Uploads\\", $"{title}");
+
+                //var fileStream = new FileStream(imageUrl, FileMode.Create);
+                //await image.CopyToAsync(fileStream).ConfigureAwait(false);
+
+                using var fileStream = File.Create(imageUrl);
+                await image.CopyToAsync(fileStream);
+                
+            }
+        }
+            
     }
 }

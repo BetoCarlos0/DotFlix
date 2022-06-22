@@ -12,7 +12,7 @@ namespace ApiDotflix.Data.Map
             builder.Property(x => x.MovieId)
                 .UseIdentityColumn(100, 1);
 
-            builder.Property(x => x.Image)
+            builder.Property(x => x.ImageUrl)
                 .HasColumnType("varchar")
                 .HasMaxLength(100)
                 .IsRequired();
