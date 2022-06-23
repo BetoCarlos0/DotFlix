@@ -17,9 +17,9 @@ namespace ApiDotflix.Entities.Models.Dtos
         public string Sinopse { get; set; }
 
         [JsonIgnore]
-        [Required(ErrorMessage = "Imagem obrigatória")]
-        public string ImageUrl { get; set; }
-        [NotMapped]
+        public string? ImageUrl { get; set; }
+
+        [NotMapped ,Required(ErrorMessage = "Imagem obrogatória")]
         public IFormFile Image { get; set; }
 
         [Required(ErrorMessage = "Classificação indicativa Id obrigatória")]

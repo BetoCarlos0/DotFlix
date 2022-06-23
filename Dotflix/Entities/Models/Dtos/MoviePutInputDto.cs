@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ApiDotflix.Entities.Models.Dtos
 {
@@ -17,9 +18,10 @@ namespace ApiDotflix.Entities.Models.Dtos
         [StringLength(250, MinimumLength = 5, ErrorMessage = "Sinopse menor que 5 caracteres")]
         public string Sinopse { get; set; }
 
-        [Required(ErrorMessage = "Imagem obrigatória")]
-        public string ImageUrl { get; set; }
-        [NotMapped]
+        [JsonIgnore]
+        public string? ImageUrl { get; set; }
+
+        [NotMapped, Required(ErrorMessage = "Imagem obrigatória")]
         public IFormFile Image { get; set; }
 
         [Required(ErrorMessage = "Classificação indicativa Id obrigatória")]

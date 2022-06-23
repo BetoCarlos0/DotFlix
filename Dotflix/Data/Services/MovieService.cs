@@ -14,12 +14,12 @@ namespace ApiDotflix.Data.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly FileService _file;
 
-        public MovieService(IMovieRepository movieRepository, IWebHostEnvironment env)
+        public MovieService(IMovieRepository movieRepository, FileService file)
         {
             _movieRepository = movieRepository;
-            _env = env;
+            _file = file;
         }
 
         public async Task<IEnumerable<MovieOutputDto>> GetAllAsync()
@@ -55,7 +55,11 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> AddAsync(MoviePostInputDto movieDto)
         {
-            movieDto.ImageUrl = await UploadImage(movieDto.ImageUrl, movieDto.Image, movieDto.Title);
+            movieDto.ImageUrl = await _file.UploadImage(
+                0,
+                movieDto.Title,
+                movieDto.Image
+            );
 
             var movie = Mapping.MappingInputMovie(movieDto);
 
@@ -64,6 +68,11 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> UpdateAsync(MoviePutInputDto movie)
         {
+            movie.ImageUrl = await _file.UploadImage(
+                movie.MovieId,
+                movie.Title,
+                movie.Image
+            );
 
             await _movieRepository.UpdateAsync(movie);
 
@@ -72,25 +81,8 @@ namespace ApiDotflix.Data.Services
 
         public async Task<bool> DeleteId(int id)
         {
+            await _file.DeleteFile(id);
             return await _movieRepository.DeleteId(id);
         }
-
-        private async Task<string> UploadImage(string imageUrl, IFormFile image, string title)
-        {
-            if (image != null)
-            {
-                if (!Directory.Exists(_env.WebRootPath + "\\Uploads\\"))
-                    Directory.CreateDirectory(_env.WebRootPath + "\\Uploads\\");
-
-                imageUrl = Path.Combine("Uploads", $"{title}-{image.FileName}");
-
-                using FileStream fileStream = File.Create(_env.WebRootPath +@"\"+ imageUrl);
-
-                await image.CopyToAsync(fileStream);
-                await fileStream.FlushAsync();
-            }
-            return imageUrl;
-        }
-            
     }
 }

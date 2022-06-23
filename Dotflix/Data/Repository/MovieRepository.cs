@@ -85,7 +85,7 @@ namespace ApiDotflix.Data.Repository
 
             if (getMovie == null) return false;
             
-            getMovie.Image = movie.Image;
+            getMovie.ImageUrl = movie.ImageUrl;
             getMovie.Title = movie.Title;
             getMovie.Sinopse = movie.Sinopse;
             getMovie.Relevance = movie.Relevance;

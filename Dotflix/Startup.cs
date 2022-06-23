@@ -35,6 +35,8 @@ namespace ApiDotflix
             services.AddScoped<IAboutRepository, AboutRepository>();
             services.AddScoped<IAboutService, AboutService>();
 
+            services.AddScoped<FileService>();
+
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
             //services.AddDbContext<DotflixDbContext>(options =>
