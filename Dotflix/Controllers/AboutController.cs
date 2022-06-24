@@ -41,11 +41,13 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put")]
-        public async Task<IActionResult> UpdateAbout(AboutInputDto about)
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateAbout(int id, AboutInputDto about)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
 
+            if (about.AboutId != id)
+                return BadRequest("Id diferente do Sobre do filme");
             try
             {
                 return Ok(await _aboutService.UpdateAsync(about).ConfigureAwait(false));

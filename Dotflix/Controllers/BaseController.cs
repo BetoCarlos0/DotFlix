@@ -72,10 +72,13 @@ namespace ApiDotflix.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("put")]
-        public async Task<IActionResult> UpdateAsync(T entity)
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> UpdateAsync(int id, T entity)
         {
             if (!ModelState.IsValid) return BadRequest(new ValidationProblemDetails(ModelState));
+
+            if (id != entity.Id)
+                return BadRequest($"Id's Diferentes {id} e {entity.Id}");
 
             try
             {
